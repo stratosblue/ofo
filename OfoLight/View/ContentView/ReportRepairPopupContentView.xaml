@@ -1,0 +1,35 @@
+﻿<UserControl
+    x:Class="OfoLight.View.ReportRepairPopupContentView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OfoLight.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="RepairDataTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Name}"></TextBlock>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Button Style="{StaticResource NoEventStyleButton}" Command="{Binding CloseCommand}" Background="Transparent" HorizontalAlignment="Right" Margin="0,0,18,0">
+            <Image Source="ms-appx:///Assets/icons/exit_normal_img.png" Width="20" Height="20"></Image>
+        </Button>
+
+        <ListView x:Name="reasonListView" Grid.Row="1" ItemTemplate="{StaticResource RepairDataTemplate}" ItemsSource="{Binding RepairReasonList}" SelectionMode="Multiple">
+        </ListView>
+
+        <Button Style="{StaticResource FillButton}" Grid.Row="2" Height="44" Margin="50,70" Command="{Binding RepairCommand}" CommandParameter="{x:Bind reasonListView}" Background="{StaticResource MainColorBrush}" VerticalAlignment="Top" Content="{Binding SelectedValue,ElementName=reasonListView,Converter={StaticResource MixCommonConverter},ConverterParameter=ReapirButtonText}"></Button>
+    </Grid>
+</UserControl>

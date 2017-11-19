@@ -1,0 +1,30 @@
+﻿<Page
+    x:Class="OfoLight.View.UnlockView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OfoLight.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" NavigationCacheMode="Disabled">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="2.5*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Button Command="{Binding CloseCommand}" Style="{StaticResource NoEventStyleButton}" Background="Transparent" HorizontalAlignment="Right" Width="50" Height="50" Margin="25,0">
+            <Image Source="ms-appx:///Assets/icons/window_close.png"></Image>
+        </Button>
+        <Image Grid.Row="1" Source="ms-appx:///Assets/icons/unlock_bg_card.png" VerticalAlignment="Center" HorizontalAlignment="Center"></Image>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBox Style="{StaticResource RoundTextBox}" Margin="50,10" Height="40" FontSize="20" MaxLength="15" PlaceholderText="请输入车牌号" BorderBrush="{StaticResource MainColorBrush}" InputScope="NumericPin" Text="{Binding CarNumber,Mode=TwoWay}"></TextBox>
+            <Button Style="{StaticResource FillButton}" Grid.Row="1" Height="40" Margin="50,10" Command="{Binding UnlockCarCommand}" Background="{StaticResource MainColorBrush}" IsEnabled="{Binding IsEnableUnlock}">立即用车</Button>
+        </Grid>
+    </Grid>
+</Page>

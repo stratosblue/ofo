@@ -1,0 +1,15 @@
+﻿<Page
+    x:Class="OfoLight.View.LoadingView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OfoLight.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" NavigationCacheMode="Disabled">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Image Stretch="Uniform" Source="ms-appx:///Assets/new_splash_content.png"></Image>
+        <Image Stretch="Uniform" Source="{Binding SplashImage}"></Image>
+        <Button Style="{StaticResource NoEventStyleButton}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="25,15" Padding="10,4" Background="{StaticResource MainGrayColorBrush}" Opacity="0.7" Content="{Binding ButtonTip}" Command="{Binding SkipSplashCommand}" Visibility="{Binding SkipSplashButtonVisibility}"></Button>
+    </Grid>
+</Page>

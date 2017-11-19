@@ -1,0 +1,22 @@
+﻿<UserControl
+    x:Class="OfoLight.Controls.UserNickModifyControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OfoLight.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+    <Border>
+        <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock>4-16个字符，仅支持中文、英文大小写、数<LineBreak/>字“_”、减号及其组合。</TextBlock>
+            <TextBox Grid.Row="1" x:Name="nickTextBox" Margin="5"></TextBox>
+            <Button Grid.Row="2" HorizontalAlignment="Center" Click="ModifyNickButtonClick">确定</Button>
+        </Grid>
+    </Border>
+</UserControl>

@@ -1,0 +1,76 @@
+﻿<UserControl
+    x:Class="OfoLight.View.AboutUsContentView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OfoLight.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+            <Setter Property="Margin" Value="0,4"></Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer x:Name="scrollViewer" Background="{StaticResource MainLightGrayColorBrush}">
+        <StackPanel>
+            <StackPanel Padding="0,15" Background="White">
+                <Image Source="ms-appx:///Assets/icons/square_icon.png" Width="75" Height="75"></Image>
+                <TextBlock FontSize="20" Margin="0,10,0,0">ofo小黄车</TextBlock>
+                <TextBlock Text="{x:Bind Version}" Margin="0,0,0,20"></TextBlock>
+                <TextBlock>全球第一个无桩共享单车平台，</TextBlock>
+                <TextBlock>随时随地，随取随用，</TextBlock>
+                <TextBlock>让世界没有陌生的角落。</TextBlock>
+                <Button Style="{StaticResource NoEventStyleButton}" Background="Transparent" HorizontalAlignment="Center" Margin="0,20" Click="DownClick">
+                    <Image Source="ms-appx:///Assets/icons/about_more.png" Width="25" Height="25"></Image>
+                </Button>
+                <Image Source="ms-appx:///Assets/icons/about_pic.png"></Image>
+            </StackPanel>
+            <Grid Margin="0,25" Background="White">
+                <Grid.Resources>
+                    <Style x:Key="TitleTextBlock" TargetType="TextBlock">
+                        <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+                        <Setter Property="Margin" Value="10"></Setter>
+                    </Style>
+                    <Style x:Key="ValueTextBlock" TargetType="TextBlock">
+                        <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+                        <Setter Property="Margin" Value="10"></Setter>
+                        <Setter Property="Foreground" Value="{StaticResource MainDeepGrayColorBrush}"></Setter>
+                    </Style>
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Style="{StaticResource TitleTextBlock}">微信公众号</TextBlock>
+                <TextBlock Grid.Column="1" Style="{StaticResource ValueTextBlock}">ofo小黄车</TextBlock>
+                <TextBlock Grid.Row="1" Style="{StaticResource TitleTextBlock}">商务合作</TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="1" Style="{StaticResource ValueTextBlock}">bdinchina@ofo.com</TextBlock>
+                <TextBlock Grid.Row="2" Style="{StaticResource TitleTextBlock}">政府与公共事务</TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="1" Style="{StaticResource ValueTextBlock}">gr@ofo.com</TextBlock>
+                <TextBlock Grid.Row="3" Style="{StaticResource TitleTextBlock}">官方网站</TextBlock>
+                <TextBlock Grid.Row="3" Grid.Column="1" Style="{StaticResource ValueTextBlock}">www.ofo.com</TextBlock>
+            </Grid>
+            <StackPanel>
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                        <Setter Property="Margin" Value="2"></Setter>
+                        <Setter Property="FontSize" Value="13"></Setter>
+                        <Setter Property="Foreground" Value="{StaticResource MainDeepGrayColorBrush}"></Setter>
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock>© 2017 ofo.com All right reserved</TextBlock>
+                <TextBlock>北京拜克洛克科技有限公司</TextBlock>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

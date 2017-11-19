@@ -1,0 +1,138 @@
+﻿<Page
+    x:Class="OfoLight.View.UnlockedView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OfoLight.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" NavigationCacheMode="Disabled">
+
+    <Page.Resources>
+        <DataTemplate x:Key="PasswordDataTemplate">
+            <Grid BorderBrush="{StaticResource MainDeepColorBrush}" CornerRadius="5" BorderThickness="2" MinWidth="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock FontSize="40" Text="{Binding}" Margin="15,0"></TextBlock>
+            </Grid>
+        </DataTemplate>
+        <Style x:Key="PasswordListView" TargetType="ListView">
+            <Setter Property="ItemContainerTransitions">
+                <Setter.Value>
+                    <TransitionCollection>
+                        <!--<AddDeleteThemeTransition/>-->
+                        <ContentThemeTransition/>
+                        <!--<ReorderThemeTransition/>-->
+                        <EntranceThemeTransition IsStaggeringEnabled="False"/>
+                    </TransitionCollection>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <ItemsStackPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListView">
+                        <StackPanel BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                            <ItemsPresenter/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="PasswordListViewItem" TargetType="ListViewItem">
+            <Setter Property="Padding" Value="0"></Setter>
+            <Setter Property="Margin" Value="3,0"></Setter>
+            <Setter Property="MinWidth" Value="0"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <ListViewItemPresenter VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="6*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Image Grid.Row="1" Source="ms-appx:///Assets/icons/unlock_bg_card.png" VerticalAlignment="Center" HorizontalAlignment="Center"></Image>
+        <Grid x:Name="_timerPanel" Grid.Row="2" Visibility="{Binding TimerPanelVisibility}">
+            <!--{Binding TimerPanelVisibility}-->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock HorizontalAlignment="Center" FontSize="20" Text="骑行时间"></TextBlock>
+            <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding RidingTime,Converter={StaticResource TimeSpanToStringConverter}}" FontSize="55" Margin="0,13"></TextBlock>
+            <TextBlock Grid.Row="2" HorizontalAlignment="Center" FontSize="14" Text="关锁后，请打乱密码" Margin="0,18"></TextBlock>
+            <Button Style="{StaticResource FillButton}" Grid.Row="3" Height="44" Margin="50,10" Command="{Binding FinishUsingCarCommand}" Background="{StaticResource MainColorBrush}" IsEnabled="{Binding IsEnableFinish}">结束用车</Button>
+        </Grid>
+
+        <Grid x:Name="_passwordPanel" Grid.Row="2" Visibility="{Binding Visibility,ElementName=_timerPanel,Converter={StaticResource AntiVisibilityConverter}}">
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="13"></Setter>
+                    <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                    <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                </Style>
+                <Style TargetType="HyperlinkButton">
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                </Style>
+            </Grid.Resources>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="35"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="{Binding UnLockCarInfo.CarNumber}"></TextBlock>
+                <TextBlock Text="车辆的解锁码" Margin="4,0,0,0"></TextBlock>
+            </StackPanel>
+            <ListView Grid.Row="1" Margin="25" ItemTemplate="{StaticResource PasswordDataTemplate}" Style="{StaticResource PasswordListView}" SelectionMode="None" ItemsSource="{Binding Password}" ItemContainerStyle="{StaticResource PasswordListViewItem}">
+            </ListView>
+            <TextBlock Grid.Row="2" FontSize="16" Text="用车结束后，记得在手机上结束行程"></TextBlock>
+            <HyperlinkButton Grid.Row="3" HorizontalAlignment="Center">
+                <HyperlinkButton Command="{Binding UnlockHelpCommand}">
+                    <TextBlock FontSize="16" Text="如何开锁？"></TextBlock>
+                </HyperlinkButton>
+            </HyperlinkButton>
+            <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock FontSize="14" Foreground="{StaticResource MainDeepGrayColorBrush}" Text="{Binding RepairTimeOut}"></TextBlock>
+                <TextBlock FontSize="14" Foreground="{StaticResource MainDeepGrayColorBrush}" Text="秒后将开始计费，请检查车辆"></TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Foreground="{StaticResource MainDeepGrayColorBrush}" Text="如有问题" VerticalAlignment="Center"></TextBlock>
+                <HyperlinkButton Margin="5,0" Command="{Binding RepairCommand}">
+                    <TextBlock Text="立即报修" VerticalAlignment="Center"></TextBlock>
+                </HyperlinkButton>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Image Source="ms-appx:///Assets/icons/bluebar_forbidden.png" Width="24" Height="24"></Image>
+                <TextBlock FontSize="16" Text="12周岁以下儿童禁止骑车" VerticalAlignment="Center" Foreground="{StaticResource MainDeepGrayColorBrush}"></TextBlock>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

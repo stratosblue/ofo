@@ -1,0 +1,57 @@
+﻿<Page
+    x:Class="OfoLight.View.ActivityCenterView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OfoLight.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <DataTemplate x:Key="AdListTemplate">
+            <HyperlinkButton Command="{Binding ClickCommand}" CommandParameter="{Binding JumpUrl}">
+                <Image Source="{Binding ImgUrl}"></Image>
+            </HyperlinkButton>
+        </DataTemplate>
+    </Page.Resources>
+    <Grid Background="{StaticResource MainLightGrayColorBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <!--头部-->
+        <Grid Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock FontSize="30" Margin="20,0">我的消息</TextBlock>
+            <Button Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" Style="{StaticResource NoEventStyleButton}" Command="{Binding CloseCommand}" Background="Transparent">
+                <Image Source="ms-appx:///Assets/icons/exit_normal_img.png" Width="20" Height="20"></Image>
+            </Button>
+        </Grid>
+
+        <ScrollViewer Grid.Row="1" HorizontalScrollMode="Disabled" VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <!--顶部广告-->
+                <Grid Background="White" Margin="0,0,0,12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <FlipView Width="{Binding WindowWidth}" MaxHeight="300" ItemTemplate="{StaticResource AdListTemplate}" ItemsSource="{Binding ActivityList}"></FlipView>
+                </Grid>
+                <Grid Grid.Row="1" Background="White">
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>

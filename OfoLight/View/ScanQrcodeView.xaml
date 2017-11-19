@@ -1,0 +1,128 @@
+﻿<Page
+    x:Class="OfoLight.View.ScanQrcodeView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OfoLight.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:OfoLight.Converters"
+    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:Core="using:Microsoft.Xaml.Interactions.Core" 
+    xmlns:CoreAddOn="using:Microsoft.Xaml.Interactions.Core.AddOn"
+    mc:Ignorable="d" NavigationCacheMode="Required">
+
+    <Page.Resources>
+        <converters:RunningStateColorConverter x:Key="RunningStateColorConverter"></converters:RunningStateColorConverter>
+        <Style x:Key="transBackgroud" TargetType="Grid">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Opacity" Value="0.6"></Setter>
+        </Style>
+        <Style x:Key="ScanOperateButton" TargetType="Button" BasedOn="{StaticResource NoEventStyleButton}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+        </Style>
+    </Page.Resources>
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <SlideNavigationTransitionInfo/>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+    <Grid>
+        <!--视频流预览-->
+        <ContentControl Grid.RowSpan="3" Content="{Binding CaptureElement}"></ContentControl>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="220"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="220"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <!--顶部-->
+            <Grid Grid.ColumnSpan="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid Grid.RowSpan="2" Style="{StaticResource transBackgroud}"></Grid>
+
+                <Image Source="ms-appx:///Assets/icons/scan_logo.png" Height="30" HorizontalAlignment="Left" Margin="20,0,0,0"></Image>
+                <Button Command="{Binding CloseCommand}" Style="{StaticResource NoEventStyleButton}" Background="Transparent" HorizontalAlignment="Right" Width="40" Height="40" Margin="25,0">
+                    <Image Source="ms-appx:///Assets/icons/exit_scan_img.png"></Image>
+                </Button>
+                <TextBlock Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="25" Foreground="{StaticResource MainDeepColorBrush}" FontSize="16">对准车牌上的二维码,即可自动扫描</TextBlock>
+            </Grid>
+
+            <Grid Grid.Row="1" Grid.Column="0" Style="{StaticResource transBackgroud}"></Grid>
+            <Grid Grid.Row="1" Grid.Column="2" Style="{StaticResource transBackgroud}"></Grid>
+
+            <Grid x:Name="ContentPanel" Grid.Row="1" Grid.Column="1">
+                <Image Source="ms-appx:///Assets/icons/scan_crop_bg.png" Width="220" Height="220"></Image>
+                <Grid x:Name="scanProgressGrid" Height="20" VerticalAlignment="Top">
+                    <Image x:Name="scanProgressImage" Source="ms-appx:///Assets/icons/scan_progress.png">
+                        <Image.Resources>
+                            <Storyboard x:Name="scanProgressStoryBoard">
+                                <DoubleAnimation RepeatBehavior="Forever" Duration="0:0:3" AutoReverse="False" Storyboard.TargetName="scanProgressTransform" Storyboard.TargetProperty="Y" From="0" To="210"></DoubleAnimation>
+                            </Storyboard>
+                        </Image.Resources>
+                        <Image.RenderTransform>
+                            <TranslateTransform x:Name="scanProgressTransform" Y="0"></TranslateTransform>
+                        </Image.RenderTransform>
+
+                        <Interactivity:Interaction.Behaviors>
+                            <Core:EventTriggerBehavior>
+                                <CoreAddOn:StoryBoardAction TargetStoryBoard="{Binding ElementName=scanProgressStoryBoard}" MethodName="Begin"/>
+                            </Core:EventTriggerBehavior>
+                        </Interactivity:Interaction.Behaviors>
+                    </Image>
+                </Grid>
+
+            </Grid>
+
+            <Grid Grid.Row="2" Grid.ColumnSpan="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.ColumnSpan="2" Style="{StaticResource transBackgroud}"></Grid>
+
+                <TextBlock Grid.ColumnSpan="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,8,0,0" Foreground="{StaticResource MainDeepColorBrush}" FontSize="16">如长时间未正确扫码，请尝试调整距离</TextBlock>
+
+                <Button Command="{Binding LightOnFlashCommand}" Style="{StaticResource ScanOperateButton}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Ellipse Width="45" Height="45" Fill="#C9000000">
+                        </Ellipse>
+                        <Image x:Name="flashLightOnImage" Source="ms-appx:///Assets/icons/scan_flashflight_on.png" Visibility="{Binding IsLightOn,Converter={StaticResource BoolToVisibilityConverter}}" Width="25" Height="25" Stretch="Uniform"></Image>
+                        <Image Visibility="{Binding Visibility,ElementName=flashLightOnImage,Converter={StaticResource AntiVisibilityConverter}}" Source="ms-appx:///Assets/icons/scan_flashflight_off.png" Width="25" Height="25" Stretch="Uniform"></Image>
+                        <TextBlock Grid.Row="1" Foreground="White" Margin="10">手电筒</TextBlock>
+                    </Grid>
+                </Button>
+
+                <Button Grid.Column="1" Command="{Binding ManualInputCommand}" Style="{StaticResource ScanOperateButton}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Ellipse Width="45" Height="45" Fill="#C9000000">
+                        </Ellipse>
+                        <Image Source="ms-appx:///Assets/icons/scan_manual_input.png" Width="25" Height="25" Stretch="Uniform"></Image>
+                        <TextBlock Grid.Row="1" Foreground="White" Margin="10">手动输入</TextBlock>
+                    </Grid>
+                </Button>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

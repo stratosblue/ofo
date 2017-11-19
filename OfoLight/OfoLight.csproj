@@ -1,0 +1,793 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{84C3B1BE-1C60-45CD-A5BE-35AE2E7A7E9E}</ProjectGuid>
+    <OutputType>AppContainerExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OfoLight</RootNamespace>
+    <AssemblyName>OfoLight</AssemblyName>
+    <DefaultLanguage>zh-CN</DefaultLanguage>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.15063.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
+    <PackageCertificateKeyFile>OfoLight_StoreKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>2B44E923E84BAA48321808621CFEA11A4943DFFA</PackageCertificateThumbprint>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>arm</AppxBundlePlatforms>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <EnableGatekeeperAnalysis>false</EnableGatekeeperAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+    <EnableGatekeeperAnalysis>true</EnableGatekeeperAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>false</UseDotNetNativeToolchain>
+    <EnableGatekeeperAnalysis>false</EnableGatekeeperAnalysis>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+    <EnableGatekeeperAnalysis>true</EnableGatekeeperAnalysis>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ContentPopup.xaml.cs">
+      <DependentUpon>ContentPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NotifyPopup.xaml.cs">
+      <DependentUpon>NotifyPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UserNickModifyControl.xaml.cs">
+      <DependentUpon>UserNickModifyControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\AntiVisibilityConverter.cs" />
+    <Compile Include="Converters\HalfDoubleConverter.cs" />
+    <Compile Include="Converters\MixCommonConverter.cs" />
+    <Compile Include="Converters\IntToDescribeCommonConverter.cs" />
+    <Compile Include="Converters\RunningStateColorConverter.cs" />
+    <Compile Include="Converters\TextRegexToEnableConverter.cs" />
+    <Compile Include="Converters\TimeSpanToStringConverter.cs" />
+    <Compile Include="Entity\AppConfiguration.cs" />
+    <Compile Include="Entity\ContentPageArgs.cs" />
+    <Compile Include="Global.cs" />
+    <Compile Include="Lab\StoryBoardAction.cs" />
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RelayCommand.cs" />
+    <Compile Include="Utilities\ImageUtility.cs" />
+    <Compile Include="Utilities\LocalCacheUtility.cs" />
+    <Compile Include="Utilities\ClientCookieManager.cs" />
+    <Compile Include="Utilities\AccessStreamUtility.cs" />
+    <Compile Include="Utilities\MessageDialogUtility.cs" />
+    <Compile Include="Utilities\NetworkStatusUtility.cs" />
+    <Compile Include="Utilities\OfoUtility.cs" />
+    <Compile Include="Utilities\PositionUtility.cs" />
+    <Compile Include="Utilities\ResourceUtility.cs" />
+    <Compile Include="Utilities\SettingUtility.cs" />
+    <Compile Include="Utilities\StatusBarUtility.cs" />
+    <Compile Include="Utilities\VariousUtility.cs" />
+    <Compile Include="ViewModel\ActivityCenterActivityItemViewModel.cs" />
+    <Compile Include="ViewModel\ActivityCenterViewModel.cs" />
+    <Compile Include="ViewModel\ContentViewModel\BasePopupContentViewModel.cs" />
+    <Compile Include="ViewModel\ContentViewModel\ActivityPopupContentViewModel.cs" />
+    <Compile Include="ViewModel\ContentViewModel\BaseContentViewModel.cs" />
+    <Compile Include="ViewModel\BaseViewModel.cs" />
+    <Compile Include="ViewModel\ConfirmPaymentViewModel.cs" />
+    <Compile Include="ViewModel\ContentViewModel\WebPagePopupContentViewModel.cs" />
+    <Compile Include="ViewModel\CreditHistoriesContentViewModel.cs" />
+    <Compile Include="ViewModel\LoadingViewModel.cs" />
+    <Compile Include="ViewModel\ContentViewModel\LoginFirstStepContentViewModel.cs" />
+    <Compile Include="ViewModel\ContentViewModel\LoginSecondStepContentViewModel.cs" />
+    <Compile Include="ViewModel\MainPageViewModel.cs" />
+    <Compile Include="ViewModel\NoLoginViewModel.cs" />
+    <Compile Include="ViewModel\NotifyViewModel.cs" />
+    <Compile Include="ViewModel\ContentViewModel\SettingContentViewModel.cs" />
+    <Compile Include="ViewModel\ContentViewModel\ReportRepairPopupContentViewModel.cs" />
+    <Compile Include="ViewModel\ContentViewModel\RedEnvelopePupopContentViewModel.cs" />
+    <Compile Include="ViewModel\UnlockedViewModel.cs" />
+    <Compile Include="ViewModel\ContentViewModel\UnLockGuidePopupContentViewModel.cs" />
+    <Compile Include="ViewModel\UnlockViewModel.cs" />
+    <Compile Include="ViewModel\ContentPageViewModel.cs" />
+    <Compile Include="ViewModel\ButtonViewModel.cs" />
+    <Compile Include="ViewModel\UserCenterViewModel.cs" />
+    <Compile Include="ViewModel\ContentViewModel\UserProfileContentViewModel.cs" />
+    <Compile Include="ViewModel\ContentViewModel\WebPageViewModel.cs" />
+    <Compile Include="ViewModel\ScanQrcodeViewModel.cs" />
+    <Compile Include="ViewModel\ContentViewModel\UserWalletContentViewModel.cs" />
+    <Compile Include="View\ActivityCenterView.xaml.cs">
+      <DependentUpon>ActivityCenterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\AboutSoftWareContentView.xaml.cs">
+      <DependentUpon>AboutSoftWareContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\AboutUsContentView.xaml.cs">
+      <DependentUpon>AboutUsContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\ReportRepairPopupContentView.xaml.cs">
+      <DependentUpon>ReportRepairPopupContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\ActivityPopupContentView.xaml.cs">
+      <DependentUpon>ActivityPopupContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ConfirmPaymentView.xaml.cs">
+      <DependentUpon>ConfirmPaymentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\ActivityCenterContentView.xaml.cs">
+      <DependentUpon>ActivityCenterContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\WebPagePopupContentView.xaml.cs">
+      <DependentUpon>WebPagePopupContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\CreditHistoriesContentView.xaml.cs">
+      <DependentUpon>CreditHistoriesContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LoadingView.xaml.cs">
+      <DependentUpon>LoadingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\LoginFirstStepContentView.xaml.cs">
+      <DependentUpon>LoginFirstStepContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\LoginSecondStepContentView.xaml.cs">
+      <DependentUpon>LoginSecondStepContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NoLoginView.xaml.cs">
+      <DependentUpon>NoLoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\RedPacketPupopContentView.xaml.cs">
+      <DependentUpon>RedPacketPupopContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ScanQrcodeView.xaml.cs">
+      <DependentUpon>ScanQrcodeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\SettingContentView.xaml.cs">
+      <DependentUpon>SettingContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\SoftWareLicenseContentView.xaml.cs">
+      <DependentUpon>SoftWareLicenseContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UnlockedView.xaml.cs">
+      <DependentUpon>UnlockedView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\UnLockGuideContentView.xaml.cs">
+      <DependentUpon>UnLockGuideContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UnlockView.xaml.cs">
+      <DependentUpon>UnlockView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentPageView.xaml.cs">
+      <DependentUpon>ContentPageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserCenterView.xaml.cs">
+      <DependentUpon>UserCenterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\UserProfileContentView.xaml.cs">
+      <DependentUpon>UserProfileContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\WebPageContentView.xaml.cs">
+      <DependentUpon>WebPageContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\UserWalletContentView.xaml.cs">
+      <DependentUpon>UserWalletContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\WebPageView.xaml.cs">
+      <DependentUpon>WebPageView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+    <Content Include="Assets\appicon\LargeTile.scale-100.png" />
+    <Content Include="Assets\appicon\LargeTile.scale-125.png" />
+    <Content Include="Assets\appicon\LargeTile.scale-150.png" />
+    <Content Include="Assets\appicon\LargeTile.scale-200.png" />
+    <Content Include="Assets\appicon\LargeTile.scale-400.png" />
+    <Content Include="Assets\appicon\SmallTile.scale-100.png" />
+    <Content Include="Assets\appicon\SmallTile.scale-125.png" />
+    <Content Include="Assets\appicon\SmallTile.scale-150.png" />
+    <Content Include="Assets\appicon\SmallTile.scale-200.png" />
+    <Content Include="Assets\appicon\SmallTile.scale-400.png" />
+    <Content Include="Assets\appicon\SplashScreen.scale-100.png" />
+    <Content Include="Assets\appicon\SplashScreen.scale-125.png" />
+    <Content Include="Assets\appicon\SplashScreen.scale-150.png" />
+    <Content Include="Assets\appicon\SplashScreen.scale-200.png" />
+    <Content Include="Assets\appicon\SplashScreen.scale-400.png" />
+    <Content Include="Assets\appicon\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\appicon\Square150x150Logo.scale-125.png" />
+    <Content Include="Assets\appicon\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\appicon\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\appicon\Square150x150Logo.scale-400.png" />
+    <Content Include="Assets\appicon\Square44x44Logo.altform-unplated_targetsize-16.png" />
+    <Content Include="Assets\appicon\Square44x44Logo.altform-unplated_targetsize-24.png" />
+    <Content Include="Assets\appicon\Square44x44Logo.altform-unplated_targetsize-256.png" />
+    <Content Include="Assets\appicon\Square44x44Logo.altform-unplated_targetsize-32.png" />
+    <Content Include="Assets\appicon\Square44x44Logo.altform-unplated_targetsize-48.png" />
+    <Content Include="Assets\appicon\Square44x44Logo.scale-100.png" />
+    <Content Include="Assets\appicon\Square44x44Logo.scale-125.png" />
+    <Content Include="Assets\appicon\Square44x44Logo.scale-150.png" />
+    <Content Include="Assets\appicon\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\appicon\Square44x44Logo.scale-400.png" />
+    <Content Include="Assets\appicon\Square44x44Logo.targetsize-16.png" />
+    <Content Include="Assets\appicon\Square44x44Logo.targetsize-24.png" />
+    <Content Include="Assets\appicon\Square44x44Logo.targetsize-256.png" />
+    <Content Include="Assets\appicon\Square44x44Logo.targetsize-32.png" />
+    <Content Include="Assets\appicon\Square44x44Logo.targetsize-48.png" />
+    <Content Include="Assets\appicon\StoreLogo.scale-100.png" />
+    <Content Include="Assets\appicon\StoreLogo.scale-125.png" />
+    <Content Include="Assets\appicon\StoreLogo.scale-150.png" />
+    <Content Include="Assets\appicon\StoreLogo.scale-200.png" />
+    <Content Include="Assets\appicon\StoreLogo.scale-400.png" />
+    <Content Include="Assets\appicon\Wide310x150Logo.scale-100.png" />
+    <Content Include="Assets\appicon\Wide310x150Logo.scale-125.png" />
+    <Content Include="Assets\appicon\Wide310x150Logo.scale-150.png" />
+    <Content Include="Assets\appicon\Wide310x150Logo.scale-200.png" />
+    <Content Include="Assets\appicon\Wide310x150Logo.scale-400.png" />
+    <Content Include="Assets\Font\iconfont.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\application_icon.png" />
+    <Content Include="Assets\close_signal.jpg" />
+    <Content Include="Assets\header_join.jpg" />
+    <Content Include="Assets\icons\abc_ab_share_pack_mtrl_alpha.9.png" />
+    <Content Include="Assets\icons\abc_btn_check_to_on_mtrl_000.png" />
+    <Content Include="Assets\icons\abc_btn_check_to_on_mtrl_015.png" />
+    <Content Include="Assets\icons\abc_btn_radio_to_on_mtrl_000.png" />
+    <Content Include="Assets\icons\abc_btn_radio_to_on_mtrl_015.png" />
+    <Content Include="Assets\icons\abc_btn_switch_to_on_mtrl_00001.9.png" />
+    <Content Include="Assets\icons\abc_btn_switch_to_on_mtrl_00012.9.png" />
+    <Content Include="Assets\icons\abc_cab_background_top_mtrl_alpha.9.png" />
+    <Content Include="Assets\icons\abc_ic_commit_search_api_mtrl_alpha.png" />
+    <Content Include="Assets\icons\abc_ic_menu_copy_mtrl_am_alpha.png" />
+    <Content Include="Assets\icons\abc_ic_menu_cut_mtrl_alpha.png" />
+    <Content Include="Assets\icons\abc_ic_menu_paste_mtrl_am_alpha.png" />
+    <Content Include="Assets\icons\abc_ic_menu_selectall_mtrl_alpha.png" />
+    <Content Include="Assets\icons\abc_ic_menu_share_mtrl_alpha.png" />
+    <Content Include="Assets\icons\abc_ic_star_black_16dp.png" />
+    <Content Include="Assets\icons\abc_ic_star_black_36dp.png" />
+    <Content Include="Assets\icons\abc_ic_star_black_48dp.png" />
+    <Content Include="Assets\icons\abc_ic_star_half_black_16dp.png" />
+    <Content Include="Assets\icons\abc_ic_star_half_black_36dp.png" />
+    <Content Include="Assets\icons\abc_ic_star_half_black_48dp.png" />
+    <Content Include="Assets\icons\abc_list_divider_mtrl_alpha.9.png" />
+    <Content Include="Assets\icons\abc_list_focused_holo.9.png" />
+    <Content Include="Assets\icons\abc_list_longpressed_holo.9.png" />
+    <Content Include="Assets\icons\abc_list_pressed_holo_dark.9.png" />
+    <Content Include="Assets\icons\abc_list_pressed_holo_light.9.png" />
+    <Content Include="Assets\icons\abc_list_selector_disabled_holo_dark.9.png" />
+    <Content Include="Assets\icons\abc_list_selector_disabled_holo_light.9.png" />
+    <Content Include="Assets\icons\abc_menu_hardkey_panel_mtrl_mult.9.png" />
+    <Content Include="Assets\icons\abc_popup_background_mtrl_mult.9.png" />
+    <Content Include="Assets\icons\abc_scrubber_control_off_mtrl_alpha.png" />
+    <Content Include="Assets\icons\abc_scrubber_control_to_pressed_mtrl_000.png" />
+    <Content Include="Assets\icons\abc_scrubber_control_to_pressed_mtrl_005.png" />
+    <Content Include="Assets\icons\abc_scrubber_primary_mtrl_alpha.9.png" />
+    <Content Include="Assets\icons\abc_scrubber_track_mtrl_alpha.9.png" />
+    <Content Include="Assets\icons\abc_spinner_mtrl_am_alpha.9.png" />
+    <Content Include="Assets\icons\abc_switch_track_mtrl_alpha.9.png" />
+    <Content Include="Assets\icons\abc_tab_indicator_mtrl_alpha.9.png" />
+    <Content Include="Assets\icons\abc_textfield_activated_mtrl_alpha.9.png" />
+    <Content Include="Assets\icons\abc_textfield_default_mtrl_alpha.9.png" />
+    <Content Include="Assets\icons\abc_textfield_search_activated_mtrl_alpha.9.png" />
+    <Content Include="Assets\icons\abc_textfield_search_default_mtrl_alpha.9.png" />
+    <Content Include="Assets\icons\abc_text_select_handle_left_mtrl_dark.png" />
+    <Content Include="Assets\icons\abc_text_select_handle_left_mtrl_light.png" />
+    <Content Include="Assets\icons\abc_text_select_handle_middle_mtrl_dark.png" />
+    <Content Include="Assets\icons\abc_text_select_handle_middle_mtrl_light.png" />
+    <Content Include="Assets\icons\abc_text_select_handle_right_mtrl_dark.png" />
+    <Content Include="Assets\icons\abc_text_select_handle_right_mtrl_light.png" />
+    <Content Include="Assets\icons\about_more.png" />
+    <Content Include="Assets\icons\about_pic.png" />
+    <Content Include="Assets\icons\actionbar_icon_back.png" />
+    <Content Include="Assets\icons\actionbar_icon_close.png" />
+    <Content Include="Assets\icons\actionbar_icon_share.png" />
+    <Content Include="Assets\icons\actionbar_logo.png" />
+    <Content Include="Assets\icons\affirm.png" />
+    <Content Include="Assets\icons\area_pic.png" />
+    <Content Include="Assets\icons\asshole_list.png" />
+    <Content Include="Assets\icons\background_popover.9.png" />
+    <Content Include="Assets\icons\backspace_button.png" />
+    <Content Include="Assets\icons\bicycle1.png" />
+    <Content Include="Assets\icons\bicycle2.png" />
+    <Content Include="Assets\icons\bicycle3.png" />
+    <Content Include="Assets\icons\bike.png" />
+    <Content Include="Assets\icons\blank_banner.png" />
+    <Content Include="Assets\icons\blank_enterance.png" />
+    <Content Include="Assets\icons\bluebar_fold.png" />
+    <Content Include="Assets\icons\bluebar_forbidden.png" />
+    <Content Include="Assets\icons\bluebar_unfold.png" />
+    <Content Include="Assets\icons\blue_bar_alert.png" />
+    <Content Include="Assets\icons\blue_bar_jouney_tip.png" />
+    <Content Include="Assets\icons\blue_bar_message.png" />
+    <Content Include="Assets\icons\blue_bar_red_packet.png" />
+    <Content Include="Assets\icons\broken_car_img.png" />
+    <Content Include="Assets\icons\broken_car_pressed_img.png" />
+    <Content Include="Assets\icons\bt_group.png" />
+    <Content Include="Assets\icons\bt_right.png" />
+    <Content Include="Assets\icons\bt_wifi.png" />
+    <Content Include="Assets\icons\card_package_bg.png" />
+    <Content Include="Assets\icons\certified_icon.png" />
+    <Content Include="Assets\icons\certify_icon.png" />
+    <Content Include="Assets\icons\checkf.png" />
+    <Content Include="Assets\icons\checkt.png" />
+    <Content Include="Assets\icons\clean_text.png" />
+    <Content Include="Assets\icons\close.png" />
+    <Content Include="Assets\icons\combined_shape.png" />
+    <Content Include="Assets\icons\cur_phone.png" />
+    <Content Include="Assets\icons\default_avatar_img.png" />
+    <Content Include="Assets\icons\default_avatar_large_fg.png" />
+    <Content Include="Assets\icons\default_journey_fragment_bg.9.png" />
+    <Content Include="Assets\icons\delete_nickname.png" />
+    <Content Include="Assets\icons\design_ic_visibility.png" />
+    <Content Include="Assets\icons\design_ic_visibility_off.png" />
+    <Content Include="Assets\icons\dialog_bg.9.png" />
+    <Content Include="Assets\icons\dialog_close.png" />
+    <Content Include="Assets\icons\dialog_nickname_tips.png" />
+    <Content Include="Assets\icons\discount_img.png" />
+    <Content Include="Assets\icons\empty_balance.png" />
+    <Content Include="Assets\icons\empty_coupons.png" />
+    <Content Include="Assets\icons\exit_normal_img.png" />
+    <Content Include="Assets\icons\exit_pressed_img.png" />
+    <Content Include="Assets\icons\exit_scan_img.png" />
+    <Content Include="Assets\icons\fab_bike.png" />
+    <Content Include="Assets\icons\find_update.png" />
+    <Content Include="Assets\icons\flashlight_off_bg.png" />
+    <Content Include="Assets\icons\flashlight_on_bg.png" />
+    <Content Include="Assets\icons\forbid.png" />
+    <Content Include="Assets\icons\free_pic.png" />
+    <Content Include="Assets\icons\global_icon_fail.png" />
+    <Content Include="Assets\icons\gray_bg.png" />
+    <Content Include="Assets\icons\hand.png" />
+    <Content Include="Assets\icons\help_bg.png" />
+    <Content Include="Assets\icons\help_pressed_bg.png" />
+    <Content Include="Assets\icons\icon_back.png" />
+    <Content Include="Assets\icons\icon_bike_nearby.png" />
+    <Content Include="Assets\icons\icon_close_red_packet.png" />
+    <Content Include="Assets\icons\icon_edge.png" />
+    <Content Include="Assets\icons\icon_end_touring_nor.png" />
+    <Content Include="Assets\icons\icon_end_touring_pre.png" />
+    <Content Include="Assets\icons\icon_forbidden_parking.png" />
+    <Content Include="Assets\icons\icon_location.png" />
+    <Content Include="Assets\icons\icon_location_bg.png" />
+    <Content Include="Assets\icons\icon_my_service.png" />
+    <Content Include="Assets\icons\icon_new_game_center.png" />
+    <Content Include="Assets\icons\icon_parking_commend.png" />
+    <Content Include="Assets\icons\icon_parking_red_packet.png" />
+    <Content Include="Assets\icons\icon_poi.png" />
+    <Content Include="Assets\icons\icon_popover_arrow_down.png" />
+    <Content Include="Assets\icons\icon_red_packet.png" />
+    <Content Include="Assets\icons\icon_refresh.png" />
+    <Content Include="Assets\icons\icon_replace.png" />
+    <Content Include="Assets\icons\icon_report.png" />
+    <Content Include="Assets\icons\icon_report_l.png" />
+    <Content Include="Assets\icons\icon_report_repair.png" />
+    <Content Include="Assets\icons\icon_user_center.png" />
+    <Content Include="Assets\icons\ic_back_balance.png" />
+    <Content Include="Assets\icons\ic_check_box_yellow_16dp.png" />
+    <Content Include="Assets\icons\ic_chevron_right_white_24dp.png" />
+    <Content Include="Assets\icons\ic_close_black_24dp.png" />
+    <Content Include="Assets\icons\ic_common_home.png" />
+    <Content Include="Assets\icons\ic_dialog_dismiss.png" />
+    <Content Include="Assets\icons\ic_error_white_36dp.png" />
+    <Content Include="Assets\icons\ic_expand_less_white_36dp.png" />
+    <Content Include="Assets\icons\ic_expand_more_white_36dp.png" />
+    <Content Include="Assets\icons\ic_help_outline_black_24dp.png" />
+    <Content Include="Assets\icons\ic_location_searching_white_24dp.png" />
+    <Content Include="Assets\icons\ic_more_vert_black_24dp.png" />
+    <Content Include="Assets\icons\ic_nav_claim_bike.png" />
+    <Content Include="Assets\icons\ic_nav_my_msg.png" />
+    <Content Include="Assets\icons\ic_no_back_balance.png" />
+    <Content Include="Assets\icons\ic_photo_camera_black_24dp.png" />
+    <Content Include="Assets\icons\ic_photo_library_black_24dp.png" />
+    <Content Include="Assets\icons\ic_share_active_top.png" />
+    <Content Include="Assets\icons\ic_system_update_alt_white_24dp.png" />
+    <Content Include="Assets\icons\id_feed.png" />
+    <Content Include="Assets\icons\id_identify.png" />
+    <Content Include="Assets\icons\id_share.png" />
+    <Content Include="Assets\icons\illegal_parking_img.png" />
+    <Content Include="Assets\icons\illegal_parking_pressed_img.png" />
+    <Content Include="Assets\icons\image_placeholder.png" />
+    <Content Include="Assets\icons\img_alert_error.png" />
+    <Content Include="Assets\icons\img_bike_broken.png" />
+    <Content Include="Assets\icons\img_bike_nearby_big.png" />
+    <Content Include="Assets\icons\img_bluetooth.png" />
+    <Content Include="Assets\icons\img_center_loading.png" />
+    <Content Include="Assets\icons\img_center_marker_loading_yellow.png" />
+    <Content Include="Assets\icons\img_keyboard_normal.9.png" />
+    <Content Include="Assets\icons\img_keyboard_pressed.9.png" />
+    <Content Include="Assets\icons\img_splash_logo.png" />
+    <Content Include="Assets\icons\img_use_bike_default.png" />
+    <Content Include="Assets\icons\img_use_bike_free.png" />
+    <Content Include="Assets\icons\input_destination_bg.png" />
+    <Content Include="Assets\icons\input_destination_start_bg.png" />
+    <Content Include="Assets\icons\invalidated.png" />
+    <Content Include="Assets\icons\invalid_name.png" />
+    <Content Include="Assets\icons\invalid_name_new.png" />
+    <Content Include="Assets\icons\invalid_school.png" />
+    <Content Include="Assets\icons\invite_img.png" />
+    <Content Include="Assets\icons\iv_clear.png" />
+    <Content Include="Assets\icons\join.png" />
+    <Content Include="Assets\icons\join_plan300.png" />
+    <Content Include="Assets\icons\join_share_img.png" />
+    <Content Include="Assets\icons\join_wb.png" />
+    <Content Include="Assets\icons\journey_img.png" />
+    <Content Include="Assets\icons\light_off.png" />
+    <Content Include="Assets\icons\light_on.png" />
+    <Content Include="Assets\icons\login_qq.png" />
+    <Content Include="Assets\icons\login_weixin.png" />
+    <Content Include="Assets\icons\logo_bike.png" />
+    <Content Include="Assets\icons\map_marker.png" />
+    <Content Include="Assets\icons\map_marker_little.png" />
+    <Content Include="Assets\icons\map_overlay.png" />
+    <Content Include="Assets\icons\map_overlay_new.png" />
+    <Content Include="Assets\icons\marker_background.png" />
+    <Content Include="Assets\icons\menu_bottom_bg.png" />
+    <Content Include="Assets\icons\menu_update.png" />
+    <Content Include="Assets\icons\minions_btn_scan_1.png" />
+    <Content Include="Assets\icons\minions_btn_scan_2.png" />
+    <Content Include="Assets\icons\minions_btn_scan_3.png" />
+    <Content Include="Assets\icons\minions_eye.png" />
+    <Content Include="Assets\icons\money_card_bg.png" />
+    <Content Include="Assets\icons\money_tip.png" />
+    <Content Include="Assets\icons\motherfucker_wanking_a_bike.png" />
+    <Content Include="Assets\icons\motherfucking_asshole_rider.png" />
+    <Content Include="Assets\icons\motherfucking_bike_pair.png" />
+    <Content Include="Assets\icons\motherfucking_messy_money.png" />
+    <Content Include="Assets\icons\msg_icon_hot_activity.png" />
+    <Content Include="Assets\icons\msg_icon_lostkid.png" />
+    <Content Include="Assets\icons\msg_icon_ofonotice.png" />
+    <Content Include="Assets\icons\navigation_end_point.png" />
+    <Content Include="Assets\icons\navigation_start_point.png" />
+    <Content Include="Assets\icons\nearby_car_big_point.png" />
+    <Content Include="Assets\icons\nike.png" />
+    <Content Include="Assets\icons\notification_bg_low_normal.9.png" />
+    <Content Include="Assets\icons\notification_bg_low_pressed.9.png" />
+    <Content Include="Assets\icons\notification_bg_normal.9.png" />
+    <Content Include="Assets\icons\notification_bg_normal_pressed.9.png" />
+    <Content Include="Assets\icons\notify_panel_notification_icon_bg.png" />
+    <Content Include="Assets\icons\notify_view_icon.png" />
+    <Content Include="Assets\icons\notify_view_logo.png" />
+    <Content Include="Assets\icons\no_use_car_img.png" />
+    <Content Include="Assets\icons\no_use_car_pressed_img.png" />
+    <Content Include="Assets\icons\open.png" />
+    <Content Include="Assets\icons\overtime.png" />
+    <Content Include="Assets\icons\package_card_bg.png" />
+    <Content Include="Assets\icons\packet_bike.png" />
+    <Content Include="Assets\icons\packet_right.png" />
+    <Content Include="Assets\icons\password_bg.png" />
+    <Content Include="Assets\icons\poi_search.png" />
+    <Content Include="Assets\icons\poi_search_backgroud.png" />
+    <Content Include="Assets\icons\private_lock_img.png" />
+    <Content Include="Assets\icons\private_lock_pressed.png" />
+    <Content Include="Assets\icons\push.png" />
+    <Content Include="Assets\icons\qq.png" />
+    <Content Include="Assets\icons\qq_small.png" />
+    <Content Include="Assets\icons\red_dot.png" />
+    <Content Include="Assets\icons\red_light.png" />
+    <Content Include="Assets\icons\red_package.png" />
+    <Content Include="Assets\icons\red_package_bg.png" />
+    <Content Include="Assets\icons\red_package_opened_bg.png" />
+    <Content Include="Assets\icons\red_package_open_bg.png" />
+    <Content Include="Assets\icons\red_package_open_btn.png" />
+    <Content Include="Assets\icons\report_icon.png" />
+    <Content Include="Assets\icons\riding_hint_bubble.png" />
+    <Content Include="Assets\icons\right_arrow.png" />
+    <Content Include="Assets\icons\right_arrow_gray.png" />
+    <Content Include="Assets\icons\right_arrow_wallet.png" />
+    <Content Include="Assets\icons\route_search_arrow.png" />
+    <Content Include="Assets\icons\safe_tip_img.png" />
+    <Content Include="Assets\icons\scan_bg.png" />
+    <Content Include="Assets\icons\scan_circle_bg.png" />
+    <Content Include="Assets\icons\scan_crop_bg.png" />
+    <Content Include="Assets\icons\scan_flashflight_off.png" />
+    <Content Include="Assets\icons\scan_flashflight_on.png" />
+    <Content Include="Assets\icons\scan_input_bg.png" />
+    <Content Include="Assets\icons\scan_logo.png" />
+    <Content Include="Assets\icons\scan_manual_input.png" />
+    <Content Include="Assets\icons\scan_manual_input_pressed.png" />
+    <Content Include="Assets\icons\scan_pressed_bg.png" />
+    <Content Include="Assets\icons\scan_progress.png" />
+    <Content Include="Assets\icons\scan_timeout_img.png" />
+    <Content Include="Assets\icons\scan_unlock_disable_bg.png" />
+    <Content Include="Assets\icons\scan_unlock_enable_bg.png" />
+    <Content Include="Assets\icons\scan_unlock_pressed_bg.png" />
+    <Content Include="Assets\icons\school_pic.png" />
+    <Content Include="Assets\icons\selected_sign.png" />
+    <Content Include="Assets\icons\shadow.9.png" />
+    <Content Include="Assets\icons\shape.png" />
+    <Content Include="Assets\icons\share_qq.png" />
+    <Content Include="Assets\icons\share_qzone.png" />
+    <Content Include="Assets\icons\square_icon.png" />
+    <Content Include="Assets\icons\start_center_point.png" />
+    <Content Include="Assets\icons\start_point.png" />
+    <Content Include="Assets\icons\stop_point.png" />
+    <Content Include="Assets\icons\ticket_card_bg.png" />
+    <Content Include="Assets\icons\title_back_white.png" />
+    <Content Include="Assets\icons\title_refresh_white.png" />
+    <Content Include="Assets\icons\title_share_white.png" />
+    <Content Include="Assets\icons\touring_help_img.png" />
+    <Content Include="Assets\icons\treasureicon.png" />
+    <Content Include="Assets\icons\treasure_finish.png" />
+    <Content Include="Assets\icons\treasure_rect.png" />
+    <Content Include="Assets\icons\uncertified_icon.png" />
+    <Content Include="Assets\icons\unlock_bg_card.png" />
+    <Content Include="Assets\icons\update_fail.png" />
+    <Content Include="Assets\icons\update_success.png" />
+    <Content Include="Assets\icons\user.png" />
+    <Content Include="Assets\icons\use_guideline_img.png" />
+    <Content Include="Assets\icons\voice_off_bg.png" />
+    <Content Include="Assets\icons\voice_on_bg.png" />
+    <Content Include="Assets\icons\wait_more_report.png" />
+    <Content Include="Assets\icons\wallet_bg_remain.png" />
+    <Content Include="Assets\icons\wallet_deposit_window_icon.png" />
+    <Content Include="Assets\icons\wallet_deposit_window_pic.png" />
+    <Content Include="Assets\icons\wallet_img.png" />
+    <Content Include="Assets\icons\wechat.png" />
+    <Content Include="Assets\icons\wechat_session.png" />
+    <Content Include="Assets\icons\wechat_small.png" />
+    <Content Include="Assets\icons\wechat_timeline.png" />
+    <Content Include="Assets\icons\wheel.png" />
+    <Content Include="Assets\icons\wheel_shadow.png" />
+    <Content Include="Assets\icons\window_close.png" />
+    <Content Include="Assets\icons\withdraw_img.png" />
+    <Content Include="Assets\icons\yellow_light.png" />
+    <Content Include="Assets\icons\yellow_right_arrow.png" />
+    <Content Include="Assets\new_splash_content.png" />
+    <Content Include="Assets\new_user_guide_1.jpg" />
+    <Content Include="Assets\new_user_guide_2.jpg" />
+    <Content Include="Assets\new_user_guide_3.jpg" />
+    <Content Include="Assets\new_user_guide_4.jpg" />
+    <Content Include="Assets\scan_help_1.jpg" />
+    <Content Include="Assets\video\splash_video.mp4" />
+    <None Include="Package.StoreAssociation.xml" />
+    <Content Include="Properties\Default.rd.xml" />
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="Controls\ContentPopup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\NotifyPopup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\UserNickModifyControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ActivityCenterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentView\AboutSoftWareContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentView\AboutUsContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentView\ReportRepairPopupContentView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ContentView\ActivityPopupContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ConfirmPaymentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentView\ActivityCenterContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentView\WebPagePopupContentView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ContentView\CreditHistoriesContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LoadingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentView\LoginFirstStepContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentView\LoginSecondStepContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NoLoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentView\RedPacketPupopContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ScanQrcodeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentView\SettingContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentView\SoftWareLicenseContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UnlockedView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentView\UnLockGuideContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UnlockView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentPageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserCenterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentView\UserProfileContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentView\WebPageContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentView\UserWalletContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\WebPageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
+      <Version>6.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed">
+      <Version>2.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="ZXing.Net.Mobile">
+      <Version>2.3.2</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Amap.Web\Amap.Web.csproj">
+      <Project>{518eb7c3-0d6f-467c-9ab8-c7a4b84430d5}</Project>
+      <Name>Amap.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common.Ofo\Common.Ofo.csproj">
+      <Project>{4328616c-11a1-4c0d-89e7-0dc99dc49992}</Project>
+      <Name>Common.Ofo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HttpHelper\HttpHelper.csproj">
+      <Project>{DFC5C31B-7F39-4313-B5E2-55D3D8E1EEDF}</Project>
+      <Name>HttpHelper</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="WindowsMobile, Version=10.0.15063.0">
+      <Name>Windows Mobile Extensions for the UWP %28WindowsMobile, Version=10.0.15063.0%29</Name>
+    </SDKReference>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

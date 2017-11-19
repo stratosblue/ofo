@@ -1,0 +1,26 @@
+﻿<Page
+    x:Class="OfoLight.View.ConfirmPaymentView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OfoLight.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" NavigationCacheMode="Disabled">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <!--<StackPanel Orientation="Horizontal">
+            <TextBlock>总费用</TextBlock>
+            <TextBlock>0</TextBlock>
+            <TextBlock>元</TextBlock>
+        </StackPanel>-->
+        <StackPanel Grid.Row="2">
+            <Button Style="{StaticResource FillButton}" Height="44" Margin="50,10" Command="{Binding NaviCommand}" CommandParameter="WebPay" Background="{StaticResource MainColorBrush}">前往Web页面确认支付</Button>
+            <Button Style="{StaticResource FillButton}" Height="44" Margin="50,40" Command="{Binding PayCommand}" Background="{StaticResource MainColorBrush}">不要在意这些细节，确认支付</Button>
+        </StackPanel>
+    </Grid>
+</Page>
