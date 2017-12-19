@@ -1,4 +1,6 @@
-﻿namespace Amap.Web
+﻿using System;
+
+namespace Amap.Web
 {
     /// <summary>
     /// amap配置
@@ -34,7 +36,7 @@
         /// <summary>
         /// Csid？
         /// </summary>
-        public string Csid { get; set; } = string.Empty;
+        public string Csid { get; set; } = Guid.NewGuid().ToString();
 
         /// <summary>
         /// 获取配置的Url参数字符串

@@ -1,5 +1,8 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using Windows.Devices.Geolocation;
 
 namespace Amap.Web.Entity.Result
 {
@@ -21,7 +24,7 @@ namespace Amap.Web.Entity.Result
     public class StepsItem
     {
         /// <summary>
-        /// 沿吉泰四路向西步行196米右转
+        /// 向西步行196米右转
         /// </summary>
         public string instruction { get; set; }
         /// <summary>
@@ -29,7 +32,7 @@ namespace Amap.Web.Entity.Result
         /// </summary>
         public string orientation { get; set; }
         /// <summary>
-        /// 吉泰四路
+        /// 四路
         /// </summary>
         public string road { get; set; }
         /// <summary>
@@ -40,10 +43,53 @@ namespace Amap.Web.Entity.Result
         /// 
         /// </summary>
         public string duration { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
-        public string polyline { get; set; }
+        private string _polyLine { get; set; }
+
+        /// <summary>
+        /// 路径字符串
+        /// </summary>
+        [JsonProperty("polyline")]
+        public string PolyLine
+        {
+            get { return _polyLine; }
+            set
+            {
+                _polyLine = value;
+                try
+                {
+                    if (value != null)
+                    {
+                        PolyLineList = new List<BasicGeoposition>();
+                        var polylines = value.Split(';');
+                        foreach (var polyPoint in polylines)
+                        {
+                            var points = polyPoint.Split(',');
+                            if (points.Length == 2)
+                            {
+                                float.TryParse(points[0], out var lgt);
+                                float.TryParse(points[1], out var lat);
+
+                                PolyLineList.Add(new BasicGeoposition() { Latitude = lat, Longitude = lgt });
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 路径的BasicGeoposition集合
+        /// </summary>
+        public List<BasicGeoposition> PolyLineList { get; set; }
+
         /// <summary>
         /// 右转
         /// </summary>
@@ -64,10 +110,12 @@ namespace Amap.Web.Entity.Result
         /// 
         /// </summary>
         public string distance { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
         public string duration { get; set; }
+
         /// <summary>
         /// 
         /// </summary>

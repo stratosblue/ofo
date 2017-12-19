@@ -4,6 +4,7 @@ using OfoLight.Entity;
 using OfoLight.Utilities;
 using OfoLight.View;
 using System;
+using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -12,6 +13,11 @@ using Windows.Foundation;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls.Maps;
+using System.Collections.Generic;
+using Windows.UI;
+using Amap.Web.Entity.Result;
+using System.Threading;
+using Windows.UI.Core;
 
 namespace OfoLight.ViewModel
 {
@@ -60,12 +66,10 @@ namespace OfoLight.ViewModel
             get { return _geoPosition; }
             set
             {
+                if (_geoPosition != value)
                 {
-                    if (_geoPosition != value)
-                    {
-                        _geoPosition = value;
-                        NotifyPropertyChanged("GeoPosition");
-                    }
+                    _geoPosition = value;
+                    NotifyPropertyChanged("GeoPosition");
                 }
             }
         }
@@ -85,16 +89,10 @@ namespace OfoLight.ViewModel
             }
         }
 
-
         /// <summary>
         /// 地图控件
         /// </summary>
         public MapControl Map { get; set; }
-
-        /// <summary>
-        /// 所在位置的标记
-        /// </summary>
-        private MapIcon LocationMarker { get; set; } = new MapIcon() { ZIndex = 9999, NormalizedAnchorPoint = new Point(1, 1) };
 
         /// <summary>
         /// 地图API
@@ -143,6 +141,127 @@ namespace OfoLight.ViewModel
             }
         }
 
+        /// <summary>
+        /// 行走路径
+        /// </summary>
+        public MapPolyline WalkingPolyLine { get; private set; }
+
+        private bool _isShowDestinationInfo;
+
+        /// <summary>
+        /// 是否显示目的地信息
+        /// </summary>
+        public bool IsShowDestinationInfo
+        {
+            get { return _isShowDestinationInfo; }
+            set
+            {
+                _isShowDestinationInfo = value;
+                NotifyPropertyChanged("IsShowDestinationInfo");
+            }
+        }
+
+        private Geopoint _destinationGeoPosition;
+
+        /// <summary>
+        /// 目的地位置
+        /// </summary>
+        public Geopoint DestinationGeoPosition
+        {
+            get { return _destinationGeoPosition; }
+            set
+            {
+                _destinationGeoPosition = value;
+                NotifyPropertyChanged("DestinationGeoPosition");
+            }
+        }
+
+        private Geopoint _originGeoPosition;
+
+        /// <summary>
+        /// 行走起始地点
+        /// </summary>
+        public Geopoint OriginGeoPosition
+        {
+            get { return _originGeoPosition; }
+            set
+            {
+                _originGeoPosition = value;
+                NotifyPropertyChanged("OriginGeoPosition");
+            }
+        }
+
+
+        private string _walkingTime;
+
+        /// <summary>
+        /// 目的地行走时间
+        /// </summary>
+        public string WalkingTime
+        {
+            get { return _walkingTime; }
+            set
+            {
+                _walkingTime = value;
+                NotifyPropertyChanged("WalkingTime");
+            }
+        }
+
+        private string _walkingDistance;
+
+        /// <summary>
+        /// 行走距离
+        /// </summary>
+        public string WalkingDistance
+        {
+            get { return _walkingDistance; }
+            set
+            {
+                _walkingDistance = value;
+                NotifyPropertyChanged("WalkingDistance");
+            }
+        }
+
+        private bool _isShowMapCenterFlag = true;
+
+        /// <summary>
+        /// 是否显示地图中心标志
+        /// </summary>
+        public bool IsShowMapCenterFlag
+        {
+            get { return _isShowMapCenterFlag; }
+            set
+            {
+                _isShowMapCenterFlag = value;
+                NotifyPropertyChanged("IsShowMapCenterFlag");
+            }
+        }
+
+        /// <summary>
+        /// 车辆图标
+        /// </summary>
+        private IRandomAccessStreamReference _carImageStreamReference = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/icons/icon_bike_nearby.png"));
+
+        /// <summary>
+        /// 车辆图标-大
+        /// </summary>
+        private IRandomAccessStreamReference _carBigImageStreamReference = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/icons/img_bike_nearby_big.png"));
+
+        /// <summary>
+        /// 最后更改了图片的MapIcon
+        /// </summary>
+        private MapIcon _lastChangeImgMapIcon = null;
+
+        /// <summary>
+        /// 目标位置移动timer
+        /// </summary>
+        private Timer _locationMoveTimer = null;
+
+        /// <summary>
+        /// 最后一次刷新附近车辆的地点
+        /// </summary>
+        private BasicGeoposition _lastRefreshGeoposition = new BasicGeoposition();
+
         #endregion
 
         /// <summary>
@@ -166,12 +285,15 @@ namespace OfoLight.ViewModel
         public MainPageViewModel(MapControl map) : base(false)
         {
             Map = map;
+            Map.MapTapped += MapTappedAsync;
+            Map.CenterChanged += MapCenterChanged;
+            GeoPosition = Map.Center;
+
             CanExitApplication = true;
             var amapConfig = new AmapConfig()
             {
-                AppName = "",
+                AppName = "common.ofo.so",
                 Key = "0afcd8a0b0fe5b9b89469e3531dc23ea",
-                Csid = "71C11230-EBD6-4E28-A77C-85A6F1970A70",
                 LogVersion = 2.0F,
                 Platform = "JS",
                 SdkVersion = 1.3F
@@ -212,7 +334,89 @@ namespace OfoLight.ViewModel
                 }
             });
 
+            _locationMoveTimer = new Timer(LocationMoveTimerCallBack, null, Timeout.Infinite, Timeout.Infinite);
+
             var loadTask = InitializationAsync();
+        }
+
+        /// <summary>
+        /// 地图中心移动
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void MapCenterChanged(MapControl sender, object args)
+        {
+            _locationMoveTimer.Change(1200, Timeout.Infinite);
+        }
+
+        /// <summary>
+        /// 点击地图
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private async void MapTappedAsync(MapControl sender, MapInputEventArgs args)
+        {
+            if (!IsShowMapCenterFlag)
+            {
+                return;
+            }
+            var mapElements = sender.FindMapElementsAtOffset(args.Position);
+            var clickItem = mapElements.FirstOrDefault();
+
+            if (clickItem is MapIcon mapIcon)   //如果点击的是MapIcon
+            {
+                Map.MapElements.Remove(WalkingPolyLine);
+
+                IsShowDestinationInfo = false;
+
+                if (_lastChangeImgMapIcon != null)  //恢复之前改变为大图标的MapIcon
+                {
+                    _lastChangeImgMapIcon.Image = _carImageStreamReference;
+                    _lastChangeImgMapIcon = null;
+                }
+
+                OriginGeoPosition = Map.Center;
+                var origin = OriginGeoPosition.Position;
+                var destination = mapIcon.Location.Position;
+
+                //请求路线
+                var walkingRouteResult = await AmapWebApi.GetGetWalkingRouteAsync(origin, destination);
+
+                if (walkingRouteResult?.route?.paths?.FirstOrDefault() is PathsItem walkingPath)    //有行走路径
+                {
+                    IsShowMapCenterFlag = false;
+                    mapIcon.Image = _carBigImageStreamReference;
+                    _lastChangeImgMapIcon = mapIcon;
+
+                    //创建路径列表，并加入起始点
+                    var paths = new List<BasicGeoposition> { origin };
+
+                    foreach (var step in walkingPath.steps) //遍历行走步骤
+                    {
+                        if (step.PolyLineList != null)
+                        {
+                            paths.AddRange(step.PolyLineList);
+                        }
+                    }
+                    paths.Add(destination);
+
+                    WalkingPolyLine = new MapPolyline
+                    {
+                        Path = new Geopath(paths),
+                        StrokeColor = Color.FromArgb(255, 107, 182, 82),
+                        StrokeThickness = 4.5,
+                        ZIndex = 1
+                    };
+
+                    Map.MapElements.Add(WalkingPolyLine);
+
+                    //显示行走信息
+                    DestinationGeoPosition = mapIcon.Location;
+                    WalkingTime = walkingPath.duration;
+                    WalkingDistance = walkingPath.distance;
+                    IsShowDestinationInfo = true;
+                }
+            }
         }
 
         /// <summary>
@@ -222,8 +426,6 @@ namespace OfoLight.ViewModel
         protected override async Task InitializationAsync()
         {
             ZoomLevel = 17.5;
-
-            LocationMarker.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/icons/map_marker.png"));
 
             var freshBlueBarTask = FreshBlueBar();
 
@@ -237,7 +439,10 @@ namespace OfoLight.ViewModel
         private async Task FreshBlueBar()
         {
             //先定位以便获取位置信息
-            await LocationNowAsync();
+            //await LocationNowAsync();
+            GeoPosition = await PositionUtility.GetFixedGeopointAsync();
+
+            Map.Center = GeoPosition;
 
             var blueBarResult = await OfoApi.GetBlueBarAsync(GeoPosition.Position);
             if (await CheckOfoApiResult(blueBarResult))
@@ -323,42 +528,132 @@ namespace OfoLight.ViewModel
                 return;
             }
             IsPositioning = true;
+            IsShowMapCenterFlag = true;
+
             try
             {
-                //清除显示
-                Map?.MapElements?.Clear();
-                LocationMarker.Location = GeoPosition;
-                Map.MapElements.Add(LocationMarker);
+                ClearMapAddOnInfo();
 
                 GeoPosition = await PositionUtility.GetFixedGeopointAsync();
 
-                var nearByOfoCarsResult = await OfoApi.GetNearByOfoCarAsync(GeoPosition.Position);
-                if (await CheckOfoApiResult(nearByOfoCarsResult))
+                Map.Center = GeoPosition;
+
+                await GetPositionBicycles(GeoPosition.Position);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+        }
+
+        /// <summary>
+        /// 清除地图的附加显示信息
+        /// </summary>
+        private void ClearMapAddOnInfo()
+        {
+            //清除显示
+            Map?.MapElements?.Clear();
+
+            ClearMapWalkingAddOnInfo();
+        }
+
+        /// <summary>
+        /// 清除地图的行走附加信息
+        /// </summary>
+        private void ClearMapWalkingAddOnInfo()
+        {
+            try
+            {
+                //清空行走信息
+                WalkingTime = string.Empty;
+                WalkingDistance = string.Empty;
+                IsShowDestinationInfo = false;
+
+                Map.MapElements.Remove(WalkingPolyLine);
+
+                if (_lastChangeImgMapIcon != null)  //恢复之前改变为大图标的MapIcon
                 {
-                    var carImageStreamReference = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/icons/icon_bike_nearby.png"));
-
-                    LocationMarker.Location = GeoPosition;
-
-                    for (int i = 0; i < nearByOfoCarsResult.Data?.cars?.Count; i++)
-                    {
-                        var bicycle = nearByOfoCarsResult.Data.cars[i];
-                        MapIcon bicycleIcon = new MapIcon
-                        {
-                            Image = carImageStreamReference,
-                            Location = new Geopoint(new BasicGeoposition() { Latitude = bicycle.lat, Longitude = bicycle.lng })
-                        };
-                        Map.MapElements.Add(bicycleIcon);
-                    }
+                    _lastChangeImgMapIcon.Image = _carImageStreamReference;
+                    _lastChangeImgMapIcon = null;
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
             }
-            finally
+        }
+
+        /// <summary>
+        /// 位置移动的Timer回调函数
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        private async void LocationMoveTimerCallBack(object state)
+        {
+            if (IsPositioning || !IsShowMapCenterFlag)    //在定位，或者没有显示地图中心标志
             {
-                IsPositioning = false;
+                return;
             }
+
+            BasicGeoposition nowGeoposition = new BasicGeoposition();
+            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+            {
+                nowGeoposition = Map.Center.Position;
+            });
+
+            //移动量超过一定值时，进行重新获取附近车辆
+            if (Math.Abs(nowGeoposition.Latitude - _lastRefreshGeoposition.Latitude) > 0.0026 || Math.Abs(nowGeoposition.Longitude - _lastRefreshGeoposition.Longitude) > 0.0026)
+            {
+                await GetPositionBicycles(nowGeoposition);
+            }
+        }
+
+        /// <summary>
+        /// 获取目标地点附近的自行车
+        /// </summary>
+        /// <param name="geoposition">目标地点</param>
+        /// <returns></returns>
+        private async Task GetPositionBicycles(BasicGeoposition geoposition)
+        {
+            _lastRefreshGeoposition = geoposition;
+            await Dispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
+            {
+                IsPositioning = true;
+
+                try
+                {
+                    //清除显示
+                    ClearMapAddOnInfo();
+
+                    var nearByOfoCarsResult = await OfoApi.GetNearByOfoCarAsync(geoposition);
+                    if (await CheckOfoApiResult(nearByOfoCarsResult))
+                    {
+                        Point normalizedAnchorPoint = new Point(0.5, 0.8);
+
+                        for (int i = 0; i < nearByOfoCarsResult.Data?.cars?.Count; i++)
+                        {
+                            var bicycle = nearByOfoCarsResult.Data.cars[i];
+                            MapIcon bicycleIcon = new MapIcon
+                            {
+                                Image = _carImageStreamReference,
+                                Location = new Geopoint(new BasicGeoposition() { Latitude = bicycle.lat, Longitude = bicycle.lng }),
+                                NormalizedAnchorPoint = normalizedAnchorPoint,
+                                ZIndex = 50,
+                            };
+                            Map.MapElements.Add(bicycleIcon);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    await ShowNotifyAsync($"刷新车辆信息失败：{ex}");
+                }
+                finally
+                {
+                    IsPositioning = false;
+                }
+            });
         }
 
         /// <summary>
@@ -501,6 +796,19 @@ namespace OfoLight.ViewModel
                 {
                     await GetCurrentActivities(tryTimes);
                 }
+            }
+        }
+
+        protected override void TryGoBack()
+        {
+            if (!IsShowMapCenterFlag)   //没有显示地图中心标志时，显示地图中心标志
+            {
+                IsShowMapCenterFlag = true;
+                ClearMapWalkingAddOnInfo();
+            }
+            else
+            {
+                base.TryGoBack();
             }
         }
 

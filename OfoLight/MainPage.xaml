@@ -94,12 +94,50 @@
             </Grid.RowDefinitions>
 
             <!--地图控件-->
-            <Map:MapControl Grid.RowSpan="3" x:Name="Map" Center="{Binding GeoPosition,Mode=TwoWay}" ZoomLevel="{Binding ZoomLevel}">
+            <Map:MapControl Grid.RowSpan="3" x:Name="Map" Center="{Binding GeoPosition,Mode=OneWay}" ZoomLevel="{Binding ZoomLevel}">
                 <Map:MapControl.Transitions>
                     <TransitionCollection>
                         <ContentThemeTransition/>
                     </TransitionCollection>
                 </Map:MapControl.Transitions>
+                <Map:MapItemsControl>
+                    <!--当前地点-->
+                    <Image Map:MapControl.Location="{Binding GeoPosition,Mode=TwoWay}" Map:MapControl.NormalizedAnchorPoint="0.5,0.5" Width="43" Height="43" Source="ms-appx:///Assets/icons/map_marker.png"></Image>
+                    <!--地图中心浮标-->
+                    <Image x:Name="mapCenterFlag" Map:MapControl.Location="{Binding ElementName=Map,Path=Center,Mode=OneWay}" Map:MapControl.NormalizedAnchorPoint="0.5,1" Width="31" Height="50" Source="ms-appx:///Assets/icons/start_center_point.png" Visibility="{Binding IsShowMapCenterFlag,Converter={StaticResource BoolToVisibilityConverter}}"></Image>
+
+                    <!--行走起始点地标-->
+                    <Image Map:MapControl.Location="{Binding OriginGeoPosition,Mode=OneWay}" Map:MapControl.NormalizedAnchorPoint="0.5,1" Width="31" Height="50" Source="ms-appx:///Assets/icons/start_center_point.png" Visibility="{Binding ElementName=mapCenterFlag,Path=Visibility,Converter={StaticResource AntiVisibilityConverter}}"></Image>
+
+                    <!--目标地点行走信息-->
+                    <Grid Map:MapControl.Location="{Binding DestinationGeoPosition,Mode=OneWay}" Map:MapControl.NormalizedAnchorPoint="0.5,1" Margin="0,0,0,30" Visibility="{Binding IsShowDestinationInfo,Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="12"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.RowSpan="2" Padding="12">
+                            <Border.Background>
+                                <ImageBrush ImageSource="ms-appx:///Assets/icons/shadow.9.png" ></ImageBrush>
+                            </Border.Background>
+                            <StackPanel Padding="25,13" Background="White" CornerRadius="5">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="时间:"/>
+                                    <TextBlock Text="{Binding WalkingTime}"/>
+                                    <TextBlock Text="秒"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="距离:"/>
+                                    <TextBlock Text="{Binding WalkingDistance}"/>
+                                    <TextBlock Text="米"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        <Image Grid.Row="2" Grid.RowSpan="2" Margin="0,-12,0,0" Source="ms-appx:///Assets/icons/icon_popover_arrow_down.png" ></Image>
+                    </Grid>
+
+                </Map:MapItemsControl>
             </Map:MapControl>
 
             <!--顶部BlueBar-->

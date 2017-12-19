@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="46677Stratos.ofobeta" Publisher="CN=013C89DA-5E16-4848-946A-3730B9DEC9B8" Version="0.0.6.0" />
+  <Identity Name="46677Stratos.ofobeta" Publisher="CN=013C89DA-5E16-4848-946A-3730B9DEC9B8" Version="0.0.7.0" />
   <mp:PhoneIdentity PhoneProductId="d22303aa-c133-41ea-ab10-e70bcbbf9488" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>ofo共享单车beta</DisplayName>
@@ -24,6 +24,9 @@
           </uap:ShowNameOnTiles>
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\appicon\SplashScreen.png" BackgroundColor="white" />
+        <uap:InitialRotationPreference>
+          <uap:Rotation Preference="portrait" />
+        </uap:InitialRotationPreference>
       </uap:VisualElements>
     </Application>
   </Applications>

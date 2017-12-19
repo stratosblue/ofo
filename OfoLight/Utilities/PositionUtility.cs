@@ -13,12 +13,12 @@ namespace OfoLight.Utilities
         /// <summary>
         /// 经度修正值
         /// </summary>
-        public const double LongitudeFixValue = 0.002816;
+        public const double LongitudeFixValue = 0.002502;
 
         /// <summary>
         /// 纬度修正值
         /// </summary>
-        public const double LatitudeFixValue = -0.002543;
+        public const double LatitudeFixValue = -0.002474;
 
         /// <summary>
         /// 位置访问实例
@@ -104,13 +104,51 @@ namespace OfoLight.Utilities
         /// <returns></returns>
         public static Geopoint ToUnFixGeopoint(Geopoint geopoint)
         {
-            var basicPosition = new BasicGeoposition()
-            {
-                Altitude = geopoint.Position.Altitude,
-                Latitude = geopoint.Position.Latitude - LatitudeFixValue,
-                Longitude = geopoint.Position.Longitude - LatitudeFixValue,
-            };
+            var basicPosition = ToUnFixBasicGeoposition(geopoint.Position);
             return new Geopoint(basicPosition);
+        }
+
+        /// <summary>
+        /// 转换为未修正的位置信息
+        /// </summary>
+        /// <param name="basicGeoposition"></param>
+        /// <returns></returns>
+        public static BasicGeoposition ToUnFixBasicGeoposition(BasicGeoposition basicGeoposition)
+        {
+            var result = new BasicGeoposition()
+            {
+                Altitude = basicGeoposition.Altitude,
+                Latitude = basicGeoposition.Latitude - LatitudeFixValue,
+                Longitude = basicGeoposition.Longitude - LatitudeFixValue,
+            };
+            return result;
+        }
+
+        /// <summary>
+        /// 转换为未修正的位置信息
+        /// </summary>
+        /// <param name="geopoint"></param>
+        /// <returns></returns>
+        public static Geopoint ToFixGeopoint(Geopoint geopoint)
+        {
+            var basicPosition = ToFixBasicGeoposition(geopoint.Position);
+            return new Geopoint(basicPosition);
+        }
+
+        /// <summary>
+        /// 转换为未修正的位置信息
+        /// </summary>
+        /// <param name="basicGeoposition"></param>
+        /// <returns></returns>
+        public static BasicGeoposition ToFixBasicGeoposition(BasicGeoposition basicGeoposition)
+        {
+            var result = new BasicGeoposition()
+            {
+                Altitude = basicGeoposition.Altitude,
+                Latitude = basicGeoposition.Latitude + LatitudeFixValue,
+                Longitude = basicGeoposition.Longitude + LatitudeFixValue,
+            };
+            return result;
         }
     }
 }

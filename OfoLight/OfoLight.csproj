@@ -368,8 +368,11 @@
     <Content Include="Assets\icons\bicycle2.png" />
     <Content Include="Assets\icons\bicycle3.png" />
     <Content Include="Assets\icons\bike.png" />
+    <Content Include="Assets\icons\black_arrow.png" />
     <Content Include="Assets\icons\blank_banner.png" />
     <Content Include="Assets\icons\blank_enterance.png" />
+    <Content Include="Assets\icons\blank_route.png" />
+    <Content Include="Assets\icons\blank_window.png" />
     <Content Include="Assets\icons\bluebar_fold.png" />
     <Content Include="Assets\icons\bluebar_forbidden.png" />
     <Content Include="Assets\icons\bluebar_unfold.png" />
@@ -390,6 +393,7 @@
     <Content Include="Assets\icons\clean_text.png" />
     <Content Include="Assets\icons\close.png" />
     <Content Include="Assets\icons\combined_shape.png" />
+    <Content Include="Assets\icons\complete.png" />
     <Content Include="Assets\icons\cur_phone.png" />
     <Content Include="Assets\icons\default_avatar_img.png" />
     <Content Include="Assets\icons\default_avatar_large_fg.png" />
@@ -436,7 +440,6 @@
     <Content Include="Assets\icons\icon_refresh.png" />
     <Content Include="Assets\icons\icon_replace.png" />
     <Content Include="Assets\icons\icon_report.png" />
-    <Content Include="Assets\icons\icon_report_l.png" />
     <Content Include="Assets\icons\icon_report_repair.png" />
     <Content Include="Assets\icons\icon_user_center.png" />
     <Content Include="Assets\icons\ic_back_balance.png" />
@@ -454,8 +457,10 @@
     <Content Include="Assets\icons\ic_nav_claim_bike.png" />
     <Content Include="Assets\icons\ic_nav_my_msg.png" />
     <Content Include="Assets\icons\ic_no_back_balance.png" />
+    <Content Include="Assets\icons\ic_ofo_rescue.png" />
     <Content Include="Assets\icons\ic_photo_camera_black_24dp.png" />
     <Content Include="Assets\icons\ic_photo_library_black_24dp.png" />
+    <Content Include="Assets\icons\ic_rescue_join.png" />
     <Content Include="Assets\icons\ic_share_active_top.png" />
     <Content Include="Assets\icons\ic_system_update_alt_white_24dp.png" />
     <Content Include="Assets\icons\id_feed.png" />
@@ -494,7 +499,6 @@
     <Content Include="Assets\icons\login_weixin.png" />
     <Content Include="Assets\icons\logo_bike.png" />
     <Content Include="Assets\icons\map_marker.png" />
-    <Content Include="Assets\icons\map_marker_little.png" />
     <Content Include="Assets\icons\map_overlay.png" />
     <Content Include="Assets\icons\map_overlay_new.png" />
     <Content Include="Assets\icons\marker_background.png" />
@@ -579,6 +583,7 @@
     <Content Include="Assets\icons\start_point.png" />
     <Content Include="Assets\icons\stop_point.png" />
     <Content Include="Assets\icons\ticket_card_bg.png" />
+    <Content Include="Assets\icons\time.png" />
     <Content Include="Assets\icons\title_back_white.png" />
     <Content Include="Assets\icons\title_refresh_white.png" />
     <Content Include="Assets\icons\title_share_white.png" />
@@ -587,6 +592,7 @@
     <Content Include="Assets\icons\treasure_finish.png" />
     <Content Include="Assets\icons\treasure_rect.png" />
     <Content Include="Assets\icons\uncertified_icon.png" />
+    <Content Include="Assets\icons\uncomplete.png" />
     <Content Include="Assets\icons\unlock_bg_card.png" />
     <Content Include="Assets\icons\update_fail.png" />
     <Content Include="Assets\icons\update_success.png" />
@@ -605,7 +611,12 @@
     <Content Include="Assets\icons\wechat_timeline.png" />
     <Content Include="Assets\icons\wheel.png" />
     <Content Include="Assets\icons\wheel_shadow.png" />
+    <Content Include="Assets\icons\window_attention.png" />
+    <Content Include="Assets\icons\window_bike.png" />
     <Content Include="Assets\icons\window_close.png" />
+    <Content Include="Assets\icons\window_homeless.png" />
+    <Content Include="Assets\icons\window_link.png" />
+    <Content Include="Assets\icons\window_success.png" />
     <Content Include="Assets\icons\withdraw_img.png" />
     <Content Include="Assets\icons\yellow_light.png" />
     <Content Include="Assets\icons\yellow_right_arrow.png" />
@@ -618,7 +629,6 @@
     <Content Include="Assets\video\splash_video.mp4" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
-    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

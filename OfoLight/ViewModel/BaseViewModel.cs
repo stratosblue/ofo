@@ -341,30 +341,14 @@ namespace OfoLight.ViewModel
         /// <returns></returns>
         protected virtual bool ViewBackPressed(object sender, BackPressedEventArgs e)
         {
-            if (CanExitApplication)
+            if (e.Handled == false)
             {
-                Frame rootFrame = Window.Current.Content as Frame;
-                if (rootFrame == null)
-                    return true;
-
-                if (e.Handled == false)
-                {
-                    if (IsNotifyShowing && NotifyContent.Equals("再次点击退出"))
-                    {
-                        Global.SaveAppConfig();
-                        Application.Current.Exit();
-                    }
-                    else
-                    {
-                        ShowNotifyAsync("再次点击退出");
-                    }
-                }
+                TryGoBack();
                 return true;
             }
             else
             {
-                TryGoBack();
-                return true;
+                return false;
             }
         }
 
@@ -398,13 +382,33 @@ namespace OfoLight.ViewModel
 
         /// <summary>
         /// 页面回退
+        /// 重写时需要注意CanExitApplication属性
         /// </summary>
         protected virtual void TryGoBack()
         {
-            Frame rootFrame = Window.Current.Content as Frame;
-            if (rootFrame?.CanGoBack == true)
+            if (CanExitApplication)
             {
-                rootFrame.GoBack();
+                Frame rootFrame = Window.Current.Content as Frame;
+                if (rootFrame == null)
+                    return;
+
+                if (IsNotifyShowing && NotifyContent.Equals("再次点击退出"))
+                {
+                    Global.SaveAppConfig();
+                    Application.Current.Exit();
+                }
+                else
+                {
+                    ShowNotifyAsync("再次点击退出");
+                }
+            }
+            else
+            {
+                Frame rootFrame = Window.Current.Content as Frame;
+                if (rootFrame?.CanGoBack == true)
+                {
+                    rootFrame.GoBack();
+                }
             }
         }
 

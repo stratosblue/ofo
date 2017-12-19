@@ -1,6 +1,8 @@
 ﻿using OfoLight.Entity;
 using OfoLight.Utilities;
 using OfoLight.View;
+using System;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace OfoLight.ViewModel
@@ -87,20 +89,35 @@ namespace OfoLight.ViewModel
         /// <param name="state"></param>
         private async void LoginAsync(object state)
         {
-            var loginResult = await OfoApi.LoginAsync(PhoneVerifyCode.Trim());
-            if (await CheckOfoApiResultHttpStatus(loginResult))
+            if (string.IsNullOrWhiteSpace(PhoneVerifyCode))
             {
-                if (loginResult.IsSuccess)
+                await ShowNotifyAsync("请输入正确的验证码");
+            }
+            else
+            {
+                try
                 {
-                    Global.AppConfig.Token = loginResult.Data.Token;
-                    Global.SaveAppConfig();
-                    ClientCookieManager.AddCookies(Global.COOKIE_DOMAIN, $"ofo-tokened={loginResult.Data.Token}");
-                    Global.OfoApi.CurUser.Token = loginResult.Data.Token;
-                    await TryNavigateAsync(typeof(MainPage));
+                    var loginResult = await OfoApi.LoginAsync(PhoneVerifyCode.Trim());
+                    if (await CheckOfoApiResultHttpStatus(loginResult))
+                    {
+                        if (loginResult.IsSuccess)
+                        {
+                            Global.AppConfig.Token = loginResult.Data.Token;
+                            Global.SaveAppConfig();
+                            ClientCookieManager.AddCookies(Global.COOKIE_DOMAIN, $"ofo-tokened={loginResult.Data.Token}");
+                            Global.OfoApi.CurUser.Token = loginResult.Data.Token;
+                            await TryNavigateAsync(typeof(MainPage));
+                        }
+                        else
+                        {
+                            await ShowNotifyAsync(loginResult.Message);
+                        }
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    await ShowNotifyAsync(loginResult.Message);
+                    Debug.WriteLine(ex);
+                    await ShowNotifyAsync($"登陆出现异常：{ex}");
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿using OfoLight.Utilities;
+﻿using Common.Ofo.Entity;
+using OfoLight.Utilities;
 using OfoLight.View;
 using System;
 using System.Diagnostics;
@@ -135,11 +136,11 @@ namespace OfoLight.ViewModel
             {
                 await Dispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
                 {
-                    TokenStatus tokenStatus = await tokenTask;
+                    LoginStatus loginStatus = await tokenTask;
 
-                    switch (tokenStatus)
+                    switch (loginStatus)
                     {
-                        case TokenStatus.NetWorkFail:
+                        case LoginStatus.NetWorkFailed:
                             if (await MessageDialogUtility.ShowMessageAsync("网络访问异常，请检查您的网络状态，并重新尝试。", "出现了一些问题...", MessageDialogType.RetryCancel) == MessageDialogResult.Retry)
                             {
                                 await InitializationAsync();
@@ -149,14 +150,15 @@ namespace OfoLight.ViewModel
                                 Application.Current.Exit();
                             }
                             break;
-                        case TokenStatus.NoToken:   //没有Token
-                        case TokenStatus.TokenExpire:   //Token过期
+                        case LoginStatus.NoToken:   //没有Token
+                        case LoginStatus.TokenExpire:   //Token过期
                             await TryReplaceNavigateAsync(typeof(NoLoginView));
                             break;
-                        case TokenStatus.Logined:   //已登录
+                        case LoginStatus.Logined:   //已登录
                             await TryReplaceNavigateAsync(typeof(MainPage));
                             break;
-                        case TokenStatus.Default:
+                        case LoginStatus.CheckFailed:
+                        case LoginStatus.Default:
                         default:
                             if (await MessageDialogUtility.ShowMessageAsync("出现了未知的问题，要重试吗？", "出现了一些问题...", MessageDialogType.RetryCancel) == MessageDialogResult.Retry)
                             {
@@ -211,59 +213,26 @@ namespace OfoLight.ViewModel
         }
 
         /// <summary>
-        /// 检查本地存储用户Token状态
+        /// 检查已保存的用户Token
         /// </summary>
         /// <returns></returns>
-        private async Task<TokenStatus> CheckSavedUserTokenAsync()
+        private async Task<LoginStatus> CheckSavedUserTokenAsync()
         {
-            TokenStatus result = TokenStatus.Default;
+            LoginStatus result = LoginStatus.Default;
 
             if (!NetworkStatusUtility.IsNetworkAvailable)
             {
                 await ShowNotifyAsync("无法正常访问网络，请检查网络状态", new TimeSpan(0, 0, 5));
-                result = TokenStatus.NetWorkFail;
+                result = LoginStatus.NetWorkFailed;
             }
             else
             {
-                string token = Global.AppConfig.Token;
+                var token = Global.AppConfig.Token;
+                OfoApi.CurUser.Token = token;
+                ClientCookieManager.AddCookies(Global.COOKIE_DOMAIN, $"ofo-tokened={token}");
 
-                //无Token直接登陆页面
-                if (string.IsNullOrWhiteSpace(token))
-                {
-                    result = TokenStatus.NoToken;
-                }
-                else    //有Token，判断一下Token
-                {
-                    //验证登录状态
-                    async Task<bool> ValidateLoginStatus()
-                    {
-                        Global.OfoApi.CurUser.Token = token;
-                        var userInfo = await OfoApi.GetUserInfoAsync();
-                        if (await CheckOfoApiResultHttpStatus(userInfo))
-                        {
-                            if (userInfo.IsSuccess)
-                            {
-                                OfoApi.CurUser.TelPhone = userInfo.Data.TelPhone;
-                                ClientCookieManager.AddCookies(Global.COOKIE_DOMAIN, $"ofo-tokened={token}");
-                                result = TokenStatus.Logined;
-                            }
-                            else
-                            {
-                                result = TokenStatus.TokenExpire;
-                            }
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-
-                    if (!await ValidateLoginStatus())
-                    {
-                        await ValidateLoginStatus();
-                    }
-                }
+                //验证登录状态
+                result = await OfoApi.CheckLoginStatus();
             }
 
             return result;
@@ -309,33 +278,6 @@ namespace OfoLight.ViewModel
                 Debug.WriteLine(ex);
                 return null;
             }
-        }
-
-        /// <summary>
-        /// Token状态
-        /// </summary>
-        private enum TokenStatus
-        {
-            /// <summary>
-            /// 默认值，没有正确检查
-            /// </summary>
-            Default,
-            /// <summary>
-            /// 网络失败
-            /// </summary>
-            NetWorkFail,
-            /// <summary>
-            ///没有Token
-            /// </summary>
-            NoToken,
-            /// <summary>
-            /// Token过期
-            /// </summary>
-            TokenExpire,
-            /// <summary>
-            /// 正确登录的Token
-            /// </summary>
-            Logined,
         }
     }
 }

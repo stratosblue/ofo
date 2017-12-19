@@ -107,6 +107,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ApiUrls.cs" />
+    <Compile Include="Entity\LoginStatus.cs" />
     <Compile Include="Entity\Request\BasePositionRequest.cs" />
     <Compile Include="Entity\Request\ConfirmToPayRequest.cs" />
     <Compile Include="Entity\Request\ModifyUserAvatarRequest.cs" />

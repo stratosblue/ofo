@@ -83,6 +83,8 @@ namespace HttpUtility
 
                 //请求结果
                 HttpResponseMessage responseMessage = null;
+                //请求的异常
+                Exception requestException = null;
 
                 //获取请求体
                 using (HttpRequestMessage requestMessage = await GetRequestMessage(requestItem))
@@ -92,11 +94,26 @@ namespace HttpUtility
                     //进行请求并获取结果
                     var requestTask = Task.Run(async () =>
                     {
-                        responseMessage = await Client.SendRequestAsync(requestMessage);
-                        waitEvent.Set();
+                        try
+                        {
+                            responseMessage = await Client.SendRequestAsync(requestMessage);
+                        }
+                        catch (Exception ex)
+                        {
+                            requestException = ex;
+                        }
+                        finally
+                        {
+                            waitEvent.Set();
+                        }
                     });
 
                     waitEvent.WaitOne(requestItem.TimeOut);
+                }
+
+                if (requestException != null)
+                {
+                    throw requestException;
                 }
 
                 if (responseMessage == null)

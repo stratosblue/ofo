@@ -95,7 +95,7 @@ namespace OfoLight.ViewModel
                     await ShowContentNotifyAsync(redPacketPupopContentView, redPacketPupopContentViewModel);
                 }
             }
-            else if (payResult.Message.Contains("已支付") || payResult.ErrorCode == 40006)
+            else if (!string.IsNullOrEmpty(payResult.Message) && (payResult.Message.Contains("已支付") || payResult.ErrorCode == 40006))
             {
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {

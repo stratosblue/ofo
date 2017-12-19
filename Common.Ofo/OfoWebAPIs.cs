@@ -65,6 +65,43 @@ namespace Common.Ofo
         #region 功能实现
 
         /// <summary>
+        /// 检查登陆状态
+        /// </summary>
+        /// <returns></returns>
+        public async Task<LoginStatus> CheckLoginStatus()
+        {
+            LoginStatus result = LoginStatus.Default;
+
+            //无Token直接登陆页面
+            if (string.IsNullOrWhiteSpace(CurUser.Token))
+            {
+                result = LoginStatus.NoToken;
+            }
+            else
+            {
+                var userInfo = await GetUserInfoAsync();
+
+                if (userInfo.OK)
+                {
+                    if (userInfo.IsSuccess)
+                    {
+                        CurUser.TelPhone = userInfo.Data.TelPhone;
+                        return LoginStatus.Logined;
+                    }
+                    else
+                    {
+                        result = LoginStatus.TokenExpire;
+                    }
+                }
+                else
+                {
+                    result = LoginStatus.NetWorkFailed;
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
         /// 获取验证码
         /// </summary>
         /// <returns></returns>

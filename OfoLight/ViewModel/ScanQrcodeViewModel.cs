@@ -169,9 +169,7 @@ namespace OfoLight.ViewModel
                 {
                     _isBusy = true;
 
-                    var previewProperties = _mediaCapture.VideoDeviceController.GetMediaStreamProperties(MediaStreamType.VideoPreview) as VideoEncodingProperties;
-
-                    //VideoFrame videoFrame = new VideoFrame(BitmapPixelFormat.Rgba8, (int)previewProperties.Width, (int)previewProperties.Height);
+                    //var previewProperties = _mediaCapture.VideoDeviceController.GetMediaStreamProperties(MediaStreamType.VideoPreview) as VideoEncodingProperties;
                     VideoFrame videoFrame = new VideoFrame(BitmapPixelFormat.Rgba8, 640, 360);
                     VideoFrame previewFrame = await _mediaCapture.GetPreviewFrameAsync(videoFrame);
 
@@ -239,8 +237,9 @@ namespace OfoLight.ViewModel
 
         /// <summary>
         /// 初始化摄像头
+        /// <paramref name="changeFocusSetting">更改对焦设置</paramref>
         /// </summary>
-        public async Task InitVideoCapture()
+        public async Task InitVideoCapture(bool changeFocusSetting = true)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
              {
@@ -280,12 +279,33 @@ namespace OfoLight.ViewModel
 
                      var focusControl = _mediaCapture.VideoDeviceController.FocusControl;
 
+                     if (changeFocusSetting && focusControl.Supported)
+                     {
+                         try
+                         {
+                             await focusControl.UnlockAsync();
+                             var setting = new FocusSettings { Mode = FocusMode.Continuous, AutoFocusRange = AutoFocusRange.Normal, };
+                             focusControl.Configure(setting);
+                         }
+                         catch (Exception ex)   //出现异常时重启预览并不设置对焦
+                         {
+                             Debug.WriteLine(ex);
+                             await StopPreviewAsync();
+                             await InitVideoCapture(false);
+                             return;
+                         }
+                     }
+
                      if (focusControl.Supported)
                      {
-                         await focusControl.UnlockAsync();
-                         var setting = new FocusSettings { Mode = FocusMode.Continuous, AutoFocusRange = AutoFocusRange.Normal, };
-                         focusControl.Configure(setting);
-                         await focusControl.FocusAsync();
+                         try
+                         {
+                             await focusControl.FocusAsync();
+                         }
+                         catch (Exception ex)
+                         {
+                             Debug.WriteLine(ex);
+                         }
                      }
 
                      _isPreviewing = true;
