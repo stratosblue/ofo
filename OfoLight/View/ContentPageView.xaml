@@ -15,7 +15,7 @@
 
         <Grid Visibility="{Binding HeaderVisibility}">
             <Button Command="{Binding CloseCommand}" Style="{StaticResource NoEventStyleButton}" Background="Transparent">
-                <Image Source="ms-appx:///Assets/icons/icon_back.png" Width="25" Height="25"/>
+                <Image Source="ms-appx:///Assets/icons/icon_back.png" Width="25" Height="25" />
             </Button>
             <TextBlock Text="{Binding Name}" Margin="50,0" VerticalAlignment="Center" FontSize="20"></TextBlock>
         </Grid>

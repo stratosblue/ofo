@@ -9,20 +9,21 @@ namespace Common.Ofo.Entity.Request
     /// </summary>
     public class BaseRequest
     {
+        #region 字段
+
         /// <summary>
         /// 格林威治标准时间
         /// </summary>
         private static DateTime _standardTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
+        #endregion 字段
+
+        #region 属性
+
         /// <summary>
         /// Api地址
         /// </summary>
         public string ApiUrl { get; set; }
-
-        /// <summary>
-        /// 用户Token
-        /// </summary>
-        public string Token { get; set; }
 
         /// <summary>
         /// 表单参数 source 默认值0
@@ -33,6 +34,40 @@ namespace Common.Ofo.Entity.Request
         /// 表单参数source-version默认值9999
         /// </summary>
         public int SourceVersion { get; set; } = 9999;
+
+        /// <summary>
+        /// 用户Token
+        /// </summary>
+        public string Token { get; set; }
+
+        #endregion 属性
+
+        #region 方法
+
+        /// <summary>
+        /// 获取当前时间戳
+        /// </summary>
+        /// <returns></returns>
+        public static long GetTimeStamp()
+        {
+            return Convert.ToInt64((DateTime.Now.ToUniversalTime() - _standardTime).TotalMilliseconds);
+        }
+
+        /// <summary>
+        /// 获取表单字符串
+        /// </summary>
+        /// <returns></returns>
+        public virtual string GetFormString()
+        {
+            if (string.IsNullOrEmpty(Token))
+            {
+                return $"source={Source}&source-version={SourceVersion}";
+            }
+            else
+            {
+                return $"token={Token}&source={Source}&source-version={SourceVersion}";
+            }
+        }
 
         /// <summary>
         /// 获取Http请求
@@ -55,6 +90,15 @@ namespace Common.Ofo.Entity.Request
         }
 
         /// <summary>
+        /// 获取查询字符串
+        /// </summary>
+        /// <returns></returns>
+        public virtual string GetQueryString()
+        {
+            return string.Empty;
+        }
+
+        /// <summary>
         /// 获取请求的Url
         /// </summary>
         /// <returns></returns>
@@ -73,38 +117,6 @@ namespace Common.Ofo.Entity.Request
             return stringBuilder.ToString();
         }
 
-        /// <summary>
-        /// 获取表单字符串
-        /// </summary>
-        /// <returns></returns>
-        public virtual string GetFormString()
-        {
-            if (string.IsNullOrEmpty(Token))
-            {
-                return $"source={Source}&source-version={SourceVersion}";
-            }
-            else
-            {
-                return $"token={Token}&source={Source}&source-version={SourceVersion}";
-            }
-        }
-
-        /// <summary>
-        /// 获取查询字符串
-        /// </summary>
-        /// <returns></returns>
-        public virtual string GetQueryString()
-        {
-            return string.Empty;
-        }
-
-        /// <summary>
-        /// 获取当前时间戳
-        /// </summary>
-        /// <returns></returns>
-        public static long GetTimeStamp()
-        {
-            return Convert.ToInt64((DateTime.Now.ToUniversalTime() - _standardTime).TotalMilliseconds);
-        }
+        #endregion 方法
     }
 }

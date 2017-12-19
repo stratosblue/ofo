@@ -11,6 +11,8 @@ namespace OfoLight.Utilities
     /// </summary>
     public static class ResourceUtility
     {
+        #region 方法
+
         /// <summary>
         /// 获取程序资源文件访问流
         /// 路径eg. Assets/new_splash_content.png
@@ -42,5 +44,7 @@ namespace OfoLight.Utilities
                 return null;
             }
         }
+
+        #endregion 方法
     }
 }

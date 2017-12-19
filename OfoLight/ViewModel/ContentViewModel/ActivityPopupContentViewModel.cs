@@ -16,31 +16,16 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class ActivityPopupContentViewModel : BasePopupContentViewModel
     {
-        private BitmapImage _image;
+        #region 字段
 
-        public BitmapImage Image
-        {
-            get { return _image; }
-            set
-            {
-                _image = value;
-                NotifyPropertyChanged("Image");
-            }
-        }
+        private AdvertisementItem _activityInfo;
+        private BitmapImage _image;
 
         private string _url;
 
-        public string Url
-        {
-            get { return _url; }
-            set
-            {
-                _url = value;
-                NotifyPropertyChanged("Url");
-            }
-        }
+        #endregion 字段
 
-        private AdvertisementItem _activityInfo;
+        #region 属性
 
         /// <summary>
         /// 活动信息
@@ -103,10 +88,34 @@ namespace OfoLight.ViewModel
             }
         }
 
+        public BitmapImage Image
+        {
+            get { return _image; }
+            set
+            {
+                _image = value;
+                NotifyPropertyChanged("Image");
+            }
+        }
+
+        public string Url
+        {
+            get { return _url; }
+            set
+            {
+                _url = value;
+                NotifyPropertyChanged("Url");
+            }
+        }
+
         /// <summary>
         /// 查看活动命令
         /// </summary>
         public ICommand ViewActivityCommand { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 活动弹出界面VM
@@ -126,5 +135,7 @@ namespace OfoLight.ViewModel
                 CloseAction();
             });
         }
+
+        #endregion 构造函数
     }
 }

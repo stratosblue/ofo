@@ -11,6 +11,8 @@ namespace OfoLight.Utilities
     /// </summary>
     public static class ImageUtility
     {
+        #region 方法
+
         /// <summary>
         /// 图片压缩
         /// （目前好像还有些问题）
@@ -39,9 +41,11 @@ namespace OfoLight.Utilities
                         case ".png":
                             encoderId = BitmapEncoder.PngEncoderId;
                             break;
+
                         case ".bmp":
                             encoderId = BitmapEncoder.BmpEncoderId;
                             break;
+
                         case ".jpg":
                         default:
                             encoderId = BitmapEncoder.JpegEncoderId;
@@ -63,6 +67,7 @@ namespace OfoLight.Utilities
                     }
 
                     #region 如果不这样做，可能会缩放出错？
+
                     var width = transform.ScaledWidth;
                     var height = transform.ScaledHeight;
 
@@ -71,16 +76,17 @@ namespace OfoLight.Utilities
                         width = transform.ScaledHeight;
                         height = transform.ScaledWidth;
                     }
-                    #endregion
 
-                    // Fant是相对高质量的插值模式。  
+                    #endregion 如果不这样做，可能会缩放出错？
+
+                    // Fant是相对高质量的插值模式。
                     transform.InterpolationMode = BitmapInterpolationMode.Fant;
 
-                    // BitmapDecoder指示最佳匹配本地存储的图像数据的像素格式和alpha模式。 这可以提供高性能的与或质量增益。  
+                    // BitmapDecoder指示最佳匹配本地存储的图像数据的像素格式和alpha模式。 这可以提供高性能的与或质量增益。
                     BitmapPixelFormat format = decoder.BitmapPixelFormat;
                     BitmapAlphaMode alpha = decoder.BitmapAlphaMode;
 
-                    // PixelDataProvider提供对位图帧中像素数据的访问  
+                    // PixelDataProvider提供对位图帧中像素数据的访问
                     PixelDataProvider pixelProvider = await decoder.GetPixelDataAsync(
                         format,
                         alpha,
@@ -91,9 +97,9 @@ namespace OfoLight.Utilities
 
                     byte[] pixels = pixelProvider.DetachPixelData();
 
-                    //将像素数据写入编码器。  
+                    //将像素数据写入编码器。
                     BitmapEncoder encoder = await BitmapEncoder.CreateAsync(encoderId, result);
-                    //设置像素数据  
+                    //设置像素数据
                     encoder.SetPixelData(
                         format,
                         alpha,
@@ -104,7 +110,7 @@ namespace OfoLight.Utilities
                         pixels
                         );
 
-                    await encoder.FlushAsync(); //异步提交和刷新所有图像数据（这一步保存图片到文件） 
+                    await encoder.FlushAsync(); //异步提交和刷新所有图像数据（这一步保存图片到文件）
                 }
                 else    //不需要缩放
                 {
@@ -119,5 +125,7 @@ namespace OfoLight.Utilities
 
             return result;
         }
+
+        #endregion 方法
     }
 }

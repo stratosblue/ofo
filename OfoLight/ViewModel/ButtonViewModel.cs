@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows.Input;
-using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
@@ -13,7 +12,54 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class ButtonViewModel : NotifyViewModel
     {
+        #region 字段
+
+        private string _contentText;
+        private string _description;
         private ImageSource _icon;
+
+        private string _iconUri;
+
+        private bool _isTip;
+
+        private string _name;
+
+        private Visibility _tipStatus = Visibility.Collapsed;
+
+        #endregion 字段
+
+        #region 属性
+
+        /// <summary>
+        /// button点击的command
+        /// </summary>
+        public ICommand ButtonClickCommand { get; set; }
+
+        /// <summary>
+        /// 内容
+        /// </summary>
+        public string ContentText
+        {
+            get { return _contentText; }
+            set
+            {
+                _contentText = value;
+                NotifyPropertyChanged("ContentText");
+            }
+        }
+
+        /// <summary>
+        /// 描述
+        /// </summary>
+        public string Description
+        {
+            get { return _description; }
+            set
+            {
+                _description = value;
+                NotifyPropertyChanged("Description");
+            }
+        }
 
         /// <summary>
         /// 图标
@@ -28,7 +74,10 @@ namespace OfoLight.ViewModel
             }
         }
 
-        private string _iconUri;
+        /// <summary>
+        /// iconfont图标
+        /// </summary>
+        public string IconFont { get; set; }
 
         /// <summary>
         /// 图标的资源路径
@@ -50,59 +99,6 @@ namespace OfoLight.ViewModel
             }
         }
 
-
-        /// <summary>
-        /// iconfont图标
-        /// </summary>
-        public string IconFont { get; set; }
-
-        private string _contentText;
-
-        /// <summary>
-        /// 内容
-        /// </summary>
-        public string ContentText
-        {
-            get { return _contentText; }
-            set
-            {
-                _contentText = value;
-                NotifyPropertyChanged("ContentText");
-            }
-        }
-
-        private string _name;
-
-        /// <summary>
-        /// 名称
-        /// </summary>
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                _name = value;
-                NotifyPropertyChanged("Name");
-            }
-        }
-
-        private string _description;
-
-        /// <summary>
-        /// 描述
-        /// </summary>
-        public string Description
-        {
-            get { return _description; }
-            set
-            {
-                _description = value;
-                NotifyPropertyChanged("Description");
-            }
-        }
-
-        private bool _isTip;
-
         /// <summary>
         /// 是否提示
         /// </summary>
@@ -117,7 +113,18 @@ namespace OfoLight.ViewModel
             }
         }
 
-        private Visibility _tipStatus = Visibility.Collapsed;
+        /// <summary>
+        /// 名称
+        /// </summary>
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                NotifyPropertyChanged("Name");
+            }
+        }
 
         /// <summary>
         /// 提示的显示状态
@@ -132,15 +139,16 @@ namespace OfoLight.ViewModel
             }
         }
 
-        /// <summary>
-        /// button点击的command
-        /// </summary>
-        public ICommand ButtonClickCommand { get; set; }
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 按键VM
         /// </summary>
         public ButtonViewModel()
         { }
+
+        #endregion 构造函数
     }
 }

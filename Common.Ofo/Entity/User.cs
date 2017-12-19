@@ -1,22 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Common.Ofo.Entity
+﻿namespace Common.Ofo.Entity
 {
     /// <summary>
     /// 用户
     /// </summary>
     public class User
     {
-        /// <summary>
-        /// 用户
-        /// </summary>
-        public User()
-        {
-        }
+        #region 属性
 
         /// <summary>
         /// 电话号码
@@ -27,5 +16,18 @@ namespace Common.Ofo.Entity
         /// Token
         /// </summary>
         public string Token { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
+
+        /// <summary>
+        /// 用户
+        /// </summary>
+        public User()
+        {
+        }
+
+        #endregion 构造函数
     }
 }

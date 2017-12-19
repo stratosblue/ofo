@@ -7,6 +7,8 @@ namespace Common.Ofo.Entity.Result
     /// </summary>
     public class EndRideResult : BaseResult
     {
+        #region 属性
+
         /// <summary>
         /// 结束骑行结果
         /// </summary>
@@ -18,12 +20,22 @@ namespace Common.Ofo.Entity.Result
         [JsonProperty("values")]
         public Values Value { get; set; }
 
+        #endregion 属性
+
+        #region 类
+
         public class Values
         {
+            #region 属性
+
             /// <summary>
-            /// 
+            ///
             /// </summary>
             public UnLockCarInfo info { get; set; }
+
+            #endregion 属性
         }
+
+        #endregion 类
     }
 }

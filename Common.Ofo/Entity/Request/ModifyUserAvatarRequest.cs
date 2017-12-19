@@ -7,10 +7,16 @@ namespace Common.Ofo.Entity.Request
     /// </summary>
     public class ModifyUserAvatarRequest : BaseRequest
     {
+        #region 属性
+
         /// <summary>
         /// 头像数据
         /// </summary>
         public byte[] AvatarData { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 头像修改请求
@@ -19,6 +25,10 @@ namespace Common.Ofo.Entity.Request
         {
             ApiUrl = ApiUrls.ModifyUserAvatar;
         }
+
+        #endregion 构造函数
+
+        #region 方法
 
         public override HttpItem GetHttpItem()
         {
@@ -42,5 +52,7 @@ namespace Common.Ofo.Entity.Request
 
             return result;
         }
+
+        #endregion 方法
     }
 }

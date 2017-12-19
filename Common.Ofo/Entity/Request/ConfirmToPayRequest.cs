@@ -5,6 +5,8 @@
     /// </summary>
     public class ConfirmToPayRequest : BaseRequest
     {
+        #region 属性
+
         /// <summary>
         /// 订单编号
         /// </summary>
@@ -15,6 +17,10 @@
         /// </summary>
         public int Packetid { get; set; } = 0;
 
+        #endregion 属性
+
+        #region 构造函数
+
         /// <summary>
         /// 确认支付
         /// </summary>
@@ -23,9 +29,15 @@
             ApiUrl = ApiUrls.ConfirmToPay;
         }
 
+        #endregion 构造函数
+
+        #region 方法
+
         public override string GetFormString()
         {
             return base.GetFormString() + $"&ordernum={OrderNum}&packetid={Packetid}";
         }
+
+        #endregion 方法
     }
 }

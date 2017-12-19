@@ -12,19 +12,19 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class LoginSecondStepContentViewModel : BaseContentViewModel
     {
-        private string _telPhone;
-
-        public string TelPhone
-        {
-            get { return _telPhone; }
-            set
-            {
-                _telPhone = value;
-                NotifyPropertyChanged("TelPhone");
-            }
-        }
+        #region 字段
 
         private string _phoneVerifyCode;
+        private string _telPhone;
+
+        #endregion 字段
+
+        #region 属性
+
+        /// <summary>
+        /// 登陆命令
+        /// </summary>
+        public ICommand LoginCommand { get; set; }
 
         public string PhoneVerifyCode
         {
@@ -36,7 +36,6 @@ namespace OfoLight.ViewModel
             }
         }
 
-
         /// <summary>
         /// 重新获取验证码命令
         /// </summary>
@@ -47,10 +46,19 @@ namespace OfoLight.ViewModel
         /// </summary>
         public ICommand RegistrationProtocolCommand { get; set; }
 
-        /// <summary>
-        /// 登陆命令
-        /// </summary>
-        public ICommand LoginCommand { get; set; }
+        public string TelPhone
+        {
+            get { return _telPhone; }
+            set
+            {
+                _telPhone = value;
+                NotifyPropertyChanged("TelPhone");
+            }
+        }
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 登录第二步VM
@@ -82,6 +90,14 @@ namespace OfoLight.ViewModel
             });
         }
 
+        #endregion 构造函数
+
+        #region 方法
+
+        protected override void CloseAction()
+        {
+            ContentNavigation(new ContentPageArgs() { IsGoBack = true, });
+        }
 
         /// <summary>
         /// 登陆
@@ -122,9 +138,6 @@ namespace OfoLight.ViewModel
             }
         }
 
-        protected override void CloseAction()
-        {
-            ContentNavigation(new ContentPageArgs() { IsGoBack = true, });
-        }
+        #endregion 方法
     }
 }

@@ -9,30 +9,37 @@ namespace OfoLight.Utilities
     /// </summary>
     public static class ClientCookieManager
     {
+        #region 属性
+
         /// <summary>
         /// 基本协议筛选器
         /// </summary>
         private static HttpBaseProtocolFilter ProtocolFilter { get; set; } = new HttpBaseProtocolFilter();
 
-        /// <summary>
-        /// 清理指定url的cookie
-        /// </summary>
-        /// <param name="url"></param>
-        public static void ClearCookie(string url)
-        {
-            ClearCookie(new Uri(url));
-        }
+        #endregion 属性
+
+        #region 方法
 
         /// <summary>
-        /// 清理指定URI的Cookie
+        /// 附加Cookie
         /// </summary>
-        /// <param name="uri"></param>
-        public static void ClearCookie(Uri uri)
+        /// <param name="domain"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <param name="path"></param>
+        /// <param name="expires"></param>
+        /// <param name="httpOnly"></param>
+        public static void AddCookie(string domain, string name, string value, string path, DateTime? expires, bool httpOnly)
         {
-            foreach (var cookie in ProtocolFilter.CookieManager.GetCookies(uri))
+            var cookie = new HttpCookie(name, domain, path);
+            cookie.Value = value;
+            if (expires.HasValue)
             {
-                ProtocolFilter.CookieManager.DeleteCookie(cookie);
+                cookie.Expires = new DateTimeOffset(expires.Value);
             }
+            cookie.HttpOnly = httpOnly;
+
+            ProtocolFilter.CookieManager.SetCookie(cookie);
         }
 
         /// <summary>
@@ -70,25 +77,26 @@ namespace OfoLight.Utilities
         }
 
         /// <summary>
-        /// 附加Cookie
+        /// 清理指定url的cookie
         /// </summary>
-        /// <param name="domain"></param>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        /// <param name="path"></param>
-        /// <param name="expires"></param>
-        /// <param name="httpOnly"></param>
-        public static void AddCookie(string domain, string name, string value, string path, DateTime? expires, bool httpOnly)
+        /// <param name="url"></param>
+        public static void ClearCookie(string url)
         {
-            var cookie = new HttpCookie(name, domain, path);
-            cookie.Value = value;
-            if (expires.HasValue)
-            {
-                cookie.Expires = new DateTimeOffset(expires.Value);
-            }
-            cookie.HttpOnly = httpOnly;
-
-            ProtocolFilter.CookieManager.SetCookie(cookie);
+            ClearCookie(new Uri(url));
         }
+
+        /// <summary>
+        /// 清理指定URI的Cookie
+        /// </summary>
+        /// <param name="uri"></param>
+        public static void ClearCookie(Uri uri)
+        {
+            foreach (var cookie in ProtocolFilter.CookieManager.GetCookies(uri))
+            {
+                ProtocolFilter.CookieManager.DeleteCookie(cookie);
+            }
+        }
+
+        #endregion 方法
     }
 }

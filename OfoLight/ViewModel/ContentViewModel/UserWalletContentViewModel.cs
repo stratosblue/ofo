@@ -10,7 +10,68 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class UserWalletContentViewModel : BaseContentViewModel
     {
+        #region 字段
+
+        private float _balance;
+        private float _bond;
+        private int _monthCardEndTime;
+        private float _packetNum;
+        private float _redPacketBalance;
         private WalletInfo _walletInfo;
+
+        #endregion 字段
+
+        #region 属性
+
+        public float Balance
+        {
+            get { return _balance; }
+            set
+            {
+                _balance = value;
+                NotifyPropertyChanged("Balance");
+            }
+        }
+
+        public float Bond
+        {
+            get { return _bond; }
+            set
+            {
+                _bond = value;
+                NotifyPropertyChanged("Bond");
+            }
+        }
+
+        public int MonthCardEndTime
+        {
+            get { return _monthCardEndTime; }
+            set
+            {
+                _monthCardEndTime = value;
+                NotifyPropertyChanged("MonthCardEndTime");
+            }
+        }
+
+        public float PacketNum
+        {
+            get { return _packetNum; }
+            set
+            {
+                _packetNum = value;
+                NotifyPropertyChanged("PacketNum");
+            }
+        }
+
+        public float RedPacketBalance
+        {
+            get { return _redPacketBalance; }
+            set
+            {
+                _redPacketBalance = value;
+                NotifyPropertyChanged("RedPacketBalance");
+            }
+        }
 
         public WalletInfo WalletInfo
         {
@@ -27,77 +88,17 @@ namespace OfoLight.ViewModel
             }
         }
 
-        private float _balance;
+        #endregion 属性
 
-        public float Balance
-        {
-            get { return _balance; }
-            set
-            {
-                _balance = value;
-                NotifyPropertyChanged("Balance");
-            }
-        }
-
-        private float _bond;
-
-        public float Bond
-        {
-            get { return _bond; }
-            set
-            {
-                _bond = value;
-                NotifyPropertyChanged("Bond");
-            }
-        }
-
-        private int _monthCardEndTime;
-
-        public int MonthCardEndTime
-        {
-            get { return _monthCardEndTime; }
-            set
-            {
-                _monthCardEndTime = value;
-                NotifyPropertyChanged("MonthCardEndTime");
-            }
-        }
-        private float _packetNum;
-
-        public float PacketNum
-        {
-            get { return _packetNum; }
-            set
-            {
-                _packetNum = value;
-                NotifyPropertyChanged("PacketNum");
-            }
-        }
-        private float _redPacketBalance;
-
-        public float RedPacketBalance
-        {
-            get { return _redPacketBalance; }
-            set
-            {
-                _redPacketBalance = value;
-                NotifyPropertyChanged("RedPacketBalance");
-            }
-        }
-
+        #region 构造函数
 
         public UserWalletContentViewModel()
         {
         }
 
-        protected override async Task InitializationAsync()
-        {
-            var walletInfoResult = await OfoApi.GetWalletInfoAsync();
-            if (await CheckOfoApiResult(walletInfoResult))
-            {
-                WalletInfo = walletInfoResult.Data;
-            }
-        }
+        #endregion 构造函数
+
+        #region 方法
 
         protected override void ContentNavigation(object state)
         {
@@ -112,15 +113,19 @@ namespace OfoLight.ViewModel
                     case "卡包":
                         args.ContentElement = new WebPageContentView("https://common.ofo.so/newdist/?CardPackagePage");
                         break;
+
                     case "余额":
                         args.ContentElement = new WebPageContentView("https://common.ofo.so/newdist/?NewBalancePage");
                         break;
+
                     case "红包收入":
                         args.ContentElement = new WebPageContentView("https://common.ofo.so/newdist/?MyPacketPage");
                         break;
+
                     case "优惠券":
                         args.ContentElement = new WebPageContentView("https://common.ofo.so/newdist/?Packets");
                         break;
+
                     case "押金":
                         args.ContentElement = new WebPageContentView("https://common.ofo.so/newdist/?ForegiftWithdrawSuccess");
                         break;
@@ -131,5 +136,16 @@ namespace OfoLight.ViewModel
                 }
             }
         }
+
+        protected override async Task InitializationAsync()
+        {
+            var walletInfoResult = await OfoApi.GetWalletInfoAsync();
+            if (await CheckOfoApiResult(walletInfoResult))
+            {
+                WalletInfo = walletInfoResult.Data;
+            }
+        }
+
+        #endregion 方法
     }
 }

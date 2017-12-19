@@ -1,5 +1,4 @@
 ﻿using Common.Ofo.Entity.Result;
-using OfoLight.Controls;
 using OfoLight.Utilities;
 using System;
 using System.Collections.ObjectModel;
@@ -14,12 +13,12 @@ namespace OfoLight.ViewModel
 {
     public class ReportRepairPopupContentViewModel : BasePopupContentViewModel
     {
-        public ObservableCollection<RepairReasonInfo> RepairReasonList { get; set; } = new ObservableCollection<RepairReasonInfo>();
+        #region 属性
 
         /// <summary>
-        /// 确认报修命令
+        /// 是否Gsm 1是，0否
         /// </summary>
-        public ICommand RepairCommand { get; set; }
+        public int IsGsm { get; private set; } = 0;
 
         /// <summary>
         /// 订单编号
@@ -27,9 +26,15 @@ namespace OfoLight.ViewModel
         public string OrderNum { get; private set; }
 
         /// <summary>
-        /// 是否Gsm 1是，0否
+        /// 确认报修命令
         /// </summary>
-        public int IsGsm { get; private set; } = 0;
+        public ICommand RepairCommand { get; set; }
+
+        public ObservableCollection<RepairReasonInfo> RepairReasonList { get; set; } = new ObservableCollection<RepairReasonInfo>();
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 报修弹出内容框VM
@@ -79,6 +84,10 @@ namespace OfoLight.ViewModel
             });
         }
 
+        #endregion 构造函数
+
+        #region 方法
+
         protected override async Task InitializationAsync()
         {
             var repairReasonListResult = await OfoApi.GetRepairReasonListAsync(OrderNum);
@@ -90,5 +99,7 @@ namespace OfoLight.ViewModel
                 }
             }
         }
+
+        #endregion 方法
     }
 }

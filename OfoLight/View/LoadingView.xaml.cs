@@ -8,6 +8,8 @@ namespace OfoLight.View
     /// </summary>
     public sealed partial class LoadingView : Page
     {
+        #region 构造函数
+
         /// <summary>
         /// 程序启动加载页
         /// </summary>
@@ -16,5 +18,7 @@ namespace OfoLight.View
             this.InitializeComponent();
             DataContext = new LoadingViewModel();
         }
+
+        #endregion 构造函数
     }
 }

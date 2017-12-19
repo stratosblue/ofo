@@ -9,10 +9,7 @@ namespace HttpUtility
     /// </summary>
     public class HttpResult
     {
-        /// <summary>
-        /// 返回页面内容
-        /// </summary>
-        public string Html { get; set; }
+        #region 属性
 
         /// <summary>
         /// 返回的数据
@@ -20,9 +17,9 @@ namespace HttpUtility
         public IBuffer Data { get; set; }
 
         /// <summary>
-        /// 请求状态码
+        /// 返回页面内容
         /// </summary>
-        public HttpStatusCode StatusCode { get; set; }
+        public string Html { get; set; }
 
         /// <summary>
         /// Http请求成功
@@ -35,13 +32,20 @@ namespace HttpUtility
         public Uri Location { get; set; }
 
         /// <summary>
+        /// 原返回结果
+        /// </summary>
+        public HttpResponseMessage OriginResponse { get; set; }
+
+        /// <summary>
         /// 请求的地址，重定向时会与最初的请求地址不同
         /// </summary>
         public Uri RequestUri { get; set; }
 
         /// <summary>
-        /// 原返回结果
+        /// 请求状态码
         /// </summary>
-        public HttpResponseMessage OriginResponse { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
+
+        #endregion 属性
     }
 }

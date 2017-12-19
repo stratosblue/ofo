@@ -8,6 +8,8 @@ namespace OfoLight.Converters
     /// </summary>
     public class IntToDescribeCommonConverter : IValueConverter
     {
+        #region 方法
+
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (value is int inputValue)
@@ -21,10 +23,12 @@ namespace OfoLight.Converters
                             {
                                 case 0:
                                     return "未认证";
+
                                 case 1:
                                     return "已认证";
                             }
                             break;
+
                         case "reapirButton":
                             if (inputValue > 0)
                             {
@@ -44,5 +48,7 @@ namespace OfoLight.Converters
         {
             return null;
         }
+
+        #endregion 方法
     }
 }

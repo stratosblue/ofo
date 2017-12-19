@@ -7,7 +7,13 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class NotifyViewModel : INotifyPropertyChanged
     {
+        #region 事件
+
         public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion 事件
+
+        #region 方法
 
         /// <summary>
         /// 通知属性改变
@@ -17,5 +23,7 @@ namespace OfoLight.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
+        #endregion 方法
     }
 }

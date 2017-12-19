@@ -8,6 +8,8 @@ namespace OfoLight.Converters
     /// </summary>
     public class TimeSpanToStringConverter : IValueConverter
     {
+        #region 方法
+
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (value is TimeSpan inputValue)
@@ -28,5 +30,7 @@ namespace OfoLight.Converters
         {
             return TimeSpan.MinValue;
         }
+
+        #endregion 方法
     }
 }

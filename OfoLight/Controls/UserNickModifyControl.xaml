@@ -14,7 +14,7 @@
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
-            <TextBlock>4-16个字符，仅支持中文、英文大小写、数<LineBreak/>字“_”、减号及其组合。</TextBlock>
+            <TextBlock>4-16个字符，仅支持中文、英文大小写、数<LineBreak />字“_”、减号及其组合。</TextBlock>
             <TextBox Grid.Row="1" x:Name="nickTextBox" Margin="5"></TextBox>
             <Button Grid.Row="2" HorizontalAlignment="Center" Click="ModifyNickButtonClick">确定</Button>
         </Grid>

@@ -15,7 +15,69 @@ namespace OfoLight.ViewModel
     public class UserCenterViewModel : BaseViewModel
     {
         #region 字段、属性
+
+        private BitmapImage _avatar;
+        private int _creditTotal;
+        private int _identityType;
+        private string _nick;
         private UserInfo _userInfo;
+
+        /// <summary>
+        /// 头像
+        /// </summary>
+        public BitmapImage Avatar
+        {
+            get { return _avatar; }
+            set
+            {
+                _avatar = value;
+                NotifyPropertyChanged("Avatar");
+            }
+        }
+
+        /// <summary>
+        /// 信用总分
+        /// </summary>
+        public int CreditTotal
+        {
+            get { return _creditTotal; }
+            set
+            {
+                _creditTotal = value;
+                NotifyPropertyChanged("CreditTotal");
+            }
+        }
+
+        /// <summary>
+        /// 认证类型
+        /// </summary>
+        public int IdentityType
+        {
+            get { return _identityType; }
+            set
+            {
+                _identityType = value;
+                NotifyPropertyChanged("IdentityType");
+            }
+        }
+
+        /// <summary>
+        /// 用户昵称
+        /// </summary>
+        public string Nick
+        {
+            get { return _nick; }
+            set
+            {
+                _nick = value;
+                NotifyPropertyChanged("Nick");
+            }
+        }
+
+        /// <summary>
+        /// 菜单按键列表
+        /// </summary>
+        public ObservableCollection<ButtonViewModel> UserCenterButtons { get; set; } = new ObservableCollection<ButtonViewModel>();
 
         /// <summary>
         /// 用户信息
@@ -39,78 +101,32 @@ namespace OfoLight.ViewModel
             }
         }
 
-        private BitmapImage _avatar;
+        #endregion 字段、属性
 
-        /// <summary>
-        /// 头像
-        /// </summary>
-        public BitmapImage Avatar
-        {
-            get { return _avatar; }
-            set
-            {
-                _avatar = value;
-                NotifyPropertyChanged("Avatar");
-            }
-        }
-
-        private string _nick;
-
-        /// <summary>
-        /// 用户昵称
-        /// </summary>
-        public string Nick
-        {
-            get { return _nick; }
-            set
-            {
-                _nick = value;
-                NotifyPropertyChanged("Nick");
-            }
-        }
-
-        private int _identityType;
-
-        /// <summary>
-        /// 认证类型
-        /// </summary>
-        public int IdentityType
-        {
-            get { return _identityType; }
-            set
-            {
-                _identityType = value;
-                NotifyPropertyChanged("IdentityType");
-            }
-        }
-
-        private int _creditTotal;
-
-        /// <summary>
-        /// 信用总分
-        /// </summary>
-        public int CreditTotal
-        {
-            get { return _creditTotal; }
-            set
-            {
-                _creditTotal = value;
-                NotifyPropertyChanged("CreditTotal");
-            }
-        }
-
-        /// <summary>
-        /// 菜单按键列表
-        /// </summary>
-        public ObservableCollection<ButtonViewModel> UserCenterButtons { get; set; } = new ObservableCollection<ButtonViewModel>();
-
-        #endregion
+        #region 构造函数
 
         /// <summary>
         /// 用户中心VM
         /// </summary>
         public UserCenterViewModel()
         { }
+
+        #endregion 构造函数
+
+        #region 方法
+
+        /// <summary>
+        /// xbind的listview点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void ButtonListItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (e.ClickedItem is ButtonViewModel ubvm)
+            {
+                NavigationActionAsync(ubvm.ContentText);
+            }
+        }
 
         protected override async Task InitializationAsync()
         {
@@ -148,18 +164,23 @@ namespace OfoLight.ViewModel
                     case "个人信息":
                         args.ContentElement = new UserProfileContentView(UserInfo);
                         break;
+
                     case "我的行程":
                         args.ContentElement = new WebPageContentView("https://common.ofo.so/newdist/?MeineReise");
                         break;
+
                     case "我的钱包":
                         args.ContentElement = new UserWalletContentView();
                         break;
+
                     case "邀请好友":
                         args.ContentElement = new WebPageContentView($"https://common.ofo.so/about/new_invitation/invite.html?update&refcode={OfoApi.CurUser.TelPhone}");
                         break;
+
                     case "我的客服":
                         args.ContentElement = new WebPageContentView("https://common.ofo.so/about/customer/");
                         break;
+
                     case "设置":
                         args.ContentElement = new SettingContentView();
                         break;
@@ -171,17 +192,6 @@ namespace OfoLight.ViewModel
             }
         }
 
-        /// <summary>
-        /// xbind的listview点击事件
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void ButtonListItemClick(object sender, ItemClickEventArgs e)
-        {
-            if (e.ClickedItem is ButtonViewModel ubvm)
-            {
-                NavigationActionAsync(ubvm.ContentText);
-            }
-        }
+        #endregion 方法
     }
 }

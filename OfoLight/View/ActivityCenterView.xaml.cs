@@ -8,7 +8,13 @@ namespace OfoLight.View
     /// </summary>
     public sealed partial class ActivityCenterView : Page
     {
+        #region 属性
+
         public ActivityCenterViewModel ViewModel { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 活动中心View
@@ -19,5 +25,7 @@ namespace OfoLight.View
             ViewModel = new ActivityCenterViewModel();
             DataContext = ViewModel;
         }
+
+        #endregion 构造函数
     }
 }

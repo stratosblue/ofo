@@ -1,15 +1,84 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Common.Ofo.Entity.Result
 {
+    public class Advertisement
+    {
+        #region 属性
+
+        /// <summary>
+        ///
+        /// </summary>
+        public List<AdvertisementItem> activity { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public List<object> drawer { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public List<SplashItem> splash { get; set; }
+
+        #endregion 属性
+    }
+
+    public class AdvertisementItem
+    {
+        #region 属性
+
+        /// <summary>
+        ///
+        /// </summary>
+        public long expire { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public long id { get; set; }
+
+        /// <summary>
+        /// 图片名称
+        /// </summary>
+        public string ImgName { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        [JsonProperty("img")]
+        public string ImgUrl
+        {
+            get => _imgUrl;
+            set
+            {
+                _imgUrl = value;
+
+                ImgName = Path.GetFileName(value);
+            }
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public string link { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public long starts { get; set; }
+
+        private string _imgUrl { get; set; }
+
+        #endregion 属性
+    }
+
     public class AdvertisementResult : BaseResult
     {
+        #region 属性
+
         /// <summary>
         /// 配置信息
         /// </summary>
@@ -21,68 +90,56 @@ namespace Common.Ofo.Entity.Result
         [JsonProperty("values")]
         public Values Value { get; set; }
 
+        #endregion 属性
+
+        #region 类
+
         public class Values
         {
+            #region 属性
+
             /// <summary>
-            /// 
+            ///
             /// </summary>
             public Advertisement info { get; set; }
-        }
-    }
 
-    public class AdvertisementItem
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public long id { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string link { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public long expire { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public long starts { get; set; }
-
-        private string _imgUrl { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [JsonProperty("img")]
-        public string ImgUrl
-        {
-            get => _imgUrl;
-            set
-            {
-                _imgUrl = value;
-
-                ImgName = Path.GetFileName(value);
-            }
+            #endregion 属性
         }
 
-        /// <summary>
-        /// 图片名称
-        /// </summary>
-        public string ImgName { get; set; }
+        #endregion 类
     }
 
     public class SplashItem
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public long id { get; set; }
-        private string _imgUrl { get; set; }
+        #region 属性
 
         /// <summary>
-        /// 
+        ///
+        /// </summary>
+        public int count { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public int duration { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public long expire { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public long id { get; set; }
+
+        /// <summary>
+        /// 图片名称
+        /// </summary>
+        public string ImgName { get; set; }
+
+        /// <summary>
+        ///
         /// </summary>
         [JsonProperty("img")]
         public string ImgUrl
@@ -97,45 +154,17 @@ namespace Common.Ofo.Entity.Result
         }
 
         /// <summary>
-        /// 图片名称
-        /// </summary>
-        public string ImgName { get; set; }
-        /// <summary>
-        /// 
+        ///
         /// </summary>
         public string link { get; set; }
+
         /// <summary>
-        /// 
-        /// </summary>
-        public int duration { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public long expire { get; set; }
-        /// <summary>
-        /// 
+        ///
         /// </summary>
         public long starts { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public int count { get; set; }
-    }
 
-    public class Advertisement
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public List<AdvertisementItem> activity { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public List<SplashItem> splash { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public List<object> drawer { get; set; }
-    }
+        private string _imgUrl { get; set; }
 
+        #endregion 属性
+    }
 }

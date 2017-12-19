@@ -10,7 +10,13 @@ namespace OfoLight
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        MainPageViewModel ViewModel { get; set; }
+        #region 属性
+
+        private MainPageViewModel ViewModel { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 主页面
@@ -23,6 +29,10 @@ namespace OfoLight
             DataContext = ViewModel;
         }
 
+        #endregion 构造函数
+
+        #region 方法
+
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             await StatusBarUtility.ShowAsync();
@@ -33,5 +43,7 @@ namespace OfoLight
             }
             base.OnNavigatedTo(e);
         }
+
+        #endregion 方法
     }
 }

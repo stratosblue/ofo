@@ -1,5 +1,4 @@
 ﻿using OfoLight.ViewModel;
-using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -7,7 +6,13 @@ namespace OfoLight.View
 {
     public sealed partial class WebPageView : Page
     {
-        WebPageViewModel ViewModel { get; set; }
+        #region 属性
+
+        private WebPageViewModel ViewModel { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         public WebPageView()
         {
@@ -15,6 +20,10 @@ namespace OfoLight.View
             ViewModel = new WebPageViewModel(webView);
             DataContext = ViewModel;
         }
+
+        #endregion 构造函数
+
+        #region 方法
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -24,5 +33,7 @@ namespace OfoLight.View
                 ViewModel.TargetUrl = url;
             }
         }
+
+        #endregion 方法
     }
 }

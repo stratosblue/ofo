@@ -8,24 +8,24 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <Storyboard x:Name="hideStoryboard" >
+        <Storyboard x:Name="hideStoryboard">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="mainGrid"
                                 Storyboard.TargetProperty="Opacity"
                                 BeginTime="0:0:0">
-                <SplineDoubleKeyFrame KeyTime="00:00:00.00" Value="1"/>
-                <SplineDoubleKeyFrame KeyTime="00:00:00.400" Value="0.0"/>
+                <SplineDoubleKeyFrame KeyTime="00:00:00.00" Value="1" />
+                <SplineDoubleKeyFrame KeyTime="00:00:00.400" Value="0.0" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </UserControl.Resources>
 
-    <Grid x:Name="mainGrid" >
+    <Grid x:Name="mainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="1" Background="#aa000000" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="20,15">
-            <TextBlock x:Name="tbNotify" TextWrapping="Wrap" Foreground="#daffffff"/>
+            <TextBlock x:Name="tbNotify" TextWrapping="Wrap" Foreground="#daffffff" />
         </Grid>
     </Grid>
 </UserControl>

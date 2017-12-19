@@ -10,7 +10,6 @@ using Windows.Graphics.Imaging;
 using Windows.Media;
 using Windows.Media.Capture;
 using Windows.Media.Devices;
-using Windows.Media.MediaProperties;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -26,25 +25,34 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class ScanQrcodeViewModel : BaseViewModel
     {
-        private Result _result;
-        private MediaCapture _mediaCapture;
-        private DispatcherTimer _scan_Timer;
+        #region 字段
+
+        private static readonly Guid RotationKey = new Guid("C380465D-2271-428C-9B83-ECEA3B4A85C1");
+        private BarcodeReader _barcodeReader;
+        private CaptureElement _captureElement;
         private bool _isBusy = false;
-        private bool _isPreviewing = false;
-        BarcodeReader _barcodeReader;
-        CaptureElement _captureElement;
-
-        /// <summary>
-        /// 手电筒命令
-        /// </summary>
-        public ICommand LightOnFlashCommand { get; set; }
-
-        /// <summary>
-        /// 手动输入命令
-        /// </summary>
-        public ICommand ManualInputCommand { get; set; }
-
         private bool _isLightOn;
+        private bool _isPreviewing = false;
+        private MediaCapture _mediaCapture;
+        private Result _result;
+        private DispatcherTimer _scan_Timer;
+
+        #endregion 字段
+
+        #region 属性
+
+        /// <summary>
+        /// 预览控件
+        /// </summary>
+        public CaptureElement CaptureElement
+        {
+            get => _captureElement;
+            set
+            {
+                _captureElement = value;
+                NotifyPropertyChanged("CaptureElement");
+            }
+        }
 
         /// <summary>
         /// 手电筒是否打开
@@ -65,17 +73,18 @@ namespace OfoLight.ViewModel
         public string LastScanResult { get; private set; } = string.Empty;
 
         /// <summary>
-        /// 预览控件
+        /// 手电筒命令
         /// </summary>
-        public CaptureElement CaptureElement
-        {
-            get => _captureElement;
-            set
-            {
-                _captureElement = value;
-                NotifyPropertyChanged("CaptureElement");
-            }
-        }
+        public ICommand LightOnFlashCommand { get; set; }
+
+        /// <summary>
+        /// 手动输入命令
+        /// </summary>
+        public ICommand ManualInputCommand { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 二维码扫描VM
@@ -115,7 +124,9 @@ namespace OfoLight.ViewModel
             });
         }
 
-        private static readonly Guid RotationKey = new Guid("C380465D-2271-428C-9B83-ECEA3B4A85C1");
+        #endregion 构造函数
+
+        #region 方法
 
         /// <summary>
         /// 清理相机
@@ -144,98 +155,6 @@ namespace OfoLight.ViewModel
         }
 
         /// <summary>
-        /// 初始化图像检查Timer
-        /// </summary>
-        private void InitVideoTimer()
-        {
-            _scan_Timer = new DispatcherTimer()
-            {
-                Interval = TimeSpan.FromMilliseconds(1100)
-            };
-            _scan_Timer.Tick += ScanTimerTickAsync;
-            _scan_Timer.Start();
-        }
-
-        /// <summary>
-        /// 图像检查
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void ScanTimerTickAsync(object sender, object e)
-        {
-            try
-            {
-                if (!_isBusy)
-                {
-                    _isBusy = true;
-
-                    //var previewProperties = _mediaCapture.VideoDeviceController.GetMediaStreamProperties(MediaStreamType.VideoPreview) as VideoEncodingProperties;
-                    VideoFrame videoFrame = new VideoFrame(BitmapPixelFormat.Rgba8, 640, 360);
-                    VideoFrame previewFrame = await _mediaCapture.GetPreviewFrameAsync(videoFrame);
-
-                    WriteableBitmap bitmap = new WriteableBitmap(previewFrame.SoftwareBitmap.PixelWidth, previewFrame.SoftwareBitmap.PixelHeight);
-
-                    previewFrame.SoftwareBitmap.CopyToBuffer(bitmap.PixelBuffer);
-
-                    await Task.Run(async () => { await ScanBitmap(bitmap); });
-                }
-                await Task.Delay(50);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                _isBusy = false;
-            }
-        }
-
-        /// <summary>
-        /// 停止预览
-        /// </summary>
-        /// <returns></returns>
-        private async Task StopPreviewAsync()
-        {
-            _isPreviewing = false;
-            await _mediaCapture?.StopPreviewAsync();
-            _mediaCapture?.Dispose();
-            _mediaCapture = null;
-        }
-
-        /// <summary>
-        /// 解析二维码图片
-        /// </summary>
-        /// <param name="writeableBmp">图片</param>
-        /// <returns></returns>
-        private async Task ScanBitmap(WriteableBitmap writeableBmp)
-        {
-            try
-            {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
-                {
-                    _result = _barcodeReader.Decode(writeableBmp.PixelBuffer.ToArray(), writeableBmp.PixelWidth, writeableBmp.PixelHeight, RGBLuminanceSource.BitmapFormat.RGB32);
-
-                    if (_result != null)
-                    {
-                        var scanText = _result.Text.Trim();
-                        if (scanText.Contains("http://ofo.so/plate") || scanText.Contains("http://ofo.com/oneplate"))
-                        {
-                            LastScanResult = scanText.Split('/').Last();
-                        }
-
-                        TryReplaceNavigate(typeof(UnlockView), LastScanResult);
-                        LastScanResult = string.Empty;
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-        }
-
-        /// <summary>
         /// 初始化摄像头
         /// <paramref name="changeFocusSetting">更改对焦设置</paramref>
         /// </summary>
@@ -245,7 +164,7 @@ namespace OfoLight.ViewModel
              {
                  try
                  {
-                     ///摄像头的检测  
+                     ///摄像头的检测
                      var cameraDevice = await FindCameraDeviceByPanelAsync(Windows.Devices.Enumeration.Panel.Back);
 
                      if (cameraDevice == null)
@@ -320,6 +239,27 @@ namespace OfoLight.ViewModel
         }
 
         /// <summary>
+        /// 从挂起恢复时
+        /// </summary>
+        public override async Task OnResumingAsync()
+        {
+            await base.OnResumingAsync();
+
+            await InitVideoCapture();
+        }
+
+        /// <summary>
+        /// 挂起
+        /// </summary>
+        /// <returns></returns>
+        public override async Task OnSuspendingAsync()
+        {
+            await base.OnSuspendingAsync();
+
+            await CleanupCameraAsync();
+        }
+
+        /// <summary>
         /// 查找摄像头
         /// </summary>
         /// <param name="desiredPanel"></param>
@@ -331,6 +271,19 @@ namespace OfoLight.ViewModel
             DeviceInformation desiredDevice = allVideoDevices.FirstOrDefault(x => x.EnclosureLocation != null && x.EnclosureLocation.Panel == desiredPanel);
 
             return desiredDevice ?? allVideoDevices.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 初始化图像检查Timer
+        /// </summary>
+        private void InitVideoTimer()
+        {
+            _scan_Timer = new DispatcherTimer()
+            {
+                Interval = TimeSpan.FromMilliseconds(1100)
+            };
+            _scan_Timer.Tick += ScanTimerTickAsync;
+            _scan_Timer.Start();
         }
 
         /// <summary>
@@ -389,25 +342,84 @@ namespace OfoLight.ViewModel
         }
 
         /// <summary>
-        /// 从挂起恢复时
+        /// 解析二维码图片
         /// </summary>
-        public override async Task OnResumingAsync()
+        /// <param name="writeableBmp">图片</param>
+        /// <returns></returns>
+        private async Task ScanBitmap(WriteableBitmap writeableBmp)
         {
-            await base.OnResumingAsync();
+            try
+            {
+                await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+                {
+                    _result = _barcodeReader.Decode(writeableBmp.PixelBuffer.ToArray(), writeableBmp.PixelWidth, writeableBmp.PixelHeight, RGBLuminanceSource.BitmapFormat.RGB32);
 
-            await InitVideoCapture();
+                    if (_result != null)
+                    {
+                        var scanText = _result.Text.Trim();
+                        if (scanText.Contains("http://ofo.so/plate") || scanText.Contains("http://ofo.com/oneplate"))
+                        {
+                            LastScanResult = scanText.Split('/').Last();
+                        }
+
+                        TryReplaceNavigate(typeof(UnlockView), LastScanResult);
+                        LastScanResult = string.Empty;
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
         }
 
         /// <summary>
-        /// 挂起
+        /// 图像检查
         /// </summary>
-        /// <returns></returns>
-        public override async Task OnSuspendingAsync()
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void ScanTimerTickAsync(object sender, object e)
         {
-            await base.OnSuspendingAsync();
+            try
+            {
+                if (!_isBusy)
+                {
+                    _isBusy = true;
 
-            await CleanupCameraAsync();
+                    //var previewProperties = _mediaCapture.VideoDeviceController.GetMediaStreamProperties(MediaStreamType.VideoPreview) as VideoEncodingProperties;
+                    VideoFrame videoFrame = new VideoFrame(BitmapPixelFormat.Rgba8, 640, 360);
+                    VideoFrame previewFrame = await _mediaCapture.GetPreviewFrameAsync(videoFrame);
+
+                    WriteableBitmap bitmap = new WriteableBitmap(previewFrame.SoftwareBitmap.PixelWidth, previewFrame.SoftwareBitmap.PixelHeight);
+
+                    previewFrame.SoftwareBitmap.CopyToBuffer(bitmap.PixelBuffer);
+
+                    await Task.Run(async () => { await ScanBitmap(bitmap); });
+                }
+                await Task.Delay(50);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            finally
+            {
+                _isBusy = false;
+            }
         }
 
+        /// <summary>
+        /// 停止预览
+        /// </summary>
+        /// <returns></returns>
+        private async Task StopPreviewAsync()
+        {
+            _isPreviewing = false;
+            await _mediaCapture?.StopPreviewAsync();
+            _mediaCapture?.Dispose();
+            _mediaCapture = null;
+        }
+
+        #endregion 方法
     }
 }

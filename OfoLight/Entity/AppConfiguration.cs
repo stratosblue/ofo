@@ -7,10 +7,17 @@ namespace OfoLight.Entity
     /// </summary>
     public class AppConfiguration
     {
+        #region 属性
+
         /// <summary>
-        /// ofoToken
+        ///  缓存的splash过期时间
         /// </summary>
-        public string Token { get; set; }
+        public DateTime? CacheSplashExpire { get; set; }
+
+        /// <summary>
+        /// 最后一次缓存的splash文件名称
+        /// </summary>
+        public string LastCacheSplashFileName { get; set; }
 
         /// <summary>
         /// 最后一次的订单号
@@ -33,20 +40,34 @@ namespace OfoLight.Entity
         public DateTime LastShowActivityTime { get; set; }
 
         /// <summary>
-        /// 最后一次缓存的splash文件名称
+        /// ofoToken
         /// </summary>
-        public string LastCacheSplashFileName { get; set; }
+        public string Token { get; set; }
 
-        /// <summary>
-        ///  缓存的splash过期时间
-        /// </summary>
-        public DateTime? CacheSplashExpire { get; set; }
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 程序配置
         /// </summary>
         public AppConfiguration()
         { }
+
+        #endregion 构造函数
+
+        #region 方法
+
+        /// <summary>
+        /// 清理缓存相关设置
+        /// </summary>
+        public void ClearCacheSetting()
+        {
+            CacheSplashExpire = null;
+            LastCacheSplashFileName = string.Empty;
+            LastShowActivityId = 0;
+            LastShowActivityTime = new DateTime();
+        }
 
         /// <summary>
         /// 清理用户相关设置
@@ -60,15 +81,6 @@ namespace OfoLight.Entity
             LastShowActivityTime = new DateTime();
         }
 
-        /// <summary>
-        /// 清理缓存相关设置
-        /// </summary>
-        public void ClearCacheSetting()
-        {
-            CacheSplashExpire = null;
-            LastCacheSplashFileName = string.Empty;
-            LastShowActivityId = 0;
-            LastShowActivityTime = new DateTime();
-        }
+        #endregion 方法
     }
 }

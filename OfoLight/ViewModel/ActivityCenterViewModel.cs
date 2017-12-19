@@ -1,9 +1,5 @@
 ﻿using Common.Ofo.Entity.Result;
-using System;
 using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -14,7 +10,18 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class ActivityCenterViewModel : BaseViewModel
     {
+        #region 字段
+
         private ActivityHomePageDetail _activityHomePageDetail;
+
+        #endregion 字段
+
+        #region 属性
+
+        /// <summary>
+        /// 活动点击命令
+        /// </summary>
+        public ICommand ActivityClickCommand { get; set; }
 
         public ActivityHomePageDetail ActivityHomePageDetail
         {
@@ -32,19 +39,18 @@ namespace OfoLight.ViewModel
         public ObservableCollection<ActivityCenterActivityItemViewModel> ActivityList { get; set; } = new ObservableCollection<ActivityCenterActivityItemViewModel>();
 
         /// <summary>
-        /// 操作列表？
-        /// </summary>
-        public ObservableCollection<OperationItem> OperationList { get; set; } = new ObservableCollection<OperationItem>();
-
-        /// <summary>
         /// 关注列表？
         /// </summary>
         public ObservableCollection<FocusItem> FocusList { get; set; } = new ObservableCollection<FocusItem>();
 
         /// <summary>
-        /// 活动点击命令
+        /// 操作列表？
         /// </summary>
-        public ICommand ActivityClickCommand { get; set; }
+        public ObservableCollection<OperationItem> OperationList { get; set; } = new ObservableCollection<OperationItem>();
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 活动中心VM
@@ -53,9 +59,12 @@ namespace OfoLight.ViewModel
         {
             ActivityClickCommand = new RelayCommand(state =>
             {
-
             });
         }
+
+        #endregion 构造函数
+
+        #region 方法
 
         protected override async Task InitializationAsync()
         {
@@ -93,5 +102,7 @@ namespace OfoLight.ViewModel
                 }
             }
         }
+
+        #endregion 方法
     }
 }

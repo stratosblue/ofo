@@ -10,7 +10,13 @@ namespace OfoLight.View
     /// </summary>
     public sealed partial class ConfirmPaymentView : Page
     {
+        #region 属性
+
         public ConfirmPaymentViewModel ViewModel { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 确认支付页面
@@ -21,6 +27,10 @@ namespace OfoLight.View
             ViewModel = new ConfirmPaymentViewModel();
             DataContext = ViewModel;
         }
+
+        #endregion 构造函数
+
+        #region 方法
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -34,5 +44,7 @@ namespace OfoLight.View
                 ViewModel.OnResumingAsync();
             }
         }
+
+        #endregion 方法
     }
 }

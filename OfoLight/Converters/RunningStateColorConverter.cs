@@ -10,6 +10,8 @@ namespace OfoLight.Converters
     /// </summary>
     public class RunningStateColorConverter : IValueConverter
     {
+        #region 方法
+
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (System.Convert.ToBoolean(value))
@@ -26,5 +28,7 @@ namespace OfoLight.Converters
         {
             throw new NotImplementedException();
         }
+
+        #endregion 方法
     }
 }

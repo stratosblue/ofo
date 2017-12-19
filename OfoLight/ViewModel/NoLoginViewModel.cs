@@ -10,10 +10,16 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class NoLoginViewModel : BaseViewModel
     {
+        #region 构造函数
+
         public NoLoginViewModel()
         {
             CanExitApplication = true;
         }
+
+        #endregion 构造函数
+
+        #region 方法
 
         protected override async void NavigationActionAsync(object state)
         {
@@ -28,5 +34,7 @@ namespace OfoLight.ViewModel
 
             TryReplaceNavigate(typeof(ContentPageView), args);
         }
+
+        #endregion 方法
     }
 }

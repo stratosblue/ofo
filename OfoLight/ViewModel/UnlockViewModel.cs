@@ -12,7 +12,15 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class UnlockViewModel : BaseViewModel
     {
+        #region 字段
+
         private string _carNumber;
+
+        private bool _isEnableUnlock = true;
+
+        #endregion 字段
+
+        #region 属性
 
         public string CarNumber
         {
@@ -23,8 +31,6 @@ namespace OfoLight.ViewModel
                 NotifyPropertyChanged("CarNumber");
             }
         }
-
-        private bool _isEnableUnlock = true;
 
         public bool IsEnableUnlock
         {
@@ -41,6 +47,10 @@ namespace OfoLight.ViewModel
         /// </summary>
         public ICommand UnlockCarCommand { get; set; }
 
+        #endregion 属性
+
+        #region 构造函数
+
         /// <summary>
         /// 解锁页VM
         /// </summary>
@@ -48,6 +58,10 @@ namespace OfoLight.ViewModel
         {
             UnlockCarCommand = new RelayCommand(UnlockCar);
         }
+
+        #endregion 构造函数
+
+        #region 方法
 
         /// <summary>
         /// 解锁车辆
@@ -98,5 +112,7 @@ namespace OfoLight.ViewModel
                 }
             });
         }
+
+        #endregion 方法
     }
 }

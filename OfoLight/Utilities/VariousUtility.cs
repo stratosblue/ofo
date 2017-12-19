@@ -12,10 +12,16 @@ namespace OfoLight.Utilities
     /// </summary>
     public static class VariousUtility
     {
+        #region 字段
+
         /// <summary>
         /// 格林威治标准时间
         /// </summary>
         private static DateTime _standardTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        #endregion 字段
+
+        #region 构造函数
 
         /// <summary>
         /// 各种各样工具
@@ -26,40 +32,9 @@ namespace OfoLight.Utilities
             _standardTime = _standardTime.Add(TimeZoneInfo.Local.BaseUtcOffset);
         }
 
-        /// <summary>
-        /// 获取当前时间戳
-        /// </summary>
-        /// <returns></returns>
-        public static long GetTimeStamp()
-        {
-            return Convert.ToInt64((DateTime.Now.ToUniversalTime() - _standardTime).TotalMilliseconds);
-        }
+        #endregion 构造函数
 
-        /// <summary>
-        /// 时间戳转换为当前时间
-        /// </summary>
-        /// <param name="timestampStr"></param>
-        /// <returns></returns>
-        public static DateTime TimeStampToDateTime(string timestampStr)
-        {
-            if (timestampStr?.Length > 0)
-            {
-                long.TryParse(timestampStr, out var timestamp);
-                return TimeStampToDateTime(timestamp);
-            }
-            return _standardTime;
-        }
-
-        /// <summary>
-        /// 时间戳转换为当前时间
-        /// </summary>
-        /// <param name="timestamp"></param>
-        /// <returns></returns>
-        public static DateTime TimeStampToDateTime(long timestamp)
-        {
-            TimeSpan timeSpan = new TimeSpan(timestamp);
-            return _standardTime.Add(timeSpan);
-        }
+        #region 方法
 
         /// <summary>
         /// 字节大小转换为描述字符串
@@ -75,10 +50,13 @@ namespace OfoLight.Utilities
             {
                 case ByteSizeDescriptionType.KB:
                     return $"{(size / 1024.0).ToString(accuracyStr)}KB";
+
                 case ByteSizeDescriptionType.MB:
                     return $"{(size / 1048576.0).ToString(accuracyStr)}MB";
+
                 case ByteSizeDescriptionType.GB:
                     return $"{(size / 1073741824.0).ToString(accuracyStr)}GB";
+
                 case ByteSizeDescriptionType.Default:
                 default:
                     {
@@ -100,7 +78,6 @@ namespace OfoLight.Utilities
                         }
                     }
             }
-
         }
 
         /// <summary>
@@ -143,6 +120,45 @@ namespace OfoLight.Utilities
         }
 
         /// <summary>
+        /// 获取当前时间戳
+        /// </summary>
+        /// <returns></returns>
+        public static long GetTimeStamp()
+        {
+            return Convert.ToInt64((DateTime.Now.ToUniversalTime() - _standardTime).TotalMilliseconds);
+        }
+
+        /// <summary>
+        /// 时间戳转换为当前时间
+        /// </summary>
+        /// <param name="timestampStr"></param>
+        /// <returns></returns>
+        public static DateTime TimeStampToDateTime(string timestampStr)
+        {
+            if (timestampStr?.Length > 0)
+            {
+                long.TryParse(timestampStr, out var timestamp);
+                return TimeStampToDateTime(timestamp);
+            }
+            return _standardTime;
+        }
+
+        /// <summary>
+        /// 时间戳转换为当前时间
+        /// </summary>
+        /// <param name="timestamp"></param>
+        /// <returns></returns>
+        public static DateTime TimeStampToDateTime(long timestamp)
+        {
+            TimeSpan timeSpan = new TimeSpan(timestamp);
+            return _standardTime.Add(timeSpan);
+        }
+
+        #endregion 方法
+
+        #region 枚举
+
+        /// <summary>
         /// 字节大小描述类型
         /// </summary>
         public enum ByteSizeDescriptionType
@@ -151,18 +167,23 @@ namespace OfoLight.Utilities
             /// 自动描述
             /// </summary>
             Default,
+
             /// <summary>
             /// 以KB描述
             /// </summary>
             KB,
+
             /// <summary>
             /// 以MB描述
             /// </summary>
             MB,
+
             /// <summary>
             /// 以GB描述
             /// </summary>
             GB,
         }
+
+        #endregion 枚举
     }
 }

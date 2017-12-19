@@ -5,7 +5,13 @@ namespace OfoLight.View
 {
     public sealed partial class WebPageContentView : UserControl
     {
-        WebPageViewModel ViewModel { get; set; }
+        #region 属性
+
+        private WebPageViewModel ViewModel { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         public WebPageContentView(string startUrl)
         {
@@ -19,6 +25,10 @@ namespace OfoLight.View
             Unloaded += PageUnloaded;
         }
 
+        #endregion 构造函数
+
+        #region 方法
+
         private void PageUnloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             ViewModel.Dispose();
@@ -26,5 +36,7 @@ namespace OfoLight.View
             ViewModel = null;
             Unloaded -= PageUnloaded;
         }
+
+        #endregion 方法
     }
 }

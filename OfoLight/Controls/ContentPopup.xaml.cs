@@ -12,17 +12,27 @@ namespace OfoLight.Controls
     /// </summary>
     public sealed partial class ContentPopup : UserControl, IDisposable
     {
+        #region 字段
+
         private Popup _popup;
+
+        #endregion 字段
+
+        #region 属性
+
+        /// <summary>
+        /// 是否正在显示
+        /// </summary>
+        public bool IsShowing { get; set; }
 
         /// <summary>
         /// 提示内容
         /// </summary>
         public UIElement NotifyContent { get; set; }
 
-        /// <summary>
-        /// 是否正在显示
-        /// </summary>
-        public bool IsShowing { get; set; }
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 内容弹出框
@@ -40,15 +50,29 @@ namespace OfoLight.Controls
             Unloaded += NotifyPopup_Unloaded;
         }
 
-        private void NotifyPopup_Unloaded(object sender, RoutedEventArgs e)
+        #endregion 构造函数
+
+        #region 方法
+
+        /// <summary>
+        /// 销毁资源
+        /// </summary>
+        public void Dispose()
         {
+            Hide();
             Window.Current.SizeChanged -= Current_SizeChanged;
+            _popup = null;
         }
 
-        private void Current_SizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
+        /// <summary>
+        /// 隐藏显示
+        /// </summary>
+        /// <returns></returns>
+        public void Hide()
         {
-            Width = e.Size.Width;
-            Height = e.Size.Height;
+            IsShowing = false;
+            _popup.IsOpen = false;
+            NotifyContent = null;
         }
 
         public async Task ShowAsync()
@@ -71,25 +95,17 @@ namespace OfoLight.Controls
             });
         }
 
-        /// <summary>
-        /// 隐藏显示
-        /// </summary>
-        /// <returns></returns>
-        public void Hide()
+        private void Current_SizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
         {
-            IsShowing = false;
-            _popup.IsOpen = false;
-            NotifyContent = null;
+            Width = e.Size.Width;
+            Height = e.Size.Height;
         }
 
-        /// <summary>
-        /// 销毁资源
-        /// </summary>
-        public void Dispose()
+        private void NotifyPopup_Unloaded(object sender, RoutedEventArgs e)
         {
-            Hide();
             Window.Current.SizeChanged -= Current_SizeChanged;
-            _popup = null;
         }
+
+        #endregion 方法
     }
 }

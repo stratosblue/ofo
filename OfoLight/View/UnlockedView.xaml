@@ -17,17 +17,17 @@
             <Setter Property="ItemContainerTransitions">
                 <Setter.Value>
                     <TransitionCollection>
-                        <!--<AddDeleteThemeTransition/>-->
-                        <ContentThemeTransition/>
-                        <!--<ReorderThemeTransition/>-->
-                        <EntranceThemeTransition IsStaggeringEnabled="False"/>
+                        <!--<AddDeleteThemeTransition />-->
+                        <ContentThemeTransition />
+                        <!--<ReorderThemeTransition />-->
+                        <EntranceThemeTransition IsStaggeringEnabled="False" />
                     </TransitionCollection>
                 </Setter.Value>
             </Setter>
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
-                        <ItemsStackPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
+                        <ItemsStackPanel Orientation="Horizontal" HorizontalAlignment="Center" />
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>
@@ -35,7 +35,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ListView">
                         <StackPanel BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
-                            <ItemsPresenter/>
+                            <ItemsPresenter />
                         </StackPanel>
                     </ControlTemplate>
                 </Setter.Value>
@@ -48,7 +48,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListViewItem">
-                        <ListViewItemPresenter VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        <ListViewItemPresenter VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -85,8 +85,8 @@
                     <Setter Property="HorizontalAlignment" Value="Center"></Setter>
                 </Style>
                 <Style TargetType="HyperlinkButton">
-                    <Setter Property="Padding" Value="0"/>
-                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="HorizontalAlignment" Value="Center" />
                 </Style>
             </Grid.Resources>
 

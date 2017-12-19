@@ -13,10 +13,16 @@ namespace OfoLight.Utilities
     /// </summary>
     public class LocalCacheUtility
     {
+        #region 属性
+
         /// <summary>
         /// 本地缓存文件夹
         /// </summary>
         public static StorageFolder LocalCacheFolder { get; private set; } = ApplicationData.Current.LocalCacheFolder;
+
+        #endregion 属性
+
+        #region 方法
 
         /// <summary>
         /// 缓存文件
@@ -78,18 +84,53 @@ namespace OfoLight.Utilities
         }
 
         /// <summary>
-        /// 检查是否存在缓存文件
+        /// 清空本地缓存
         /// </summary>
-        /// <param name="fileName"></param>
         /// <returns></returns>
-        public static async Task<bool> ExistsCacheFile(string fileName)
+        public static async Task ClearLocalCacheFile()
         {
-            if (string.IsNullOrEmpty(fileName))
+            var files = await LocalCacheFolder.GetFilesAsync();
+
+            foreach (var file in files)
             {
-                return false;
+                await file.DeleteAsync(StorageDeleteOption.PermanentDelete);
             }
-            var storageItem = await LocalCacheFolder.TryGetItemAsync(fileName);
-            return storageItem != null;
+
+            var folders = await LocalCacheFolder.GetFoldersAsync();
+
+            foreach (var folder in folders)
+            {
+                await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
+            }
+        }
+
+        /// <summary>
+        /// 计算目录文件大小
+        /// </summary>
+        /// <param name="storageFolder"></param>
+        /// <param name="containsSubFolder">是否包含子目录</param>
+        /// <returns></returns>
+        public static async Task<ulong> CountStorageFolderSize(StorageFolder storageFolder, bool containsSubFolder)
+        {
+            ulong result = 0;
+            var files = await storageFolder.GetFilesAsync();
+            foreach (var file in files)
+            {
+                var fileProperties = await file.GetBasicPropertiesAsync();
+                result += fileProperties.Size;
+            }
+
+            if (containsSubFolder)
+            {
+                var folders = await storageFolder.GetFoldersAsync();
+
+                foreach (var folder in folders)
+                {
+                    result += await CountStorageFolderSize(folder, containsSubFolder);
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -125,24 +166,18 @@ namespace OfoLight.Utilities
         }
 
         /// <summary>
-        /// 清空本地缓存
+        /// 检查是否存在缓存文件
         /// </summary>
+        /// <param name="fileName"></param>
         /// <returns></returns>
-        public static async Task ClearLocalCacheFile()
+        public static async Task<bool> ExistsCacheFile(string fileName)
         {
-            var files = await LocalCacheFolder.GetFilesAsync();
-
-            foreach (var file in files)
+            if (string.IsNullOrEmpty(fileName))
             {
-                await file.DeleteAsync(StorageDeleteOption.PermanentDelete);
+                return false;
             }
-
-            var folders = await LocalCacheFolder.GetFoldersAsync();
-
-            foreach (var folder in folders)
-            {
-                await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
-            }
+            var storageItem = await LocalCacheFolder.TryGetItemAsync(fileName);
+            return storageItem != null;
         }
 
         /// <summary>
@@ -176,33 +211,6 @@ namespace OfoLight.Utilities
             return await CountStorageFolderSize(LocalCacheFolder, containsSubFolder);
         }
 
-        /// <summary>
-        /// 计算目录文件大小
-        /// </summary>
-        /// <param name="storageFolder"></param>
-        /// <param name="containsSubFolder">是否包含子目录</param>
-        /// <returns></returns>
-        public static async Task<ulong> CountStorageFolderSize(StorageFolder storageFolder, bool containsSubFolder)
-        {
-            ulong result = 0;
-            var files = await storageFolder.GetFilesAsync();
-            foreach (var file in files)
-            {
-                var fileProperties = await file.GetBasicPropertiesAsync();
-                result += fileProperties.Size;
-            }
-
-            if (containsSubFolder)
-            {
-                var folders = await storageFolder.GetFoldersAsync();
-
-                foreach (var folder in folders)
-                {
-                    result += await CountStorageFolderSize(folder, containsSubFolder);
-                }
-            }
-
-            return result;
-        }
+        #endregion 方法
     }
 }

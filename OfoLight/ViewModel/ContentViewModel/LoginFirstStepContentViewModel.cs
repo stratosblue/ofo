@@ -2,10 +2,6 @@
 using OfoLight.Utilities;
 using OfoLight.View;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.UI.Xaml;
@@ -19,36 +15,17 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class LoginFirstStepContentViewModel : BaseContentViewModel
     {
-        private string _telPhone;
+        #region 字段
 
-        /// <summary>
-        /// 电话号码
-        /// </summary>
-        public string TelPhone
-        {
-            get { return _telPhone; }
-            set
-            {
-                _telPhone = value;
-            }
-        }
+        private string _captchaCode;
+        private bool _captchaCodeInputEnable = false;
+        private string _telPhone;
 
         private BitmapImage _verifyCodeImage = new BitmapImage();
 
-        /// <summary>
-        /// 验证码图片
-        /// </summary>
-        public BitmapImage VerifyCodeImage
-        {
-            get { return _verifyCodeImage; }
-            set
-            {
-                _verifyCodeImage = value;
-                NotifyPropertyChanged("VerifyCodeImage");
-            }
-        }
+        #endregion 字段
 
-        private string _captchaCode;
+        #region 属性
 
         /// <summary>
         /// 验证码
@@ -63,8 +40,6 @@ namespace OfoLight.ViewModel
             }
         }
 
-        private bool _captchaCodeInputEnable = false;
-
         /// <summary>
         /// 验证码可输入状态
         /// </summary>
@@ -78,20 +53,48 @@ namespace OfoLight.ViewModel
             }
         }
 
-
-        /// <summary>
-        /// 验证ID
-        /// </summary>
-        private string VerifyId { get; set; }
-
         /// <summary>
         /// 刷新验证码命令
         /// </summary>
         public ICommand RefreshVerifyCodeCommand { get; set; }
 
         /// <summary>
+        /// 电话号码
+        /// </summary>
+        public string TelPhone
+        {
+            get { return _telPhone; }
+            set
+            {
+                _telPhone = value;
+            }
+        }
+
+        /// <summary>
+        /// 验证码图片
+        /// </summary>
+        public BitmapImage VerifyCodeImage
+        {
+            get { return _verifyCodeImage; }
+            set
+            {
+                _verifyCodeImage = value;
+                NotifyPropertyChanged("VerifyCodeImage");
+            }
+        }
+
+        /// <summary>
+        /// 验证ID
+        /// </summary>
+        private string VerifyId { get; set; }
+
+        #endregion 属性
+
+        /// <summary>
         /// 登录第一步的内容VM
         /// </summary>
+
+        #region 构造函数
 
         public LoginFirstStepContentViewModel()
         {
@@ -101,6 +104,23 @@ namespace OfoLight.ViewModel
                 CaptchaCode = string.Empty;
                 await GetCaptchaCodeAsync();
             });
+        }
+
+        #endregion 构造函数
+
+        #region 方法
+
+        public async Task InputCaptchaCodeTextChangedAsync(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox tb)
+            {
+                if (tb.Text.Length >= 4)
+                {
+                    CaptchaCode = tb.Text.Trim();
+                    await SubmitCaptchaCodeAsync();
+                    return;
+                }
+            }
         }
 
         protected override async Task InitializationAsync()
@@ -155,17 +175,6 @@ namespace OfoLight.ViewModel
             }
         }
 
-        public async Task InputCaptchaCodeTextChangedAsync(object sender, TextChangedEventArgs e)
-        {
-            if (sender is TextBox tb)
-            {
-                if (tb.Text.Length >= 4)
-                {
-                    CaptchaCode = tb.Text.Trim();
-                    await SubmitCaptchaCodeAsync();
-                    return;
-                }
-            }
-        }
+        #endregion 方法
     }
 }

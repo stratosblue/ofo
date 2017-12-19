@@ -15,10 +15,16 @@ namespace Common.Ofo
     /// </summary>
     public class OfoWebAPIs
     {
+        #region 字段
+
         /// <summary>
         /// 当前用户
         /// </summary>
         private User _curUser = new User();
+
+        #endregion 字段
+
+        #region 属性
 
         /// <summary>
         /// 当前用户
@@ -36,6 +42,10 @@ namespace Common.Ofo
         /// 最后的地址
         /// </summary>
         public BasicGeoposition LastLocation { get; private set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// OFOWeb接口实现
@@ -61,6 +71,8 @@ namespace Common.Ofo
         {
             CurUser = user;
         }
+
+        #endregion 构造函数
 
         #region 功能实现
 
@@ -102,110 +114,81 @@ namespace Common.Ofo
         }
 
         /// <summary>
-        /// 获取验证码
+        /// 确认支付
+        /// </summary>
+        /// <param name="orderNum">订单编号</param>
+        /// <param name="packetid">钱包id</param>
+        /// <returns></returns>
+        public async Task<ConfirmToPayResult> ConfirmToPayAsync(long orderNum, int packetid)
+        {
+            ConfirmToPayRequest request = new ConfirmToPayRequest()
+            {
+                OrderNum = orderNum,
+                Packetid = packetid,
+                Token = CurUser.Token
+            };
+            return await GetHttpResultAsync<ConfirmToPayResult>(request);
+        }
+
+        /// <summary>
+        /// 结束骑行
+        /// </summary>
+        /// <param name="ordernum">订单号</param>
+        /// <returns></returns>
+        public async Task<EndRideResult> EndRideAsync(string ordernum)
+        {
+            return await EndRideAsync(ordernum, LastLocation);
+        }
+
+        /// <summary>
+        /// 结束骑行
+        /// </summary>
+        /// <param name="ordernum">订单号</param>
+        /// <param name="location">位置</param>
+        /// <returns></returns>
+        public async Task<EndRideResult> EndRideAsync(string ordernum, BasicGeoposition location)
+        {
+            if (string.IsNullOrWhiteSpace(ordernum))
+            {
+                return new EndRideResult() { Message = "订单号不正确" };
+            }
+            SetLastLocation(location);
+
+            EndRideRequest request = new EndRideRequest()
+            {
+                Ordernum = ordernum,
+                Location = location,
+                Token = CurUser.Token
+            };
+            return await GetHttpResultAsync<EndRideResult>(request);
+        }
+
+        /// <summary>
+        /// 获取活动中心首页详情
         /// </summary>
         /// <returns></returns>
-        public async Task<GetCaptchaCodeResult> GetCaptchaCodeAsync()
+        public async Task<ActivityHomePageDetailResult> GetActivityHomePageDetailAsync()
         {
             BaseRequest request = new BaseRequest()
             {
-                ApiUrl = ApiUrls.GetCaptchaCode,
+                ApiUrl = ApiUrls.GetActivityHomePageDetail,
+                Token = CurUser.Token
             };
-            return await GetHttpResultAsync<GetCaptchaCodeResult>(request);
+            return await GetHttpResultAsync<ActivityHomePageDetailResult>(request);
         }
 
         /// <summary>
-        /// 获取手机验证码
+        /// 获取活动列表
         /// </summary>
-        /// <param name="captchaCode">图片验证码</param>
-        /// <param name="verifyId">验证ID</param>
         /// <returns></returns>
-        public async Task<GetVerifyCodeResult> GetVerifyCodeAsync(string captchaCode, string verifyId)
+        public async Task<ActivityListResult> GetActivityListAsync()
         {
-            if (string.IsNullOrWhiteSpace(CurUser?.TelPhone))
+            BaseRequest request = new BaseRequest()
             {
-                throw new ArgumentException("没有设置TelPhone，执行该请求必须先设置此属性");
-            }
-            else if (string.IsNullOrWhiteSpace(captchaCode) || string.IsNullOrWhiteSpace(verifyId))
-            {
-                throw new ArgumentException("captchaCode或verifyId值为空");
-            }
-
-            VerifyCodeRequest request = new VerifyCodeRequest()
-            {
-                CaptchaCode = captchaCode,
-                VerifyId = verifyId,
-                TelPhone = CurUser.TelPhone,
+                ApiUrl = ApiUrls.GetActivityList,
+                Token = CurUser.Token
             };
-            return await GetHttpResultAsync<GetVerifyCodeResult>(request);
-        }
-
-        /// <summary>
-        /// 再次获取手机验证码
-        /// </summary>
-        /// <returns></returns>
-        public async Task<GetVerifyCodeResult> ReGetVerifyCodeAsync()
-        {
-            if (string.IsNullOrWhiteSpace(CurUser?.TelPhone))
-            {
-                throw new ArgumentException("没有设置TelPhone，执行该请求必须先设置此属性");
-            }
-            else if (string.IsNullOrWhiteSpace(VerifyCodeRequest.LastCaptchaCode) || string.IsNullOrWhiteSpace(VerifyCodeRequest.LastVerifyId))
-            {
-                throw new ArgumentException("最后一次请求的captchaCode或verifyId值为空");
-            }
-
-            VerifyCodeRequest request = new VerifyCodeRequest()
-            {
-                TelPhone = CurUser.TelPhone,
-                IsRepeatGetSms = true,
-            };
-
-            return await GetHttpResultAsync<GetVerifyCodeResult>(request);
-        }
-
-        /// <summary>
-        /// 登陆
-        /// </summary>
-        /// <param name="code">验证码</param>
-        /// <param name="authCode">授权码？？</param>
-        /// <returns></returns>
-        public async Task<LoginResult> LoginAsync(string code, string authCode = null)
-        {
-            LoginRequest request = new LoginRequest()
-            {
-                TelPhone = CurUser.TelPhone,
-                Code = code,
-                AuthCode = authCode,
-            };
-            return await GetHttpResultAsync<LoginResult>(request);
-        }
-
-        /// <summary>
-        /// 获取配置信息
-        /// </summary>
-        /// <returns></returns>
-        public async Task<ConfigResult> GetConfigAsync()
-        {
-            return await GetConfigAsync(LastLocation);
-        }
-
-        /// <summary>
-        /// 获取配置信息
-        /// </summary>
-        /// <param name="location">位置</param>
-        /// <returns></returns>
-        public async Task<ConfigResult> GetConfigAsync(BasicGeoposition location)
-        {
-            SetLastLocation(location);
-
-            BasePositionRequest request = new BasePositionRequest()
-            {
-                ApiUrl = ApiUrls.GetConfig,
-                Location = location,
-                Token = CurUser.Token,
-            };
-            return await GetHttpResultAsync<ConfigResult>(request);
+            return await GetHttpResultAsync<ActivityListResult>(request);
         }
 
         /// <summary>
@@ -263,17 +246,75 @@ namespace Common.Ofo
         }
 
         /// <summary>
-        /// 获取用户信息
+        /// 获取验证码
         /// </summary>
         /// <returns></returns>
-        public async Task<UserInfoResult> GetUserInfoAsync()
+        public async Task<GetCaptchaCodeResult> GetCaptchaCodeAsync()
         {
             BaseRequest request = new BaseRequest()
             {
-                ApiUrl = ApiUrls.GetUserInfo,
+                ApiUrl = ApiUrls.GetCaptchaCode,
+            };
+            return await GetHttpResultAsync<GetCaptchaCodeResult>(request);
+        }
+
+        /// <summary>
+        /// 获取配置信息
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ConfigResult> GetConfigAsync()
+        {
+            return await GetConfigAsync(LastLocation);
+        }
+
+        /// <summary>
+        /// 获取配置信息
+        /// </summary>
+        /// <param name="location">位置</param>
+        /// <returns></returns>
+        public async Task<ConfigResult> GetConfigAsync(BasicGeoposition location)
+        {
+            SetLastLocation(location);
+
+            BasePositionRequest request = new BasePositionRequest()
+            {
+                ApiUrl = ApiUrls.GetConfig,
+                Location = location,
+                Token = CurUser.Token,
+            };
+            return await GetHttpResultAsync<ConfigResult>(request);
+        }
+
+        /// <summary>
+        /// 获取消费明细
+        /// </summary>
+        /// <param name="page">页面</param>
+        /// <returns></returns>
+        public async Task<ConsumerDetailsResult> GetConsumerDetailsAsync(int page = 1)
+        {
+            DetailsRequest request = new DetailsRequest()
+            {
+                Classify = 0,
+                Page = page,
                 Token = CurUser.Token
             };
-            return await GetHttpResultAsync<UserInfoResult>(request);
+            return await GetHttpResultAsync<ConsumerDetailsResult>(request);
+        }
+
+        /// <summary>
+        /// 获取信用历史
+        /// </summary>
+        /// <param name="page">获取页数</param>
+        /// <returns></returns>
+        public async Task<GetCreditHistoriesResult> GetCreditHistoriesAsync(int page)
+        {
+            GetCreditHistoriesRequest request = new GetCreditHistoriesRequest()
+            {
+                Token = CurUser.Token,
+                Page = page,
+            };
+
+            return await GetHttpResultAsync<GetCreditHistoriesResult>(request);
         }
 
         /// <summary>
@@ -300,157 +341,6 @@ namespace Common.Ofo
                 Token = CurUser.Token
             };
             return await GetHttpResultAsync<IdentificationResult>(request);
-        }
-
-        /// <summary>
-        /// 获取未完成订单
-        /// </summary>
-        /// <returns></returns>
-        public async Task<UnfinishedOrderResult> GetUnfinishedOrderAsync()
-        {
-            UnfinishedOrderRequest request = new UnfinishedOrderRequest()
-            {
-                Token = CurUser.Token
-            };
-            return await GetHttpResultAsync<UnfinishedOrderResult>(request);
-        }
-
-        /// <summary>
-        /// 确认支付
-        /// </summary>
-        /// <param name="orderNum">订单编号</param>
-        /// <param name="packetid">钱包id</param>
-        /// <returns></returns>
-        public async Task<ConfirmToPayResult> ConfirmToPayAsync(long orderNum, int packetid)
-        {
-            ConfirmToPayRequest request = new ConfirmToPayRequest()
-            {
-                OrderNum = orderNum,
-                Packetid = packetid,
-                Token = CurUser.Token
-            };
-            return await GetHttpResultAsync<ConfirmToPayResult>(request);
-        }
-
-        /// <summary>
-        /// 获取用户简介
-        /// </summary>
-        /// <returns></returns>
-        public async Task<UserProfileResult> GetUserProfileAsync()
-        {
-            BaseRequest request = new BaseRequest()
-            {
-                ApiUrl = ApiUrls.GetUserProfile,
-                Token = CurUser.Token
-            };
-            return await GetHttpResultAsync<UserProfileResult>(request);
-        }
-
-        /// <summary>
-        /// 结束骑行
-        /// </summary>
-        /// <param name="ordernum">订单号</param>
-        /// <returns></returns>
-        public async Task<EndRideResult> EndRideAsync(string ordernum)
-        {
-            return await EndRideAsync(ordernum, LastLocation);
-        }
-
-        /// <summary>
-        /// 结束骑行
-        /// </summary>
-        /// <param name="ordernum">订单号</param>
-        /// <param name="location">位置</param>
-        /// <returns></returns>
-        public async Task<EndRideResult> EndRideAsync(string ordernum, BasicGeoposition location)
-        {
-            if (string.IsNullOrWhiteSpace(ordernum))
-            {
-                return new EndRideResult() { Message = "订单号不正确" };
-            }
-            SetLastLocation(location);
-
-            EndRideRequest request = new EndRideRequest()
-            {
-                Ordernum = ordernum,
-                Location = location,
-                Token = CurUser.Token
-            };
-            return await GetHttpResultAsync<EndRideResult>(request);
-        }
-
-        /// <summary>
-        /// 获取活动列表
-        /// </summary>
-        /// <returns></returns>
-        public async Task<ActivityListResult> GetActivityListAsync()
-        {
-            BaseRequest request = new BaseRequest()
-            {
-                ApiUrl = ApiUrls.GetActivityList,
-                Token = CurUser.Token
-            };
-            return await GetHttpResultAsync<ActivityListResult>(request);
-        }
-
-        /// <summary>
-        /// 获取钱包信息
-        /// </summary>
-        /// <returns></returns>
-        public async Task<WalletInfoResult> GetWalletInfoAsync()
-        {
-            BaseRequest request = new BaseRequest()
-            {
-                ApiUrl = ApiUrls.GetWalletInfo,
-                Token = CurUser.Token
-            };
-            return await GetHttpResultAsync<WalletInfoResult>(request);
-        }
-
-        /// <summary>
-        /// 获取红包列表
-        /// </summary>
-        /// <returns></returns>
-        public async Task<RedPacketListResult> GetRedPacketListAsync()
-        {
-            BaseRequest request = new BaseRequest()
-            {
-                ApiUrl = ApiUrls.GetRedPacketList,
-                Token = CurUser.Token
-            };
-            return await GetHttpResultAsync<RedPacketListResult>(request);
-        }
-
-        /// <summary>
-        /// 获取消费明细
-        /// </summary>
-        /// <param name="page">页面</param>
-        /// <returns></returns>
-        public async Task<ConsumerDetailsResult> GetConsumerDetailsAsync(int page = 1)
-        {
-            DetailsRequest request = new DetailsRequest()
-            {
-                Classify = 0,
-                Page = page,
-                Token = CurUser.Token
-            };
-            return await GetHttpResultAsync<ConsumerDetailsResult>(request);
-        }
-
-        /// <summary>
-        /// 获取充值明细
-        /// </summary>
-        /// <param name="page">页面</param>
-        /// <returns></returns>
-        public async Task<RechargeDetailsResult> GetRechargeDetailsAsync(int page = 1)
-        {
-            DetailsRequest request = new DetailsRequest()
-            {
-                Classify = 1,
-                Page = page,
-                Token = CurUser.Token
-            };
-            return await GetHttpResultAsync<RechargeDetailsResult>(request);
         }
 
         /// <summary>
@@ -482,19 +372,33 @@ namespace Common.Ofo
         }
 
         /// <summary>
-        /// 解锁车
+        /// 获取充值明细
         /// </summary>
-        /// <param name="carNumber">车辆编号</param>
+        /// <param name="page">页面</param>
         /// <returns></returns>
-        public async Task<UnLockCarResult> UnlockCarAsync(string carNumber)
+        public async Task<RechargeDetailsResult> GetRechargeDetailsAsync(int page = 1)
         {
-            UnLockCarRequest request = new UnLockCarRequest()
+            DetailsRequest request = new DetailsRequest()
             {
-                Location = LastLocation,
-                Token = CurUser.Token,
-                CarNumber = carNumber,
+                Classify = 1,
+                Page = page,
+                Token = CurUser.Token
             };
-            return await GetHttpResultAsync<UnLockCarResult>(request);
+            return await GetHttpResultAsync<RechargeDetailsResult>(request);
+        }
+
+        /// <summary>
+        /// 获取红包列表
+        /// </summary>
+        /// <returns></returns>
+        public async Task<RedPacketListResult> GetRedPacketListAsync()
+        {
+            BaseRequest request = new BaseRequest()
+            {
+                ApiUrl = ApiUrls.GetRedPacketList,
+                Token = CurUser.Token
+            };
+            return await GetHttpResultAsync<RedPacketListResult>(request);
         }
 
         /// <summary>
@@ -510,6 +414,167 @@ namespace Common.Ofo
                 OrderNum = orderNumber,
             };
             return await GetHttpResultAsync<RepairReasonListResult>(request);
+        }
+
+        /// <summary>
+        /// 获取未完成订单
+        /// </summary>
+        /// <returns></returns>
+        public async Task<UnfinishedOrderResult> GetUnfinishedOrderAsync()
+        {
+            UnfinishedOrderRequest request = new UnfinishedOrderRequest()
+            {
+                Token = CurUser.Token
+            };
+            return await GetHttpResultAsync<UnfinishedOrderResult>(request);
+        }
+
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <returns></returns>
+        public async Task<UserInfoResult> GetUserInfoAsync()
+        {
+            BaseRequest request = new BaseRequest()
+            {
+                ApiUrl = ApiUrls.GetUserInfo,
+                Token = CurUser.Token
+            };
+            return await GetHttpResultAsync<UserInfoResult>(request);
+        }
+
+        /// <summary>
+        /// 获取用户简介
+        /// </summary>
+        /// <returns></returns>
+        public async Task<UserProfileResult> GetUserProfileAsync()
+        {
+            BaseRequest request = new BaseRequest()
+            {
+                ApiUrl = ApiUrls.GetUserProfile,
+                Token = CurUser.Token
+            };
+            return await GetHttpResultAsync<UserProfileResult>(request);
+        }
+
+        /// <summary>
+        /// 获取手机验证码
+        /// </summary>
+        /// <param name="captchaCode">图片验证码</param>
+        /// <param name="verifyId">验证ID</param>
+        /// <returns></returns>
+        public async Task<GetVerifyCodeResult> GetVerifyCodeAsync(string captchaCode, string verifyId)
+        {
+            if (string.IsNullOrWhiteSpace(CurUser?.TelPhone))
+            {
+                throw new ArgumentException("没有设置TelPhone，执行该请求必须先设置此属性");
+            }
+            else if (string.IsNullOrWhiteSpace(captchaCode) || string.IsNullOrWhiteSpace(verifyId))
+            {
+                throw new ArgumentException("captchaCode或verifyId值为空");
+            }
+
+            VerifyCodeRequest request = new VerifyCodeRequest()
+            {
+                CaptchaCode = captchaCode,
+                VerifyId = verifyId,
+                TelPhone = CurUser.TelPhone,
+            };
+            return await GetHttpResultAsync<GetVerifyCodeResult>(request);
+        }
+
+        /// <summary>
+        /// 获取钱包信息
+        /// </summary>
+        /// <returns></returns>
+        public async Task<WalletInfoResult> GetWalletInfoAsync()
+        {
+            BaseRequest request = new BaseRequest()
+            {
+                ApiUrl = ApiUrls.GetWalletInfo,
+                Token = CurUser.Token
+            };
+            return await GetHttpResultAsync<WalletInfoResult>(request);
+        }
+
+        /// <summary>
+        /// 登陆
+        /// </summary>
+        /// <param name="code">验证码</param>
+        /// <param name="authCode">授权码？？</param>
+        /// <returns></returns>
+        public async Task<LoginResult> LoginAsync(string code, string authCode = null)
+        {
+            LoginRequest request = new LoginRequest()
+            {
+                TelPhone = CurUser.TelPhone,
+                Code = code,
+                AuthCode = authCode,
+            };
+            return await GetHttpResultAsync<LoginResult>(request);
+        }
+
+        /// <summary>
+        /// 修改用户头像
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BaseResult> ModifyUserAvatarAsync(byte[] avatarData)
+        {
+            ModifyUserAvatarRequest request = new ModifyUserAvatarRequest()
+            {
+                AvatarData = avatarData,
+                Token = CurUser.Token,
+            };
+
+            return await GetHttpResultAsync<BaseResult>(request);
+        }
+
+        /// <summary>
+        /// 修改用户昵称
+        /// </summary>
+        /// <param name="nick">新的昵称</param>
+        /// <returns></returns>
+        public async Task<BaseResult> ModifyUserNickAsync(string nick)
+        {
+            if (nick?.Length < 4)
+            {
+                throw new ArgumentException("昵称过短");
+            }
+            else if (nick?.Length > 16)
+            {
+                throw new ArgumentException("昵称过长");
+            }
+
+            ModifyNickRequest request = new ModifyNickRequest()
+            {
+                Token = CurUser.Token,
+                Nick = nick,
+            };
+            return await GetHttpResultAsync<BaseResult>(request);
+        }
+
+        /// <summary>
+        /// 再次获取手机验证码
+        /// </summary>
+        /// <returns></returns>
+        public async Task<GetVerifyCodeResult> ReGetVerifyCodeAsync()
+        {
+            if (string.IsNullOrWhiteSpace(CurUser?.TelPhone))
+            {
+                throw new ArgumentException("没有设置TelPhone，执行该请求必须先设置此属性");
+            }
+            else if (string.IsNullOrWhiteSpace(VerifyCodeRequest.LastCaptchaCode) || string.IsNullOrWhiteSpace(VerifyCodeRequest.LastVerifyId))
+            {
+                throw new ArgumentException("最后一次请求的captchaCode或verifyId值为空");
+            }
+
+            VerifyCodeRequest request = new VerifyCodeRequest()
+            {
+                TelPhone = CurUser.TelPhone,
+                IsRepeatGetSms = true,
+            };
+
+            return await GetHttpResultAsync<GetVerifyCodeResult>(request);
         }
 
         /// <summary>
@@ -538,77 +603,49 @@ namespace Common.Ofo
         }
 
         /// <summary>
-        /// 获取活动中心首页详情
+        /// 解锁车
         /// </summary>
+        /// <param name="carNumber">车辆编号</param>
         /// <returns></returns>
-        public async Task<ActivityHomePageDetailResult> GetActivityHomePageDetailAsync()
+        public async Task<UnLockCarResult> UnlockCarAsync(string carNumber)
         {
-            BaseRequest request = new BaseRequest()
+            UnLockCarRequest request = new UnLockCarRequest()
             {
-                ApiUrl = ApiUrls.GetActivityHomePageDetail,
-                Token = CurUser.Token
-            };
-            return await GetHttpResultAsync<ActivityHomePageDetailResult>(request);
-        }
-
-        /// <summary>
-        /// 修改用户昵称
-        /// </summary>
-        /// <param name="nick">新的昵称</param>
-        /// <returns></returns>
-        public async Task<BaseResult> ModifyUserNickAsync(string nick)
-        {
-            if (nick?.Length < 4)
-            {
-                throw new ArgumentException("昵称过短");
-            }
-            else if (nick?.Length > 16)
-            {
-                throw new ArgumentException("昵称过长");
-            }
-
-            ModifyNickRequest request = new ModifyNickRequest()
-            {
+                Location = LastLocation,
                 Token = CurUser.Token,
-                Nick = nick,
+                CarNumber = carNumber,
             };
-            return await GetHttpResultAsync<BaseResult>(request);
+            return await GetHttpResultAsync<UnLockCarResult>(request);
         }
 
-        /// <summary>
-        /// 修改用户头像
-        /// </summary>
-        /// <returns></returns>
-        public async Task<BaseResult> ModifyUserAvatarAsync(byte[] avatarData)
-        {
-            ModifyUserAvatarRequest request = new ModifyUserAvatarRequest()
-            {
-                AvatarData = avatarData,
-                Token = CurUser.Token,
-            };
-
-            return await GetHttpResultAsync<BaseResult>(request);
-        }
-
-        /// <summary>
-        /// 获取信用历史
-        /// </summary>
-        /// <param name="page">获取页数</param>
-        /// <returns></returns>
-        public async Task<GetCreditHistoriesResult> GetCreditHistoriesAsync(int page)
-        {
-            GetCreditHistoriesRequest request = new GetCreditHistoriesRequest()
-            {
-                Token = CurUser.Token,
-                Page = page,
-            };
-
-            return await GetHttpResultAsync<GetCreditHistoriesResult>(request);
-        }
-
-        #endregion
+        #endregion 功能实现
 
         #region 基础实现
+
+        /// <summary>
+        /// 将json字符串转换为指定对象
+        /// </summary>
+        /// <typeparam name="T">目标对象</typeparam>
+        /// <param name="str">源json字符串</param>
+        /// <returns></returns>
+        private static T ConvertToEntity<T>(string str)
+        {
+            T result = default(T);
+
+            if (!string.IsNullOrEmpty(str))
+            {
+                try
+                {
+                    result = JsonConvert.DeserializeObject<T>(str);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// 获取HttpResult
@@ -624,7 +661,6 @@ namespace Common.Ofo
 
             return result;
         }
-
 
         /// <summary>
         /// 获取请求返回值的Json实体对象 (BaseResult)
@@ -659,31 +695,6 @@ namespace Common.Ofo
         }
 
         /// <summary>
-        /// 将json字符串转换为指定对象
-        /// </summary>
-        /// <typeparam name="T">目标对象</typeparam>
-        /// <param name="str">源json字符串</param>
-        /// <returns></returns>
-        private static T ConvertToEntity<T>(string str)
-        {
-            T result = default(T);
-
-            if (!string.IsNullOrEmpty(str))
-            {
-                try
-                {
-                    result = JsonConvert.DeserializeObject<T>(str);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
         /// 设置最后访问地址
         /// </summary>
         /// <param name="location"></param>
@@ -692,6 +703,6 @@ namespace Common.Ofo
             LastLocation = location;
         }
 
-        #endregion
+        #endregion 基础实现
     }
 }

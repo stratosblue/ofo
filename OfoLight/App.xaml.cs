@@ -15,6 +15,8 @@ namespace OfoLight
     /// </summary>
     sealed partial class App : Application
     {
+        #region 构造函数
+
         /// <summary>
         /// 初始化单一实例应用程序对象。这是执行的创作代码的第一行，
         /// 已执行，逻辑上等同于 main() 或 WinMain()。
@@ -27,6 +29,10 @@ namespace OfoLight
 
             Global.LoadAppConfig();
         }
+
+        #endregion 构造函数
+
+        #region 方法
 
         /// <summary>
         /// 在应用程序由最终用户正常启动时进行调用。
@@ -79,9 +85,11 @@ namespace OfoLight
         /// </summary>
         ///<param name="sender">导航失败的框架</param>
         ///<param name="e">有关导航失败的详细信息</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             Debug.WriteLine(e);
         }
+
+        #endregion 方法
     }
 }

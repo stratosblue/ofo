@@ -10,6 +10,18 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class ContentPageViewModel : BaseViewModel
     {
+        #region 字段
+
+        private UIElement _contentElement;
+
+        private ContentPageArgs _contentPageArgs;
+
+        private Visibility _headerVisibility = Visibility.Visible;
+
+        #endregion 字段
+
+        #region 属性
+
         public override bool CanExitApplication
         {
             get
@@ -28,20 +40,6 @@ namespace OfoLight.ViewModel
             }
         }
 
-        private Visibility _headerVisibility = Visibility.Visible;
-
-        public Visibility HeaderVisibility
-        {
-            get { return _headerVisibility; }
-            set
-            {
-                _headerVisibility = value;
-                NotifyPropertyChanged("HeaderVisibility");
-            }
-        }
-
-        private UIElement _contentElement;
-
         /// <summary>
         /// 内容元素
         /// </summary>
@@ -54,8 +52,6 @@ namespace OfoLight.ViewModel
                 NotifyPropertyChanged("ContentElement");
             }
         }
-
-        private ContentPageArgs _contentPageArgs;
 
         /// <summary>
         /// 内容页面参数
@@ -85,10 +81,24 @@ namespace OfoLight.ViewModel
             }
         }
 
+        public Visibility HeaderVisibility
+        {
+            get { return _headerVisibility; }
+            set
+            {
+                _headerVisibility = value;
+                NotifyPropertyChanged("HeaderVisibility");
+            }
+        }
+
         /// <summary>
         /// 内容栈
         /// </summary>
         protected ConcurrentStack<ContentPageArgs> ContentStack { get; set; } = new ConcurrentStack<ContentPageArgs>();
+
+        #endregion 属性
+
+        #region 方法
 
         /// <summary>
         /// 内容导航
@@ -117,13 +127,21 @@ namespace OfoLight.ViewModel
             }
         }
 
-        /// <summary>
-        /// 内容事件触发
-        /// </summary>
-        /// <param name="args"></param>
-        private void NavigationToContent(ContentPageArgs args)
+        public override void Dispose()
         {
-            ContentNavication(args);
+            _contentElement = null;
+            _contentPageArgs = null;
+            while (ContentStack.TryPop(out var contentArgs))
+            {
+                if (contentArgs.ContentElement is UserControl content)
+                {
+                    if (content.DataContext is BaseContentViewModel viewModel)  //是否是内容页面
+                    {
+                        viewModel.NavigationToContentEvent -= NavigationToContent;
+                    }
+                }
+            }
+            base.Dispose();
         }
 
         /// <summary>
@@ -165,21 +183,15 @@ namespace OfoLight.ViewModel
             }
         }
 
-        public override void Dispose()
+        /// <summary>
+        /// 内容事件触发
+        /// </summary>
+        /// <param name="args"></param>
+        private void NavigationToContent(ContentPageArgs args)
         {
-            _contentElement = null;
-            _contentPageArgs = null;
-            while (ContentStack.TryPop(out var contentArgs))
-            {
-                if (contentArgs.ContentElement is UserControl content)
-                {
-                    if (content.DataContext is BaseContentViewModel viewModel)  //是否是内容页面
-                    {
-                        viewModel.NavigationToContentEvent -= NavigationToContent;
-                    }
-                }
-            }
-            base.Dispose();
+            ContentNavication(args);
         }
+
+        #endregion 方法
     }
 }

@@ -8,6 +8,8 @@ namespace OfoLight.View
     /// </summary>
     public sealed partial class NoLoginView : Page
     {
+        #region 构造函数
+
         /// <summary>
         /// 未登录页面
         /// </summary>
@@ -16,5 +18,7 @@ namespace OfoLight.View
             this.InitializeComponent();
             DataContext = new NoLoginViewModel();
         }
+
+        #endregion 构造函数
     }
 }

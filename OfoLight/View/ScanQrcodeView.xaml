@@ -7,26 +7,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:OfoLight.Converters"
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
-    xmlns:Core="using:Microsoft.Xaml.Interactions.Core" 
+    xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:CoreAddOn="using:Microsoft.Xaml.Interactions.Core.AddOn"
     mc:Ignorable="d" NavigationCacheMode="Required">
 
     <Page.Resources>
         <converters:RunningStateColorConverter x:Key="RunningStateColorConverter"></converters:RunningStateColorConverter>
         <Style x:Key="transBackgroud" TargetType="Grid">
-            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Background" Value="Black" />
             <Setter Property="Opacity" Value="0.6"></Setter>
         </Style>
         <Style x:Key="ScanOperateButton" TargetType="Button" BasedOn="{StaticResource NoEventStyleButton}">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Bottom"/>
-            <Setter Property="Margin" Value="0,0,0,20"/>
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+            <Setter Property="Margin" Value="0,0,0,20" />
         </Style>
     </Page.Resources>
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
-                <SlideNavigationTransitionInfo/>
+                <SlideNavigationTransitionInfo />
             </NavigationThemeTransition>
         </TransitionCollection>
     </Page.Transitions>
@@ -78,12 +78,11 @@
 
                         <Interactivity:Interaction.Behaviors>
                             <Core:EventTriggerBehavior>
-                                <CoreAddOn:StoryBoardAction TargetStoryBoard="{Binding ElementName=scanProgressStoryBoard}" MethodName="Begin"/>
+                                <CoreAddOn:StoryBoardAction TargetStoryBoard="{Binding ElementName=scanProgressStoryBoard}" MethodName="Begin" />
                             </Core:EventTriggerBehavior>
                         </Interactivity:Interaction.Behaviors>
                     </Image>
                 </Grid>
-
             </Grid>
 
             <Grid Grid.Row="2" Grid.ColumnSpan="3">

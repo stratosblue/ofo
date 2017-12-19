@@ -8,6 +8,8 @@ namespace OfoLight.View
     /// </summary>
     public sealed partial class UserWalletContentView : UserControl
     {
+        #region 构造函数
+
         /// <summary>
         /// 用户钱包视图
         /// </summary>
@@ -16,5 +18,7 @@ namespace OfoLight.View
             this.InitializeComponent();
             DataContext = new UserWalletContentViewModel();
         }
+
+        #endregion 构造函数
     }
 }

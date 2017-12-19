@@ -11,6 +11,8 @@ namespace OfoLight.Converters
     /// </summary>
     public class MixCommonConverter : IValueConverter
     {
+        #region 方法
+
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (parameter is string para)
@@ -39,6 +41,7 @@ namespace OfoLight.Converters
                             }
                         }
                         break;
+
                     case "BondStatus":
                         if (value is float bond)
                         {
@@ -66,6 +69,7 @@ namespace OfoLight.Converters
                             }
                         }
                         break;
+
                     case "BlueBarType":
                         if (value is int inputBlueBarType)
                         {
@@ -76,6 +80,7 @@ namespace OfoLight.Converters
                                 case 1:
                                     blubarImage = new BitmapImage(new Uri("ms-appx:///Assets/icons/blue_bar_alert.png"));
                                     break;
+
                                 case 0:
                                 default:
                                     blubarImage = new BitmapImage(new Uri("ms-appx:///Assets/icons/blue_bar_message.png"));
@@ -93,5 +98,7 @@ namespace OfoLight.Converters
         {
             return null;
         }
+
+        #endregion 方法
     }
 }

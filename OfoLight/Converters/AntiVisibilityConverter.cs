@@ -9,6 +9,8 @@ namespace OfoLight.Converters
     /// </summary>
     public class AntiVisibilityConverter : IValueConverter
     {
+        #region 方法
+
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (value is Visibility inputValue)
@@ -29,5 +31,7 @@ namespace OfoLight.Converters
         {
             return Visibility.Visible;
         }
+
+        #endregion 方法
     }
 }

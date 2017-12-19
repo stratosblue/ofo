@@ -10,6 +10,8 @@ namespace OfoLight.Utilities
     /// </summary>
     public static class NetworkStatusUtility
     {
+        #region 属性
+
         /// <summary>
         /// 网络是否可用
         /// </summary>
@@ -21,6 +23,10 @@ namespace OfoLight.Utilities
                 return (profile?.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess);
             }
         }
+
+        #endregion 属性
+
+        #region 方法
 
         /// <summary>
         /// 获取IP地址
@@ -76,9 +82,7 @@ namespace OfoLight.Utilities
                 Debug.WriteLine(ex);
                 return "其他";
             }
-
         }
-
 
         /// <summary>
         /// 获取网络连接类型
@@ -138,5 +142,7 @@ namespace OfoLight.Utilities
                 return "未知";
             }
         }
+
+        #endregion 方法
     }
 }

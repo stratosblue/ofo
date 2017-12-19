@@ -8,17 +8,13 @@ namespace Amap.Web.Entity.Result
     /// </summary>
     public class BaseResult
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        [JsonProperty("status")]
-        public int Status { get; set; }
-
-        [JsonProperty("infocode")]
-        public int InfoCode { get; set; } = -1;
+        #region 属性
 
         [JsonProperty("info")]
         public string Info { get; set; }
+
+        [JsonProperty("infocode")]
+        public int InfoCode { get; set; } = -1;
 
         /// <summary>
         /// 网页源文本
@@ -26,8 +22,16 @@ namespace Amap.Web.Entity.Result
         public string SourceHtml { get; set; }
 
         /// <summary>
+        ///
+        /// </summary>
+        [JsonProperty("status")]
+        public int Status { get; set; }
+
+        /// <summary>
         /// Http状态
         /// </summary>
         public HttpStatusCode StatusCode { get; set; }
+
+        #endregion 属性
     }
 }

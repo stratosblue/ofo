@@ -1,7 +1,7 @@
 ﻿using OfoLight.ViewModel;
 using System.Text.RegularExpressions;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace OfoLight.View
 {
@@ -10,7 +10,13 @@ namespace OfoLight.View
     /// </summary>
     public sealed partial class LoginFirstStepContentView : UserControl
     {
+        #region 属性
+
         public LoginFirstStepContentViewModel ViewModel { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 登录第一步view
@@ -22,6 +28,9 @@ namespace OfoLight.View
             DataContext = ViewModel;
         }
 
+        #endregion 构造函数
+
+        #region 方法
 
         public void InputPhoneNumTextChanged(object sender, TextChangedEventArgs e)
         {
@@ -34,5 +43,7 @@ namespace OfoLight.View
                 }
             }
         }
+
+        #endregion 方法
     }
 }

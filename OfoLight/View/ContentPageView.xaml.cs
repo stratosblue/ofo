@@ -10,7 +10,13 @@ namespace OfoLight.View
     /// </summary>
     public sealed partial class ContentPageView : Page
     {
-        ContentPageViewModel ViewModel { get; set; }
+        #region 属性
+
+        private ContentPageViewModel ViewModel { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         public ContentPageView()
         {
@@ -20,11 +26,9 @@ namespace OfoLight.View
             Unloaded += PageUnloaded;
         }
 
-        private void PageUnloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            ViewModel.Dispose();
-            Unloaded -= PageUnloaded;
-        }
+        #endregion 构造函数
+
+        #region 方法
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -34,5 +38,13 @@ namespace OfoLight.View
                 ViewModel.ContentNavication(args);
             }
         }
+
+        private void PageUnloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            ViewModel.Dispose();
+            Unloaded -= PageUnloaded;
+        }
+
+        #endregion 方法
     }
 }

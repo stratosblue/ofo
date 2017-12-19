@@ -9,10 +9,16 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class BaseContentViewModel : BaseViewModel
     {
+        #region 事件
+
         /// <summary>
         /// 内容导航事件
         /// </summary>
         public event Action<ContentPageArgs> NavigationToContentEvent;
+
+        #endregion 事件
+
+        #region 属性
 
         /// <summary>
         /// 是否可以回退
@@ -23,6 +29,10 @@ namespace OfoLight.ViewModel
         /// 内容导航命令 VM需要重写ContentNavigation
         /// </summary>
         public ICommand ContentNaviCommand { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 内容页面的 内容基础VM
@@ -43,6 +53,14 @@ namespace OfoLight.ViewModel
             });
         }
 
+        #endregion 构造函数
+
+        #region 方法
+
+        public virtual void GoBack()
+        {
+        }
+
         /// <summary>
         /// ContentNaviCommand触发的事件
         /// </summary>
@@ -59,8 +77,6 @@ namespace OfoLight.ViewModel
             NavigationToContentEvent?.Invoke(args);
         }
 
-        public virtual void GoBack()
-        {
-        }
+        #endregion 方法
     }
 }

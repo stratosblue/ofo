@@ -10,7 +10,13 @@ namespace OfoLight.View
     /// </summary>
     public sealed partial class UnlockedView : Page
     {
+        #region 属性
+
         public UnlockedViewModel ViewModel { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 已解锁车界面
@@ -20,6 +26,16 @@ namespace OfoLight.View
             this.InitializeComponent();
             ViewModel = new UnlockedViewModel();
             DataContext = ViewModel;
+        }
+
+        #endregion 构造函数
+
+        #region 方法
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            ViewModel?.StopTimer();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -32,10 +48,6 @@ namespace OfoLight.View
             }
         }
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            base.OnNavigatedFrom(e);
-            ViewModel?.StopTimer();
-        }
+        #endregion 方法
     }
 }

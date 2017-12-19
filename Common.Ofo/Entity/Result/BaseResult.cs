@@ -8,6 +8,8 @@ namespace Common.Ofo.Entity.Result
     /// </summary>
     public class BaseResult
     {
+        #region 属性
+
         /// <summary>
         /// 40012订单已报修
         /// </summary>
@@ -23,6 +25,11 @@ namespace Common.Ofo.Entity.Result
         public string Message { get; set; }
 
         /// <summary>
+        /// Http状态是否为200
+        /// </summary>
+        public bool OK { get => StatusCode == HttpStatusCode.Ok; }
+
+        /// <summary>
         /// 网页源文本
         /// </summary>
         public string SourceHtml { get; set; }
@@ -32,9 +39,6 @@ namespace Common.Ofo.Entity.Result
         /// </summary>
         public HttpStatusCode StatusCode { get; set; }
 
-        /// <summary>
-        /// Http状态是否为200
-        /// </summary>
-        public bool OK { get => StatusCode == HttpStatusCode.Ok; }
+        #endregion 属性
     }
 }

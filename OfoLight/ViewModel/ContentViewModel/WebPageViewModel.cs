@@ -5,12 +5,22 @@ namespace OfoLight.ViewModel
 {
     public class WebPageViewModel : BaseContentViewModel
     {
+        #region 字段
+
+        private bool _isLastFragmentView = false;
+
+        private string _targetUrl;
+
+        #endregion 字段
+
+        #region 属性
+
+        public override bool CanGoBack { get => WebView?.CanGoBack == true; }
+
         /// <summary>
         /// 检测导航，在片段后退时，使用导航后退
         /// </summary>
         public bool IsReCheckNavi { get; set; } = false;
-
-        private string _targetUrl;
 
         public string TargetUrl
         {
@@ -24,7 +34,9 @@ namespace OfoLight.ViewModel
 
         public WebView WebView { get; set; }
 
-        public override bool CanGoBack { get => WebView?.CanGoBack == true; }
+        #endregion 属性
+
+        #region 构造函数
 
         public WebPageViewModel(WebView webView)
         {
@@ -33,7 +45,30 @@ namespace OfoLight.ViewModel
             WebView.NavigationCompleted += WebViewNavigationCompleted;
         }
 
-        private bool _isLastFragmentView = false;
+        #endregion 构造函数
+
+        #region 方法
+
+        /// <summary>
+        /// 资源释放
+        /// </summary>
+        public override void Dispose()
+        {
+            WebView.PermissionRequested -= WebViewPermissionRequested;
+            WebView.NavigationCompleted -= WebViewNavigationCompleted;
+            WebView.NavigateToString(string.Empty);
+            WebView = null;
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+            base.Dispose();
+        }
+
+        public override async void GoBack()
+        {
+            await WebView.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                WebView.GoBack();
+            });
+        }
 
         private async void WebViewNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
@@ -69,25 +104,6 @@ namespace OfoLight.ViewModel
                 args.PermissionRequest.Allow();
         }
 
-        public override async void GoBack()
-        {
-            await WebView.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            {
-                WebView.GoBack();
-            });
-        }
-
-        /// <summary>
-        /// 资源释放
-        /// </summary>
-        public override void Dispose()
-        {
-            WebView.PermissionRequested -= WebViewPermissionRequested;
-            WebView.NavigationCompleted -= WebViewNavigationCompleted;
-            WebView.NavigateToString(string.Empty);
-            WebView = null;
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
-            base.Dispose();
-        }
+        #endregion 方法
     }
 }

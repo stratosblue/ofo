@@ -14,10 +14,16 @@ namespace Amap.Web
     /// </summary>
     public class AmapWebAPIs
     {
+        #region 属性
+
         /// <summary>
         /// 接口配置
         /// </summary>
         public AmapConfig Config { get; private set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 高德地图网页版API
@@ -35,6 +41,10 @@ namespace Amap.Web
         {
             Config = config ?? throw new ArgumentNullException("配置不可为空");
         }
+
+        #endregion 构造函数
+
+        #region 方法
 
         /// <summary>
         /// 获取行走路线
@@ -68,7 +78,36 @@ namespace Amap.Web
             return await GetHttpResultAsync<LocationDetailsResult>(request);
         }
 
+        #endregion 方法
+
         #region 基础实现
+
+        /// <summary>
+        /// 将json字符串转换为指定对象
+        /// </summary>
+        /// <typeparam name="T">目标对象</typeparam>
+        /// <param name="str">源json字符串</param>
+        /// <returns></returns>
+        private static T ConvertToEntity<T>(string str)
+        {
+            T result = default(T);
+
+            if (!string.IsNullOrEmpty(str))
+            {
+                try
+                {
+                    //TODO 高德地图的空返回修正，不知可有更好的办法？
+                    var fStr = str.Replace(":[]", ":null");
+                    result = JsonConvert.DeserializeObject<T>(fStr);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// 获取HttpResult
@@ -84,7 +123,6 @@ namespace Amap.Web
 
             return result;
         }
-
 
         /// <summary>
         /// 获取请求返回值的Json实体对象 (BaseResult)
@@ -118,33 +156,6 @@ namespace Amap.Web
             return result;
         }
 
-        /// <summary>
-        /// 将json字符串转换为指定对象
-        /// </summary>
-        /// <typeparam name="T">目标对象</typeparam>
-        /// <param name="str">源json字符串</param>
-        /// <returns></returns>
-        private static T ConvertToEntity<T>(string str)
-        {
-            T result = default(T);
-
-            if (!string.IsNullOrEmpty(str))
-            {
-                try
-                {
-                    //TODO 高德地图的空返回修正，不知可有更好的办法？
-                    var fStr = str.Replace(":[]", ":null");
-                    result = JsonConvert.DeserializeObject<T>(fStr);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                }
-            }
-
-            return result;
-        }
-
-        #endregion
+        #endregion 基础实现
     }
 }

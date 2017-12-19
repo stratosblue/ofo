@@ -15,25 +15,7 @@ namespace OfoLight.Utilities
     /// </summary>
     public static class OfoUtility
     {
-        /// <summary>
-        /// 获取掩盖的手机号
-        /// </summary>
-        /// <returns></returns>
-        public static string GetMaskTelPhoneNum(string phoneNum)
-        {
-            var stringBuilder = new StringBuilder();
-            if (phoneNum.Length == 11)
-            {
-                stringBuilder.Append(phoneNum.Substring(0, 3));
-                stringBuilder.Append("****");
-                stringBuilder.Append(phoneNum.Substring(7, 4));
-            }
-            else
-            {
-                stringBuilder.Append(phoneNum);
-            }
-            return stringBuilder.ToString();
-        }
+        #region 方法
 
         /// <summary>
         /// 通过URL获取头像图片的访问流
@@ -57,7 +39,6 @@ namespace OfoLight.Utilities
                         await LocalCacheUtility.CacheHttpFileAsync(fileName, avatarUrl);
                     }
                     avatarStream = await LocalCacheUtility.GetCacheAsync(fileName);
-
                 }
 
                 //头像没有正确获取，则获取默认头像
@@ -88,5 +69,27 @@ namespace OfoLight.Utilities
 
             return result;
         }
+
+        /// <summary>
+        /// 获取掩盖的手机号
+        /// </summary>
+        /// <returns></returns>
+        public static string GetMaskTelPhoneNum(string phoneNum)
+        {
+            var stringBuilder = new StringBuilder();
+            if (phoneNum.Length == 11)
+            {
+                stringBuilder.Append(phoneNum.Substring(0, 3));
+                stringBuilder.Append("****");
+                stringBuilder.Append(phoneNum.Substring(7, 4));
+            }
+            else
+            {
+                stringBuilder.Append(phoneNum);
+            }
+            return stringBuilder.ToString();
+        }
+
+        #endregion 方法
     }
 }

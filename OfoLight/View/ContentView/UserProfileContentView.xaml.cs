@@ -6,12 +6,21 @@ namespace OfoLight.View
 {
     public sealed partial class UserProfileContentView : UserControl
     {
-        UserProfileContentViewModel ViewModel { get; set; }
+        #region 属性
+
+        private UserProfileContentViewModel ViewModel { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
+
         public UserProfileContentView(UserInfo UserInfo)
         {
             this.InitializeComponent();
             ViewModel = new UserProfileContentViewModel(UserInfo);
             DataContext = ViewModel;
         }
+
+        #endregion 构造函数
     }
 }

@@ -2,7 +2,6 @@
 using Common.Ofo.Entity.Result;
 using OfoLight.Controls;
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -38,19 +37,20 @@ namespace OfoLight.ViewModel
         private static OfoWebAPIs _ofoApi;
 
         /// <summary>
-        /// Ofo接口实例
-        /// </summary>
-        protected static OfoWebAPIs OfoApi { get => _ofoApi; }
-
-        /// <summary>
-        /// 消息提示
-        /// </summary>
-        protected static NotifyPopup NotifyPopupInstance { get; private set; }
-
-        /// <summary>
         /// 内容弹出消息
         /// </summary>
         protected static ContentPopup ContentPopupInstance { get; set; }
+
+        /// <summary>
+        /// 消息提示是否正在显示
+        /// </summary>
+        protected static bool IsNotifyShowing
+        {
+            get
+            {
+                return NotifyPopupInstance == null ? false : NotifyPopupInstance.IsShowing;
+            }
+        }
 
         /// <summary>
         /// 消息提示内容
@@ -68,22 +68,46 @@ namespace OfoLight.ViewModel
         }
 
         /// <summary>
-        /// 消息提示是否正在显示
+        /// 消息提示
         /// </summary>
-        protected static bool IsNotifyShowing
-        {
-            get
-            {
-                return NotifyPopupInstance == null ? false : NotifyPopupInstance.IsShowing;
-            }
-        }
+        protected static NotifyPopup NotifyPopupInstance { get; private set; }
 
-        #endregion
+        /// <summary>
+        /// Ofo接口实例
+        /// </summary>
+        protected static OfoWebAPIs OfoApi { get => _ofoApi; }
+
+        #endregion 静态字段、属性
+
+        #region 字段
+
+        private static double _windowHeight;
+
+        private static double _windowWidth;
 
         /// <summary>
         /// 名称
         /// </summary>
         private string _name;
+
+        #endregion 字段
+
+        #region 属性
+
+        /// <summary>
+        /// 当前VM是否可以退出程序
+        /// </summary>
+        public virtual bool CanExitApplication { get; set; } = false;
+
+        /// <summary>
+        /// 关闭命令
+        /// </summary>
+        public ICommand CloseCommand { get; set; }
+
+        /// <summary>
+        /// 是否已监听视图大小改变
+        /// </summary>
+        public bool IsWatchedViewSizeChange { get; private set; } = false;
 
         /// <summary>
         /// 名称
@@ -99,11 +123,9 @@ namespace OfoLight.ViewModel
         }
 
         /// <summary>
-        /// 当前VM的UI线程
+        /// 导航命令
         /// </summary>
-        protected CoreDispatcher Dispatcher { get; set; }
-
-        private static double _windowHeight;
+        public ICommand NaviCommand { get; set; }
 
         /// <summary>
         /// 主窗体高度
@@ -117,8 +139,6 @@ namespace OfoLight.ViewModel
                 NotifyPropertyChanged("WindowHeight");
             }
         }
-
-        private static double _windowWidth;
 
         /// <summary>
         /// 主窗体宽度
@@ -134,9 +154,54 @@ namespace OfoLight.ViewModel
         }
 
         /// <summary>
-        /// 当前VM是否可以退出程序
+        /// 当前VM的UI线程
         /// </summary>
-        public virtual bool CanExitApplication { get; set; } = false;
+        protected CoreDispatcher Dispatcher { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
+
+        /// <summary>
+        /// 基础ViewModel
+        /// </summary>
+        public BaseViewModel() : this(true)
+        {
+        }
+
+        /// <summary>
+        /// 基础ViewModel
+        /// <paramref name="isInitAsync">是否执行初始化</paramref>
+        /// </summary>
+        public BaseViewModel(bool isInitAsync)
+        {
+            Dispatcher = Window.Current.Dispatcher;
+
+            if (isInitAsync)
+            {
+                InitializationAsync();
+            }
+
+            CloseCommand = new RelayCommand((state) =>
+            {
+                CloseAction();
+            });
+            NaviCommand = new RelayCommand((state) =>
+            {
+                try
+                {
+                    NavigationActionAsync(state);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
+            });
+        }
+
+        #endregion 构造函数
+
+        #region 方法
 
         /// <summary>
         /// 设置初始化application
@@ -152,50 +217,6 @@ namespace OfoLight.ViewModel
             _application = application;
             _application.Suspending += ApplicationSuspending;
             _application.Resuming += ApplicationResuming;
-        }
-
-        /// <summary>
-        /// 应用由挂起转为运行状态
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private static void ApplicationResuming(object sender, object e)
-        {
-            if (Window.Current.Content is Frame rootFrame)
-            {
-                if (rootFrame.Content is Page currentPage)
-                {
-                    if (currentPage.DataContext is BaseViewModel currentViewModel)
-                    {
-                        currentViewModel.OnResumingAsync();
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// 在将要挂起应用程序执行时调用。  在不知道应用程序
-        /// 无需知道应用程序会被终止还是会恢复，
-        /// 并让内存内容保持不变。
-        /// </summary>
-        /// <param name="sender">挂起的请求的源。</param>
-        /// <param name="e">有关挂起请求的详细信息。</param>
-        private static void ApplicationSuspending(object sender, SuspendingEventArgs e)
-        {
-            var deferral = e.SuspendingOperation.GetDeferral();
-
-            //TODO: 保存应用程序状态并停止任何后台活动
-            if (Window.Current.Content is Frame rootFrame)
-            {
-                if (rootFrame.Content is Page currentPage)
-                {
-                    if (currentPage.DataContext is BaseViewModel currentViewModel)
-                    {
-                        currentViewModel.OnSuspendingAsync();
-                    }
-                }
-            }
-            deferral.Complete();
         }
 
         /// <summary>
@@ -257,118 +278,83 @@ namespace OfoLight.ViewModel
         }
 
         /// <summary>
-        /// 是否已监听视图大小改变
+        /// 检查Ofo接口返回数据是否正常
         /// </summary>
-        public bool IsWatchedViewSizeChange { get; private set; } = false;
-
-        /// <summary>
-        /// 关闭命令
-        /// </summary>
-        public ICommand CloseCommand { get; set; }
-
-        /// <summary>
-        /// 导航命令
-        /// </summary>
-        public ICommand NaviCommand { get; set; }
-
-        /// <summary>
-        /// 基础ViewModel
-        /// </summary>
-        public BaseViewModel() : this(true)
-        {
-        }
-
-        /// <summary>
-        /// 基础ViewModel
-        /// <paramref name="isInitAsync">是否执行初始化</paramref>
-        /// </summary>
-        public BaseViewModel(bool isInitAsync)
-        {
-            Dispatcher = Window.Current.Dispatcher;
-
-            if (isInitAsync)
-            {
-                InitializationAsync();
-            }
-
-            CloseCommand = new RelayCommand((state) =>
-            {
-                CloseAction();
-            });
-            NaviCommand = new RelayCommand((state) =>
-            {
-                try
-                {
-                    NavigationActionAsync(state);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                }
-            });
-        }
-
-        /// <summary>
-        /// 监听视图大小改变
-        /// </summary>
-        protected void WatchViewSizeChanged()
-        {
-            if (!IsWatchedViewSizeChange)
-            {
-                SizeChanged += ViewSizeChanged;
-                IsWatchedViewSizeChange = true;
-            }
-        }
-
-        /// <summary>
-        /// 内部调用的后退按钮事件
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void InternalViewBackPressed(object sender, BackPressedEventArgs e)
-        {
-            if (e.Handled == false && ViewBackPressed(sender, e))
-            {
-                e.Handled = true;
-            }
-        }
-
-        /// <summary>
-        /// 视图点击后退
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="ofoApiResult"></param>
         /// <returns></returns>
-        protected virtual bool ViewBackPressed(object sender, BackPressedEventArgs e)
+        public async Task<bool> CheckOfoApiResult(BaseResult ofoApiResult)
         {
-            if (e.Handled == false)
+            if (ofoApiResult.OK)
             {
-                TryGoBack();
-                return true;
+                if (ofoApiResult.IsSuccess)
+                {
+                    return true;
+                }
+                else
+                {
+                    await ShowNotifyAsync(ofoApiResult?.Message);
+                    return false;
+                }
             }
             else
             {
+                await ShowNotifyAsync("网络异常");
                 return false;
             }
         }
 
         /// <summary>
-        /// 窗体大小更改
+        /// 检查Ofo接口返回数据Http状态
         /// </summary>
-        protected virtual void WindowSizeChanged()
-        { }
+        /// <param name="ofoApiResult"></param>
+        /// <returns></returns>
+        public async Task<bool> CheckOfoApiResultHttpStatus(BaseResult ofoApiResult)
+        {
+            if (ofoApiResult.OK)
+            {
+                return true;
+            }
+            else
+            {
+                await ShowNotifyAsync("网络异常");
+                return false;
+            }
+        }
 
         /// <summary>
-        /// 窗体大小更改
+        /// 销毁VM相关资源
         /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        private void ViewSizeChanged(double width, double height)
+        public virtual void Dispose()
         {
-            WindowHeight = height;
-            WindowWidth = width;
+            if (IsWatchedViewSizeChange)
+            {
+                SizeChanged -= ViewSizeChanged;
+                IsWatchedViewSizeChange = false;
+            }
+        }
 
-            WindowSizeChanged();
+        /// <summary>
+        /// 应用程序从挂起恢复运行时
+        /// </summary>
+        public virtual async Task OnResumingAsync()
+        {
+            await Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// 应用程序挂起
+        /// </summary>
+        public virtual async Task OnSuspendingAsync()
+        {
+            await Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// 关闭命令的回调函数
+        /// </summary>
+        protected virtual void CloseAction()
+        {
+            TryGoBack();
         }
 
         /// <summary>
@@ -379,6 +365,13 @@ namespace OfoLight.ViewModel
         {
             return null;
         }
+
+        /// <summary>
+        /// NaviCommand命令的回调函数
+        /// </summary>
+        /// <param name="state"></param>
+        protected virtual void NavigationActionAsync(object state)
+        { }
 
         /// <summary>
         /// 页面回退
@@ -424,39 +417,118 @@ namespace OfoLight.ViewModel
         }
 
         /// <summary>
-        /// 关闭命令的回调函数
+        /// 视图点击后退
         /// </summary>
-        protected virtual void CloseAction()
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        protected virtual bool ViewBackPressed(object sender, BackPressedEventArgs e)
         {
-            TryGoBack();
+            if (e.Handled == false)
+            {
+                TryGoBack();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
-        /// NaviCommand命令的回调函数
+        /// 监听视图大小改变
         /// </summary>
-        /// <param name="state"></param>
-        protected virtual void NavigationActionAsync(object state)
+        protected void WatchViewSizeChanged()
+        {
+            if (!IsWatchedViewSizeChange)
+            {
+                SizeChanged += ViewSizeChanged;
+                IsWatchedViewSizeChange = true;
+            }
+        }
+
+        /// <summary>
+        /// 窗体大小更改
+        /// </summary>
+        protected virtual void WindowSizeChanged()
         { }
 
         /// <summary>
-        /// 应用程序从挂起恢复运行时
+        /// 应用由挂起转为运行状态
         /// </summary>
-        public virtual async Task OnResumingAsync()
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void ApplicationResuming(object sender, object e)
         {
-            await Task.CompletedTask;
+            if (Window.Current.Content is Frame rootFrame)
+            {
+                if (rootFrame.Content is Page currentPage)
+                {
+                    if (currentPage.DataContext is BaseViewModel currentViewModel)
+                    {
+                        currentViewModel.OnResumingAsync();
+                    }
+                }
+            }
         }
 
         /// <summary>
-        /// 应用程序挂起
+        /// 在将要挂起应用程序执行时调用。  在不知道应用程序
+        /// 无需知道应用程序会被终止还是会恢复，
+        /// 并让内存内容保持不变。
         /// </summary>
-        public virtual async Task OnSuspendingAsync()
+        /// <param name="sender">挂起的请求的源。</param>
+        /// <param name="e">有关挂起请求的详细信息。</param>
+        private static void ApplicationSuspending(object sender, SuspendingEventArgs e)
         {
-            await Task.CompletedTask;
+            var deferral = e.SuspendingOperation.GetDeferral();
+
+            //TODO: 保存应用程序状态并停止任何后台活动
+            if (Window.Current.Content is Frame rootFrame)
+            {
+                if (rootFrame.Content is Page currentPage)
+                {
+                    if (currentPage.DataContext is BaseViewModel currentViewModel)
+                    {
+                        currentViewModel.OnSuspendingAsync();
+                    }
+                }
+            }
+            deferral.Complete();
         }
+
+        /// <summary>
+        /// 内部调用的后退按钮事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void InternalViewBackPressed(object sender, BackPressedEventArgs e)
+        {
+            if (e.Handled == false && ViewBackPressed(sender, e))
+            {
+                e.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// 窗体大小更改
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        private void ViewSizeChanged(double width, double height)
+        {
+            WindowHeight = height;
+            WindowWidth = width;
+
+            WindowSizeChanged();
+        }
+
+        #endregion 方法
 
         #region 导航
 
         #region 同步
+
         /// <summary>
         /// 尝试页面导航
         /// </summary>
@@ -473,6 +545,23 @@ namespace OfoLight.ViewModel
         protected void TryNavigate(Type pageType, object parameter)
         {
             TryNavigate(pageType, parameter, false);
+        }
+
+        /// <summary>
+        /// 尝试页面导航
+        /// </summary>
+        /// <param name="pageType">页面type</param>
+        /// <param name="parameter">参数</param>
+        /// <param name="isReplaceCurrent">是否替换当前页</param>
+        protected virtual void TryNavigate(Type pageType, object parameter, bool isReplaceCurrent)
+        {
+            if (Window.Current?.Content is Frame rootFrame)
+            {
+                if (rootFrame.Navigate(pageType, parameter) && isReplaceCurrent)
+                {
+                    rootFrame.BackStack.RemoveAt(rootFrame.BackStack.Count - 1);
+                }
+            }
         }
 
         /// <summary>
@@ -494,24 +583,7 @@ namespace OfoLight.ViewModel
             TryNavigate(pageType, parameter, true);
         }
 
-        /// <summary>
-        /// 尝试页面导航
-        /// </summary>
-        /// <param name="pageType">页面type</param>
-        /// <param name="parameter">参数</param>
-        /// <param name="isReplaceCurrent">是否替换当前页</param>
-        protected virtual void TryNavigate(Type pageType, object parameter, bool isReplaceCurrent)
-        {
-            if (Window.Current?.Content is Frame rootFrame)
-            {
-                if (rootFrame.Navigate(pageType, parameter) && isReplaceCurrent)
-                {
-                    rootFrame.BackStack.RemoveAt(rootFrame.BackStack.Count - 1);
-                }
-            }
-        }
-
-        #endregion
+        #endregion 同步
 
         #region 异步
 
@@ -534,25 +606,6 @@ namespace OfoLight.ViewModel
         }
 
         /// <summary>
-        /// 尝试页面导航(页面替换)
-        /// </summary>
-        /// <param name="pageType">页面type</param>
-        protected async Task TryReplaceNavigateAsync(Type pageType)
-        {
-            await TryNavigateAsync(pageType, null, true);
-        }
-
-        /// <summary>
-        /// 尝试页面导航(页面替换)
-        /// </summary>
-        /// <param name="pageType">页面type</param>
-        /// <param name="parameter">参数</param>
-        protected async Task TryReplaceNavigateAsync(Type pageType, object parameter)
-        {
-            await TryNavigateAsync(pageType, parameter, true);
-        }
-
-        /// <summary>
         /// 尝试页面导航
         /// </summary>
         /// <param name="pageType">页面type</param>
@@ -572,21 +625,32 @@ namespace OfoLight.ViewModel
             });
         }
 
-        #endregion
-        #endregion
+        /// <summary>
+        /// 尝试页面导航(页面替换)
+        /// </summary>
+        /// <param name="pageType">页面type</param>
+        protected async Task TryReplaceNavigateAsync(Type pageType)
+        {
+            await TryNavigateAsync(pageType, null, true);
+        }
+
+        /// <summary>
+        /// 尝试页面导航(页面替换)
+        /// </summary>
+        /// <param name="pageType">页面type</param>
+        /// <param name="parameter">参数</param>
+        protected async Task TryReplaceNavigateAsync(Type pageType, object parameter)
+        {
+            await TryNavigateAsync(pageType, parameter, true);
+        }
+
+        #endregion 异步
+
+        #endregion 导航
 
         #region 消息提示
 
         #region 文字提示
-
-        /// <summary>
-        /// 显示提示消息
-        /// </summary>
-        /// <returns></returns>
-        protected async Task ShowNotifyAsync()
-        {
-            await NotifyPopupInstance.ShowAsync();
-        }
 
         /// <summary>
         /// 显示提示消息
@@ -607,7 +671,16 @@ namespace OfoLight.ViewModel
             await NotifyPopupInstance.ShowAsync(notifyContent, showTime);
         }
 
-        #endregion
+        /// <summary>
+        /// 显示提示消息
+        /// </summary>
+        /// <returns></returns>
+        protected async Task ShowNotifyAsync()
+        {
+            await NotifyPopupInstance.ShowAsync();
+        }
+
+        #endregion 文字提示
 
         #region 内容提示
 
@@ -626,65 +699,8 @@ namespace OfoLight.ViewModel
             await ContentPopupInstance.ShowAsync();
         }
 
-        #endregion
+        #endregion 内容提示
 
-        #endregion
-
-        /// <summary>
-        /// 检查Ofo接口返回数据是否正常
-        /// </summary>
-        /// <param name="ofoApiResult"></param>
-        /// <returns></returns>
-        public async Task<bool> CheckOfoApiResult(BaseResult ofoApiResult)
-        {
-            if (ofoApiResult.OK)
-            {
-                if (ofoApiResult.IsSuccess)
-                {
-                    return true;
-                }
-                else
-                {
-                    await ShowNotifyAsync(ofoApiResult?.Message);
-                    return false;
-                }
-            }
-            else
-            {
-                await ShowNotifyAsync("网络异常");
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// 检查Ofo接口返回数据Http状态
-        /// </summary>
-        /// <param name="ofoApiResult"></param>
-        /// <returns></returns>
-        public async Task<bool> CheckOfoApiResultHttpStatus(BaseResult ofoApiResult)
-        {
-            if (ofoApiResult.OK)
-            {
-                return true;
-            }
-            else
-            {
-                await ShowNotifyAsync("网络异常");
-                return false;
-            }
-        }
-
-
-        /// <summary>
-        /// 销毁VM相关资源
-        /// </summary>
-        public virtual void Dispose()
-        {
-            if (IsWatchedViewSizeChange)
-            {
-                SizeChanged -= ViewSizeChanged;
-                IsWatchedViewSizeChange = false;
-            }
-        }
+        #endregion 消息提示
     }
 }

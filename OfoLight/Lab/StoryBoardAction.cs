@@ -10,6 +10,8 @@ namespace Microsoft.Xaml.Interactions.Core.AddOn
     /// </summary>
     public class StoryBoardAction : DependencyObject, IAction
     {
+        #region 字段
+
         /// <summary>
         /// 执行方法名称依赖属性
         /// </summary>
@@ -27,6 +29,10 @@ namespace Microsoft.Xaml.Interactions.Core.AddOn
             typeof(Storyboard),
             typeof(StoryBoardAction),
             new PropertyMetadata(null, new PropertyChangedCallback(StoryBoardAction.OnTargetStoryBoardChanged)));
+
+        #endregion 字段
+
+        #region 属性
 
         /// <summary>
         /// 执行方法名
@@ -62,6 +68,10 @@ namespace Microsoft.Xaml.Interactions.Core.AddOn
             }
         }
 
+        #endregion 属性
+
+        #region 方法
+
         /// <summary>
         /// 执行操作
         /// </summary>
@@ -90,6 +100,7 @@ namespace Microsoft.Xaml.Interactions.Core.AddOn
                 case "Begin":
                     target.Begin();
                     break;
+
                 case "Stop":
                     target.Stop();
                     break;
@@ -126,5 +137,7 @@ namespace Microsoft.Xaml.Interactions.Core.AddOn
                 StoryBoardAction.TargetStoryBoard = newStoryboard;
             }
         }
+
+        #endregion 方法
     }
 }

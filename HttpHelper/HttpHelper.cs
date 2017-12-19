@@ -17,29 +17,13 @@ namespace HttpUtility
     /// </summary>
     public class HttpHelper
     {
-        /// <summary>
-        /// 获取指定Url在当前APP容器内的Cookie集合
-        /// </summary>
-        public static HttpCookieCollection GetCookie(string url)
-        {
-            return GetCookie(new Uri(url));
-        }
-
-        /// <summary>
-        /// 获取指定Uri在当前APP容器内的Cookie集合
-        /// </summary>
-        public static HttpCookieCollection GetCookie(Uri uri)
-        {
-            var protocolFilter = new HttpBaseProtocolFilter();
-            return protocolFilter.CookieManager.GetCookies(uri);
-        }
+        #region 字段
 
         private HttpClient _client = null;
 
-        /// <summary>
-        /// 基础协议筛选器
-        /// </summary>
-        public HttpBaseProtocolFilter ProtocolFilter { get; set; } = new HttpBaseProtocolFilter();
+        #endregion 字段
+
+        #region 属性
 
         /// <summary>
         /// Http客户端
@@ -59,6 +43,32 @@ namespace HttpUtility
             {
                 _client = value;
             }
+        }
+
+        /// <summary>
+        /// 基础协议筛选器
+        /// </summary>
+        public HttpBaseProtocolFilter ProtocolFilter { get; set; } = new HttpBaseProtocolFilter();
+
+        #endregion 属性
+
+        #region 方法
+
+        /// <summary>
+        /// 获取指定Url在当前APP容器内的Cookie集合
+        /// </summary>
+        public static HttpCookieCollection GetCookie(string url)
+        {
+            return GetCookie(new Uri(url));
+        }
+
+        /// <summary>
+        /// 获取指定Uri在当前APP容器内的Cookie集合
+        /// </summary>
+        public static HttpCookieCollection GetCookie(Uri uri)
+        {
+            var protocolFilter = new HttpBaseProtocolFilter();
+            return protocolFilter.CookieManager.GetCookies(uri);
         }
 
         /// <summary>
@@ -144,14 +154,16 @@ namespace HttpUtility
                         case ResultType.STRING: //返回字符串
                             result.Html = requestItem.Encoding.GetString(WindowsRuntimeBufferExtensions.ToArray(buffer), 0, (int)buffer.Length);
                             break;
+
                         case ResultType.DATA:   //返回数据
                             result.Data = buffer;
                             break;
+
                         default:
                             break;
                     }
 
-                    #endregion
+                    #endregion 根据返回类型处理请求的返回值
                 }
             }
             catch (Exception ex)
@@ -171,6 +183,35 @@ namespace HttpUtility
         }
 
         /// <summary>
+        /// 将参数httpItem除请求URL之外的设置配置为此对象的默认设置
+        /// </summary>
+        /// <param name="httpItem"></param>
+        public void SetAsDefaultHeader(HttpItem httpItem)
+        {
+            SetCookies(Client.DefaultRequestHeaders.Cookie, httpItem.Cookie);
+
+            SetCookies(Client.DefaultRequestHeaders.Cookie, httpItem.CookieCollection);
+
+            SetHeaders(Client.DefaultRequestHeaders, httpItem);
+        }
+
+        /// <summary>
+        /// byte数组转换为InMemoryRandomAccessStream
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        private static async Task<InMemoryRandomAccessStream> BytesToStream(byte[] bytes)
+        {
+            InMemoryRandomAccessStream inputStream = new InMemoryRandomAccessStream();
+            IBuffer postDataBuffer = WindowsRuntimeBufferExtensions.AsBuffer(bytes);
+
+            DataWriter datawriter = new DataWriter(inputStream.GetOutputStreamAt(0));
+            datawriter.WriteBuffer(postDataBuffer, 0, postDataBuffer.Length);
+            await datawriter.StoreAsync();
+            return inputStream;
+        }
+
+        /// <summary>
         /// 获取Post请求正文内容
         /// </summary>
         /// <param name="requestItem"></param>
@@ -186,12 +227,53 @@ namespace HttpUtility
                     case PostType.DATA:
                         result = await GetHttpStreamContent(requestItem);
                         break;
+
                     case PostType.STRING:
                     default:
                         result = GetHttpFormUrlEncodedContent(requestItem);
                         break;
                 }
             }
+            return result;
+        }
+
+        /// <summary>
+        /// 获取Post请求正文内容    表单
+        /// </summary>
+        /// <param name="requestItem"></param>
+        /// <returns></returns>
+        private IHttpContent GetHttpFormUrlEncodedContent(HttpItem requestItem)
+        {
+            IHttpContent result = null;
+
+            KeyValuePairCollection<string, string> keyValueList = new KeyValuePairCollection<string, string>(); ;
+
+            if (requestItem.PostDataCollection?.Count > 0)
+            {
+                keyValueList.AddRange(requestItem.PostDataCollection);
+            }
+            if (!string.IsNullOrWhiteSpace(requestItem.PostData))
+            {
+                string[] formdatas = requestItem.PostData.Split('&');
+                if (formdatas != null && formdatas.Length > 0)
+                {
+                    foreach (var item in formdatas)
+                    {
+                        string[] formdata = item.Split('=');
+                        if (formdata.Length == 2)
+                        {
+                            keyValueList.Add(formdata[0], formdata[1]);
+                            //keyValueList.Add(WebUtility.UrlDecode(formdata[0]), WebUtility.UrlDecode(formdata[1]));
+                        }
+                    }
+                }
+            }
+
+            if (keyValueList.Count > 0)
+            {
+                result = new HttpFormUrlEncodedContent(keyValueList);
+            }
+
             return result;
         }
 
@@ -253,46 +335,6 @@ namespace HttpUtility
         }
 
         /// <summary>
-        /// 获取Post请求正文内容    表单
-        /// </summary>
-        /// <param name="requestItem"></param>
-        /// <returns></returns>
-        private IHttpContent GetHttpFormUrlEncodedContent(HttpItem requestItem)
-        {
-            IHttpContent result = null;
-
-            KeyValuePairCollection<string, string> keyValueList = new KeyValuePairCollection<string, string>(); ;
-
-            if (requestItem.PostDataCollection?.Count > 0)
-            {
-                keyValueList.AddRange(requestItem.PostDataCollection);
-            }
-            if (!string.IsNullOrWhiteSpace(requestItem.PostData))
-            {
-                string[] formdatas = requestItem.PostData.Split('&');
-                if (formdatas != null && formdatas.Length > 0)
-                {
-                    foreach (var item in formdatas)
-                    {
-                        string[] formdata = item.Split('=');
-                        if (formdata.Length == 2)
-                        {
-                            keyValueList.Add(formdata[0], formdata[1]);
-                            //keyValueList.Add(WebUtility.UrlDecode(formdata[0]), WebUtility.UrlDecode(formdata[1]));
-                        }
-                    }
-                }
-            }
-
-            if (keyValueList.Count > 0)
-            {
-                result = new HttpFormUrlEncodedContent(keyValueList);
-            }
-
-            return result;
-        }
-
-        /// <summary>
         /// 获取请求消息
         /// </summary>
         /// <param name="requestItem"></param>
@@ -305,17 +347,20 @@ namespace HttpUtility
             result.Content = await GetHttpContent(requestItem);
 
             #region 设置Method
+
             switch (requestItem.Method)
             {
                 case MethodType.POST:
                     result.Method = new HttpMethod("POST");
                     break;
+
                 case MethodType.GET:
                 default:
                     result.Method = new HttpMethod("GET");
                     break;
             }
-            #endregion
+
+            #endregion 设置Method
 
             //请求URI
             result.RequestUri = requestItem.URI;
@@ -329,19 +374,6 @@ namespace HttpUtility
             SetCookies(result.Headers.Cookie, requestItem.CookieCollection);
 
             return result;
-        }
-
-        /// <summary>
-        /// 将参数httpItem除请求URL之外的设置配置为此对象的默认设置
-        /// </summary>
-        /// <param name="httpItem"></param>
-        public void SetAsDefaultHeader(HttpItem httpItem)
-        {
-            SetCookies(Client.DefaultRequestHeaders.Cookie, httpItem.Cookie);
-
-            SetCookies(Client.DefaultRequestHeaders.Cookie, httpItem.CookieCollection);
-
-            SetHeaders(Client.DefaultRequestHeaders, httpItem);
         }
 
         /// <summary>
@@ -431,20 +463,6 @@ namespace HttpUtility
             }
         }
 
-        /// <summary>
-        /// byte数组转换为InMemoryRandomAccessStream
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <returns></returns>
-        private static async Task<InMemoryRandomAccessStream> BytesToStream(byte[] bytes)
-        {
-            InMemoryRandomAccessStream inputStream = new InMemoryRandomAccessStream();
-            IBuffer postDataBuffer = WindowsRuntimeBufferExtensions.AsBuffer(bytes);
-
-            DataWriter datawriter = new DataWriter(inputStream.GetOutputStreamAt(0));
-            datawriter.WriteBuffer(postDataBuffer, 0, postDataBuffer.Length);
-            await datawriter.StoreAsync();
-            return inputStream;
-        }
+        #endregion 方法
     }
 }

@@ -10,10 +10,7 @@ namespace OfoLight.Utilities
     /// </summary>
     public class PositionUtility
     {
-        /// <summary>
-        /// 经度修正值
-        /// </summary>
-        public const double LongitudeFixValue = 0.002502;
+        #region 字段
 
         /// <summary>
         /// 纬度修正值
@@ -21,27 +18,22 @@ namespace OfoLight.Utilities
         public const double LatitudeFixValue = -0.002474;
 
         /// <summary>
+        /// 经度修正值
+        /// </summary>
+        public const double LongitudeFixValue = 0.002502;
+
+        #endregion 字段
+
+        #region 属性
+
+        /// <summary>
         /// 位置访问实例
         /// </summary>
         public static Geolocator GeolocatorInstance { get; private set; } = new Geolocator();
 
-        /// <summary>
-        /// 获取未修正的基础位置
-        /// </summary>
-        /// <returns></returns>
-        public static async Task<BasicGeoposition> GetUnFixBasicPositionAsync()
-        {
-            try
-            {
-                var geoPoint = await GetUnFixGeopointAsync();
-                return geoPoint.Position;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                return new BasicGeoposition();
-            }
-        }
+        #endregion 属性
+
+        #region 方法
 
         /// <summary>
         /// 获取修正的基础位置
@@ -81,6 +73,24 @@ namespace OfoLight.Utilities
         }
 
         /// <summary>
+        /// 获取未修正的基础位置
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<BasicGeoposition> GetUnFixBasicPositionAsync()
+        {
+            try
+            {
+                var geoPoint = await GetUnFixGeopointAsync();
+                return geoPoint.Position;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return new BasicGeoposition();
+            }
+        }
+
+        /// <summary>
         /// 获取位置
         /// </summary>
         /// <returns></returns>
@@ -100,11 +110,27 @@ namespace OfoLight.Utilities
         /// <summary>
         /// 转换为未修正的位置信息
         /// </summary>
+        /// <param name="basicGeoposition"></param>
+        /// <returns></returns>
+        public static BasicGeoposition ToFixBasicGeoposition(BasicGeoposition basicGeoposition)
+        {
+            var result = new BasicGeoposition()
+            {
+                Altitude = basicGeoposition.Altitude,
+                Latitude = basicGeoposition.Latitude + LatitudeFixValue,
+                Longitude = basicGeoposition.Longitude + LatitudeFixValue,
+            };
+            return result;
+        }
+
+        /// <summary>
+        /// 转换为未修正的位置信息
+        /// </summary>
         /// <param name="geopoint"></param>
         /// <returns></returns>
-        public static Geopoint ToUnFixGeopoint(Geopoint geopoint)
+        public static Geopoint ToFixGeopoint(Geopoint geopoint)
         {
-            var basicPosition = ToUnFixBasicGeoposition(geopoint.Position);
+            var basicPosition = ToFixBasicGeoposition(geopoint.Position);
             return new Geopoint(basicPosition);
         }
 
@@ -129,26 +155,12 @@ namespace OfoLight.Utilities
         /// </summary>
         /// <param name="geopoint"></param>
         /// <returns></returns>
-        public static Geopoint ToFixGeopoint(Geopoint geopoint)
+        public static Geopoint ToUnFixGeopoint(Geopoint geopoint)
         {
-            var basicPosition = ToFixBasicGeoposition(geopoint.Position);
+            var basicPosition = ToUnFixBasicGeoposition(geopoint.Position);
             return new Geopoint(basicPosition);
         }
 
-        /// <summary>
-        /// 转换为未修正的位置信息
-        /// </summary>
-        /// <param name="basicGeoposition"></param>
-        /// <returns></returns>
-        public static BasicGeoposition ToFixBasicGeoposition(BasicGeoposition basicGeoposition)
-        {
-            var result = new BasicGeoposition()
-            {
-                Altitude = basicGeoposition.Altitude,
-                Latitude = basicGeoposition.Latitude + LatitudeFixValue,
-                Longitude = basicGeoposition.Longitude + LatitudeFixValue,
-            };
-            return result;
-        }
+        #endregion 方法
     }
 }

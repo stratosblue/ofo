@@ -12,7 +12,28 @@ namespace OfoLight.ViewModel
 {
     public class SettingContentViewModel : BaseContentViewModel
     {
+        #region 字段
+
         private string _cacheSize;
+
+        #endregion 字段
+
+        #region 属性
+
+        /// <summary>
+        /// 免责声明命令
+        /// </summary>
+        public ICommand AboutSoftWareCommand { get; set; }
+
+        /// <summary>
+        /// 软件授权信息命令
+        /// </summary>
+        public ICommand AboutSoftWareLicenseCommand { get; set; }
+
+        /// <summary>
+        /// 关于我们命令
+        /// </summary>
+        public ICommand AboutUsCommand { get; set; }
 
         public string CacheSize
         {
@@ -25,29 +46,18 @@ namespace OfoLight.ViewModel
         }
 
         /// <summary>
-        /// 退出登录命令
-        /// </summary>
-        public ICommand LoginOutCommand { get; set; }
-
-        /// <summary>
         /// 清理缓存命令
         /// </summary>
         public ICommand ClearCacheCommand { get; set; }
 
         /// <summary>
-        /// 软件授权信息命令
+        /// 退出登录命令
         /// </summary>
-        public ICommand AboutSoftWareLicenseCommand { get; set; }
+        public ICommand LoginOutCommand { get; set; }
 
-        /// <summary>
-        /// 关于我们命令
-        /// </summary>
-        public ICommand AboutUsCommand { get; set; }
+        #endregion 属性
 
-        /// <summary>
-        /// 免责声明命令
-        /// </summary>
-        public ICommand AboutSoftWareCommand { get; set; }
+        #region 构造函数
 
         public SettingContentViewModel()
         {
@@ -117,10 +127,16 @@ namespace OfoLight.ViewModel
             });
         }
 
+        #endregion 构造函数
+
+        #region 方法
+
         protected override async Task InitializationAsync()
         {
             var cacheSize = await LocalCacheUtility.GetLocalCacheSizeAsync(true);
             CacheSize = VariousUtility.ByteSizeToString(cacheSize);
         }
+
+        #endregion 方法
     }
 }

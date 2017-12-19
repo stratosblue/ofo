@@ -11,6 +11,36 @@ namespace OfoLight.Utilities
     /// </summary>
     public class AccessStreamUtility
     {
+        #region 方法
+
+        /// <summary>
+        /// IRandomAccessStream转换为bytes
+        /// </summary>
+        /// <param name="randomAccessStream"></param>
+        /// <returns></returns>
+        public static async Task<byte[]> AccessStreamToBytesAsync(IRandomAccessStream randomAccessStream)
+        {
+            Stream stream = WindowsRuntimeStreamExtensions.AsStreamForRead(randomAccessStream.GetInputStreamAt(0));
+            MemoryStream ms = new MemoryStream();
+            await stream.CopyToAsync(ms);
+            return ms.ToArray();
+        }
+
+        /// <summary>
+        /// Buffer转换为byte[]
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
+        public static byte[] BufferToBytes(IBuffer buffer)
+        {
+            using (var dataReader = DataReader.FromBuffer(buffer))
+            {
+                var bytes = new byte[buffer.Length];
+                dataReader.ReadBytes(bytes);
+                return bytes;
+            }
+        }
+
         /// <summary>
         /// 从base64字符串获取内存随机访问流
         /// </summary>
@@ -50,19 +80,21 @@ namespace OfoLight.Utilities
             return result;
         }
 
-        /// <summary>
-        /// Buffer转换为byte[]
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <returns></returns>
-        public static byte[] BufferToBytes(IBuffer buffer)
+        public static IBuffer RandomAccessStream2Buffer(IRandomAccessStream randomStream)
         {
-            using (var dataReader = DataReader.FromBuffer(buffer))
+            Stream stream = WindowsRuntimeStreamExtensions.AsStreamForRead(randomStream.GetInputStreamAt(0));
+            MemoryStream memoryStream = new MemoryStream();
+            if (stream != null)
             {
-                var bytes = new byte[buffer.Length];
-                dataReader.ReadBytes(bytes);
-                return bytes;
+                byte[] bytes = StreamToBytes(stream);
+                if (bytes != null)
+                {
+                    var binaryWriter = new BinaryWriter(memoryStream);
+                    binaryWriter.Write(bytes);
+                }
             }
+            IBuffer buffer = WindowsRuntimeBufferExtensions.GetWindowsRuntimeBuffer(memoryStream, 0, (int)memoryStream.Length);
+            return buffer;
         }
 
         public static byte[] StreamToBytes(Stream stream)
@@ -109,34 +141,6 @@ namespace OfoLight.Utilities
             }
         }
 
-        public static IBuffer RandomAccessStream2Buffer(IRandomAccessStream randomStream)
-        {
-            Stream stream = WindowsRuntimeStreamExtensions.AsStreamForRead(randomStream.GetInputStreamAt(0));
-            MemoryStream memoryStream = new MemoryStream();
-            if (stream != null)
-            {
-                byte[] bytes = StreamToBytes(stream);
-                if (bytes != null)
-                {
-                    var binaryWriter = new BinaryWriter(memoryStream);
-                    binaryWriter.Write(bytes);
-                }
-            }
-            IBuffer buffer = WindowsRuntimeBufferExtensions.GetWindowsRuntimeBuffer(memoryStream, 0, (int)memoryStream.Length);
-            return buffer;
-        }
-
-        /// <summary>
-        /// IRandomAccessStream转换为bytes
-        /// </summary>
-        /// <param name="randomAccessStream"></param>
-        /// <returns></returns>
-        public static async Task<byte[]> AccessStreamToBytesAsync(IRandomAccessStream randomAccessStream)
-        {
-            Stream stream = WindowsRuntimeStreamExtensions.AsStreamForRead(randomAccessStream.GetInputStreamAt(0));
-            MemoryStream ms = new MemoryStream();
-            await stream.CopyToAsync(ms);
-            return ms.ToArray();
-        }
+        #endregion 方法
     }
 }

@@ -3,11 +3,72 @@ using System.Collections.Generic;
 
 namespace Common.Ofo.Entity.Result
 {
+    public class CarsItem
+    {
+        #region 属性
+
+        /// <summary>
+        ///
+        /// </summary>
+        public string carno { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public double lat { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public double lng { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public string ordernum { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public string userIdLast { get; set; }
+
+        #endregion 属性
+    }
+
+    public class NearByOfoCars
+    {
+        #region 属性
+
+        /// <summary>
+        ///
+        /// </summary>
+        public List<CarsItem> cars { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public List<string> redPacketAreas { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public int time { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public int zoomLevel { get; set; }
+
+        #endregion 属性
+    }
+
     /// <summary>
     /// 附近的车结果
     /// </summary>
     public class NearByOfoCarsResult : BaseResult
     {
+        #region 属性
+
         /// <summary>
         /// 附近的车
         /// </summary>
@@ -19,56 +80,22 @@ namespace Common.Ofo.Entity.Result
         [JsonProperty("values")]
         public Values Value { get; set; }
 
+        #endregion 属性
+
+        #region 类
+
         public class Values
         {
+            #region 属性
+
             /// <summary>
-            /// 
+            ///
             /// </summary>
             public NearByOfoCars info { get; set; }
+
+            #endregion 属性
         }
-    }
 
-    public class CarsItem
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public string carno { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string ordernum { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string userIdLast { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public double lng { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public double lat { get; set; }
-    }
-
-    public class NearByOfoCars
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public int zoomLevel { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public List<CarsItem> cars { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public List<string> redPacketAreas { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public int time { get; set; }
+        #endregion 类
     }
 }

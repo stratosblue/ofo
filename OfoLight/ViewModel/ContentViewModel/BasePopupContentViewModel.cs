@@ -8,15 +8,25 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class BasePopupContentViewModel : BaseViewModel
     {
-        /// <summary>
-        /// 内容弹出消息
-        /// </summary>
-        public ContentPopup ContentPopup { get; set; }
+        #region 字段
 
         /// <summary>
         /// 关闭回调
         /// </summary>
         public Action _closeCallBack = null;
+
+        #endregion 字段
+
+        #region 属性
+
+        /// <summary>
+        /// 内容弹出消息
+        /// </summary>
+        public ContentPopup ContentPopup { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 内容弹出页面VM
@@ -27,6 +37,10 @@ namespace OfoLight.ViewModel
             _closeCallBack = closeCallBack;
         }
 
+        #endregion 构造函数
+
+        #region 方法
+
         protected override async void CloseAction()
         {
             await ContentPopup?.Dispatcher?.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
@@ -35,5 +49,7 @@ namespace OfoLight.ViewModel
             });
             _closeCallBack?.Invoke();
         }
+
+        #endregion 方法
     }
 }

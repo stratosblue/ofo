@@ -9,16 +9,16 @@
 
     <UserControl.Resources>
         <Style x:Key="TitleTextBlock" TargetType="TextBlock">
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Padding" Value="0,12"/>
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Padding" Value="0,12" />
         </Style>
 
         <Style x:Key="FloatRightTextBlock" TargetType="TextBlock">
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Foreground" Value="{StaticResource MainGrayColorBrush}"/>
-            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{StaticResource MainGrayColorBrush}" />
+            <Setter Property="FontSize" Value="18" />
         </Style>
 
         <DataTemplate x:Key="FullScreenListViewButtonsDataTemplate">
@@ -67,9 +67,9 @@
             <Grid Grid.Row="1" Margin="0,20">
                 <Grid.Resources>
                     <Style x:Key="listGrid" TargetType="Grid">
-                        <Setter Property="Padding" Value="20,0"/>
-                        <Setter Property="Background" Value="White"/>
-                        <Setter Property="Margin" Value="0,0,0,1"/>
+                        <Setter Property="Padding" Value="20,0" />
+                        <Setter Property="Background" Value="White" />
+                        <Setter Property="Margin" Value="0,0,0,1" />
                     </Style>
                 </Grid.Resources>
 

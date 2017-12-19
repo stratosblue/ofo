@@ -8,6 +8,8 @@ namespace OfoLight.View
     /// </summary>
     public sealed partial class LoginSecondStepContentView : UserControl
     {
+        #region 构造函数
+
         /// <summary>
         /// 登录第二步View
         /// </summary>
@@ -16,5 +18,7 @@ namespace OfoLight.View
             this.InitializeComponent();
             DataContext = new LoginSecondStepContentViewModel();
         }
+
+        #endregion 构造函数
     }
 }

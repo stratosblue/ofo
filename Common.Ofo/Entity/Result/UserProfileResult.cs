@@ -1,57 +1,37 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Common.Ofo.Entity.Result
 {
-    /// <summary>
-    /// 用户简介结果
-    /// </summary>
-    public class UserProfileResult : BaseResult
-    {
-        /// <summary>
-        /// 用户简介
-        /// </summary>
-        public UserProfile Data { get => Value?.info; }
-
-        /// <summary>
-        /// 返回的值
-        /// </summary>
-        [JsonProperty("values")]
-        public Values Value { get; set; }
-
-        public class Values
-        {
-            /// <summary>
-            /// 
-            /// </summary>
-            public UserProfile info { get; set; }
-        }
-    }
-
     /// <summary>
     /// 用户简介
     /// </summary>
     public class UserProfile
     {
-        /// <summary>
-        /// 生日年份
-        /// </summary>
-        [JsonProperty("byear")]
-        public int BirthYear { get; set; }
-        /// <summary>
-        /// 生日月份
-        /// </summary>
-        [JsonProperty("bmonth")]
-        public int BirthMonth { get; set; }
+        #region 属性
+
         /// <summary>
         /// 生日日期
         /// </summary>
         [JsonProperty("bday")]
         public int BirthDay { get; set; }
+
+        /// <summary>
+        /// 生日月份
+        /// </summary>
+        [JsonProperty("bmonth")]
+        public int BirthMonth { get; set; }
+
+        /// <summary>
+        /// 生日年份
+        /// </summary>
+        [JsonProperty("byear")]
+        public int BirthYear { get; set; }
+
+        /// <summary>
+        /// 等级？学历？
+        /// </summary>
+        [JsonProperty("grade")]
+        public string Grade { get; set; }
 
         /// <summary>
         /// 学校
@@ -65,10 +45,43 @@ namespace Common.Ofo.Entity.Result
         [JsonProperty("sex")]
         public int SexType { get; set; }
 
+        #endregion 属性
+    }
+
+    /// <summary>
+    /// 用户简介结果
+    /// </summary>
+    public class UserProfileResult : BaseResult
+    {
+        #region 属性
+
         /// <summary>
-        /// 等级？学历？
+        /// 用户简介
         /// </summary>
-        [JsonProperty("grade")]
-        public string Grade { get; set; }
+        public UserProfile Data { get => Value?.info; }
+
+        /// <summary>
+        /// 返回的值
+        /// </summary>
+        [JsonProperty("values")]
+        public Values Value { get; set; }
+
+        #endregion 属性
+
+        #region 类
+
+        public class Values
+        {
+            #region 属性
+
+            /// <summary>
+            ///
+            /// </summary>
+            public UserProfile info { get; set; }
+
+            #endregion 属性
+        }
+
+        #endregion 类
     }
 }

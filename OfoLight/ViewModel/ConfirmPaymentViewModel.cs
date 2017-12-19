@@ -2,9 +2,6 @@
 using OfoLight.Entity;
 using OfoLight.View;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -12,7 +9,17 @@ namespace OfoLight.ViewModel
 {
     public class ConfirmPaymentViewModel : BaseViewModel
     {
+        #region 字段
+
         private UnLockCarInfo _unLockCarInfo;
+
+        private WalletInfo _walletInfo;
+
+        #endregion 字段
+
+        #region 属性
+
+        public ICommand PayCommand { get; set; }
 
         public UnLockCarInfo UnLockCarInfo
         {
@@ -24,8 +31,6 @@ namespace OfoLight.ViewModel
             }
         }
 
-        private WalletInfo _walletInfo;
-
         public WalletInfo WalletInfo
         {
             get { return _walletInfo; }
@@ -36,11 +41,25 @@ namespace OfoLight.ViewModel
             }
         }
 
-        public ICommand PayCommand { get; set; }
+        #endregion 属性
+
+        #region 构造函数
 
         public ConfirmPaymentViewModel()
         {
             PayCommand = new RelayCommand(ConfirmPay);
+        }
+
+        #endregion 构造函数
+
+        #region 方法
+
+        /// <summary>
+        /// 从挂起恢复
+        /// </summary>
+        public override async Task OnResumingAsync()
+        {
+            await CheckOrderStatusAsync();
         }
 
         protected override async Task InitializationAsync()
@@ -52,9 +71,25 @@ namespace OfoLight.ViewModel
             }
         }
 
-        private async void ConfirmPay(object state)
+        protected override void NavigationActionAsync(object state)
         {
-            await CheckOrderStatusAsync();
+            if (state is string param)
+            {
+                if (state.Equals("WebPay"))
+                {
+                    ContentPageArgs args = new ContentPageArgs()
+                    {
+                        Name = "ofo小黄车",
+                        ContentElement = new WebPageContentView(Global.MAIN_WEBPAGE_URL),
+                    };
+                    TryNavigate(typeof(ContentPageView), args);
+                }
+            }
+        }
+
+        protected override void TryGoBack()
+        {
+            //此页面不允许返回
         }
 
         /// <summary>
@@ -104,33 +139,11 @@ namespace OfoLight.ViewModel
             }
         }
 
-        /// <summary>
-        /// 从挂起恢复
-        /// </summary>
-        public override async Task OnResumingAsync()
+        private async void ConfirmPay(object state)
         {
             await CheckOrderStatusAsync();
         }
 
-        protected override void NavigationActionAsync(object state)
-        {
-            if (state is string param)
-            {
-                if (state.Equals("WebPay"))
-                {
-                    ContentPageArgs args = new ContentPageArgs()
-                    {
-                        Name = "ofo小黄车",
-                        ContentElement = new WebPageContentView(Global.MAIN_WEBPAGE_URL),
-                    };
-                    TryNavigate(typeof(ContentPageView), args);
-                }
-            }
-        }
-
-        protected override void TryGoBack()
-        {
-            //此页面不允许返回
-        }
+        #endregion 方法
     }
 }

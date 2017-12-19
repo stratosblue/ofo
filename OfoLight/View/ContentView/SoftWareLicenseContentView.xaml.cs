@@ -8,10 +8,16 @@ namespace OfoLight.View
 {
     public sealed partial class SoftWareLicenseContentView : UserControl
     {
+        #region 构造函数
+
         public SoftWareLicenseContentView()
         {
             this.InitializeComponent();
         }
+
+        #endregion 构造函数
+
+        #region 方法
 
         private async void OpenUrlClickAsync(object sender, RoutedEventArgs e)
         {
@@ -24,5 +30,7 @@ namespace OfoLight.View
                 Debug.WriteLine(ex);
             }
         }
+
+        #endregion 方法
     }
 }

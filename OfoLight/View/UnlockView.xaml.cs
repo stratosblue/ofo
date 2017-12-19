@@ -9,7 +9,13 @@ namespace OfoLight.View
     /// </summary>
     public sealed partial class UnlockView : Page
     {
+        #region 属性
+
         private UnlockViewModel ViewModel { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 解锁页。
@@ -21,6 +27,10 @@ namespace OfoLight.View
             DataContext = ViewModel;
         }
 
+        #endregion 构造函数
+
+        #region 方法
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
@@ -30,5 +40,7 @@ namespace OfoLight.View
                 ViewModel.UnlockCarCommand.Execute(null);
             }
         }
+
+        #endregion 方法
     }
 }

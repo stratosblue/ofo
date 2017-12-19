@@ -5,11 +5,17 @@ namespace OfoLight.View
 {
     public sealed partial class WebPagePopupContentView : UserControl
     {
+        #region 构造函数
+
         public WebPagePopupContentView()
         {
             this.InitializeComponent();
             Unloaded += ContentViewUnloaded;
         }
+
+        #endregion 构造函数
+
+        #region 方法
 
         private void ContentViewUnloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
@@ -17,5 +23,7 @@ namespace OfoLight.View
             GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
             Unloaded -= ContentViewUnloaded;
         }
+
+        #endregion 方法
     }
 }

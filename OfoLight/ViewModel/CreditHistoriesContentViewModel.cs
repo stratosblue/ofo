@@ -9,18 +9,26 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class CreditHistoriesContentViewModel : BaseContentViewModel
     {
-        public int Page { get; set; }
-
-        private bool _isLoading = false;
-
-        private bool _canLoadMore = true;
-
-        private object _loadingLock = new object();
+        #region 字段
 
         /// <summary>
         /// 信用历史
         /// </summary>
         public ObservableCollection<CreditItem> CreditHistories = new ObservableCollection<CreditItem>();
+
+        private bool _canLoadMore = true;
+        private bool _isLoading = false;
+        private object _loadingLock = new object();
+
+        #endregion 字段
+
+        #region 属性
+
+        public int Page { get; set; }
+
+        #endregion 属性
+
+        #region 方法
 
         protected override async Task InitializationAsync()
         {
@@ -59,5 +67,7 @@ namespace OfoLight.ViewModel
                 await ShowNotifyAsync("没有更多记录可以加载");
             }
         }
+
+        #endregion 方法
     }
 }

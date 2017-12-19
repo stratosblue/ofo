@@ -8,25 +8,7 @@ namespace Amap.Web
     /// </summary>
     public class AmapConfig
     {
-        /// <summary>
-        /// Key
-        /// </summary>
-        public string Key { get; set; }
-
-        /// <summary>
-        /// 平台？ JS
-        /// </summary>
-        public string Platform { get; set; } = "JS";
-
-        /// <summary>
-        /// 日志版本？ 2.0
-        /// </summary>
-        public float LogVersion { get; set; } = 2.0F;
-
-        /// <summary>
-        /// SDK版本？ 1.3
-        /// </summary>
-        public float SdkVersion { get; set; } = 1.3F;
+        #region 属性
 
         /// <summary>
         /// App名称？ https://common.ofo.so/newdist/?Login
@@ -39,6 +21,30 @@ namespace Amap.Web
         public string Csid { get; set; } = Guid.NewGuid().ToString();
 
         /// <summary>
+        /// Key
+        /// </summary>
+        public string Key { get; set; }
+
+        /// <summary>
+        /// 日志版本？ 2.0
+        /// </summary>
+        public float LogVersion { get; set; } = 2.0F;
+
+        /// <summary>
+        /// 平台？ JS
+        /// </summary>
+        public string Platform { get; set; } = "JS";
+
+        /// <summary>
+        /// SDK版本？ 1.3
+        /// </summary>
+        public float SdkVersion { get; set; } = 1.3F;
+
+        #endregion 属性
+
+        #region 方法
+
+        /// <summary>
         /// 获取配置的Url参数字符串
         /// </summary>
         /// <returns></returns>
@@ -46,5 +52,7 @@ namespace Amap.Web
         {
             return $"key={Key}&platform={Platform}&logversion={LogVersion}&sdkversion={SdkVersion}&appname={AppName}&csid={Csid}";
         }
+
+        #endregion 方法
     }
 }

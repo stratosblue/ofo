@@ -11,17 +11,27 @@ namespace OfoLight.Controls
     /// </summary>
     public sealed partial class NotifyPopup : UserControl
     {
+        #region 字段
+
         private Popup _popup;
+
+        #endregion 字段
+
+        #region 属性
+
+        /// <summary>
+        /// 是否正在显示
+        /// </summary>
+        public bool IsShowing { get; set; }
 
         /// <summary>
         /// 提示内容
         /// </summary>
         public string NotifyContent { get; set; }
 
-        /// <summary>
-        /// 是否正在显示
-        /// </summary>
-        public bool IsShowing { get; set; }
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 弹出提示控件
@@ -36,17 +46,9 @@ namespace OfoLight.Controls
             Unloaded += NotifyPopup_Unloaded;
         }
 
-        private void NotifyPopup_Unloaded(object sender, RoutedEventArgs e)
-        {
-            Window.Current.SizeChanged -= Current_SizeChanged;
-            Unloaded -= NotifyPopup_Unloaded;
-        }
+        #endregion 构造函数
 
-        private void Current_SizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
-        {
-            Width = e.Size.Width;
-            Height = e.Size.Height;
-        }
+        #region 方法
 
         public async Task ShowAsync()
         {
@@ -75,6 +77,18 @@ namespace OfoLight.Controls
             });
         }
 
+        private void Current_SizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
+        {
+            Width = e.Size.Width;
+            Height = e.Size.Height;
+        }
+
+        private void NotifyPopup_Unloaded(object sender, RoutedEventArgs e)
+        {
+            Window.Current.SizeChanged -= Current_SizeChanged;
+            Unloaded -= NotifyPopup_Unloaded;
+        }
+
         private void Show_Completed(object sender, object e)
         {
             hideStoryboard.Stop();
@@ -85,5 +99,7 @@ namespace OfoLight.Controls
 
             NotifyContent = string.Empty;
         }
+
+        #endregion 方法
     }
 }

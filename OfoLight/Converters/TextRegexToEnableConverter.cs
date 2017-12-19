@@ -9,6 +9,8 @@ namespace OfoLight.Converters
     /// </summary>
     public class TextRegexToEnableConverter : IValueConverter
     {
+        #region 方法
+
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             var str = value as string;
@@ -25,5 +27,7 @@ namespace OfoLight.Converters
         {
             return string.Empty;
         }
+
+        #endregion 方法
     }
 }

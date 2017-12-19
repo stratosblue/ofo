@@ -8,15 +8,12 @@ namespace OfoLight.Entity
     /// </summary>
     public class ContentPageArgs : EventArgs
     {
-        /// <summary>
-        /// 名称
-        /// </summary>
-        public string Name { get; set; }
+        #region 属性
 
         /// <summary>
-        /// 头可见状态
+        /// 可以进入内容栈
         /// </summary>
-        public Visibility HeaderVisibility { get; set; } = Visibility.Visible;
+        public bool CanStack { get; set; } = true;
 
         /// <summary>
         /// 内容元素
@@ -24,9 +21,9 @@ namespace OfoLight.Entity
         public UIElement ContentElement { get; set; }
 
         /// <summary>
-        /// 可以进入内容栈
+        /// 头可见状态
         /// </summary>
-        public bool CanStack { get; set; } = true;
+        public Visibility HeaderVisibility { get; set; } = Visibility.Visible;
 
         /// <summary>
         /// 是否后退
@@ -35,9 +32,20 @@ namespace OfoLight.Entity
         public bool IsGoBack { get; set; } = false;
 
         /// <summary>
+        /// 名称
+        /// </summary>
+        public string Name { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
+
+        /// <summary>
         /// 内容页面参数
         /// </summary>
         public ContentPageArgs()
         { }
+
+        #endregion 构造函数
     }
 }

@@ -16,7 +16,15 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class RedPacketPupopContentViewModel : BasePopupContentViewModel
     {
+        #region 字段
+
         private BitmapImage _image;
+
+        private PaymentInfo _paymentInfo;
+
+        #endregion 字段
+
+        #region 属性
 
         public BitmapImage Image
         {
@@ -28,8 +36,10 @@ namespace OfoLight.ViewModel
             }
         }
 
-
-        private PaymentInfo _paymentInfo;
+        /// <summary>
+        /// 打开红包命令
+        /// </summary>
+        public ICommand OpenRedPacketCommand { get; set; }
 
         /// <summary>
         /// 支付信息
@@ -87,10 +97,9 @@ namespace OfoLight.ViewModel
             }
         }
 
-        /// <summary>
-        /// 打开红包命令
-        /// </summary>
-        public ICommand OpenRedPacketCommand { get; set; }
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 红包弹出内容VM
@@ -109,5 +118,7 @@ namespace OfoLight.ViewModel
                 TryNavigate(typeof(ContentPageView), args);
             });
         }
+
+        #endregion 构造函数
     }
 }

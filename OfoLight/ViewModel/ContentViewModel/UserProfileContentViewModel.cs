@@ -21,83 +21,14 @@ namespace OfoLight.ViewModel
     {
         #region 字段、属性
 
+        private BitmapImage _avatar;
+        private string _creditScoreInfo;
+        private string _nick;
+        private string _schoolInfo;
+        private string _telPhone;
         private UserInfo _userInfo;
 
-        /// <summary>
-        /// 用户信息
-        /// </summary>
-        public UserInfo UserInfo
-        {
-            get { return _userInfo; }
-            set
-            {
-                _userInfo = value;
-                NotifyPropertyChanged("UserInfo");
-            }
-        }
-
         private UserProfile _userProfile;
-
-        /// <summary>
-        /// 用户简介？
-        /// </summary>
-        public UserProfile UserProfile
-        {
-            get { return _userProfile; }
-            set
-            {
-                _userProfile = value;
-                NotifyPropertyChanged("UserProfile");
-            }
-        }
-
-        private string _schoolInfo;
-
-        /// <summary>
-        /// 学校信息
-        /// </summary>
-        public string SchoolInfo
-        {
-            get { return _schoolInfo; }
-            set
-            {
-                _schoolInfo = value;
-                NotifyPropertyChanged("SchoolInfo");
-            }
-        }
-
-        private string _telPhone;
-
-        /// <summary>
-        /// 电话号码
-        /// </summary>
-        public string TelPhone
-        {
-            get { return _telPhone; }
-            set
-            {
-                _telPhone = value;
-                NotifyPropertyChanged("TelPhone");
-            }
-        }
-
-        private string _nick;
-
-        /// <summary>
-        /// 昵称
-        /// </summary>
-        public string Nick
-        {
-            get { return _nick; }
-            set
-            {
-                _nick = value;
-                NotifyPropertyChanged("Nick");
-            }
-        }
-
-
-        private BitmapImage _avatar;
 
         /// <summary>
         /// 头像
@@ -112,7 +43,10 @@ namespace OfoLight.ViewModel
             }
         }
 
-        private string _creditScoreInfo;
+        /// <summary>
+        /// 更换头像命令
+        /// </summary>
+        public ICommand ChangeAvatarCommand { get; set; }
 
         /// <summary>
         /// 信用分信息
@@ -140,11 +74,73 @@ namespace OfoLight.ViewModel
         };
 
         /// <summary>
-        /// 更换头像命令
+        /// 昵称
         /// </summary>
-        public ICommand ChangeAvatarCommand { get; set; }
+        public string Nick
+        {
+            get { return _nick; }
+            set
+            {
+                _nick = value;
+                NotifyPropertyChanged("Nick");
+            }
+        }
 
-        #endregion
+        /// <summary>
+        /// 学校信息
+        /// </summary>
+        public string SchoolInfo
+        {
+            get { return _schoolInfo; }
+            set
+            {
+                _schoolInfo = value;
+                NotifyPropertyChanged("SchoolInfo");
+            }
+        }
+
+        /// <summary>
+        /// 电话号码
+        /// </summary>
+        public string TelPhone
+        {
+            get { return _telPhone; }
+            set
+            {
+                _telPhone = value;
+                NotifyPropertyChanged("TelPhone");
+            }
+        }
+
+        /// <summary>
+        /// 用户信息
+        /// </summary>
+        public UserInfo UserInfo
+        {
+            get { return _userInfo; }
+            set
+            {
+                _userInfo = value;
+                NotifyPropertyChanged("UserInfo");
+            }
+        }
+
+        /// <summary>
+        /// 用户简介？
+        /// </summary>
+        public UserProfile UserProfile
+        {
+            get { return _userProfile; }
+            set
+            {
+                _userProfile = value;
+                NotifyPropertyChanged("UserProfile");
+            }
+        }
+
+        #endregion 字段、属性
+
+        #region 构造函数
 
         /// <summary>
         /// 个人信息内容页VM
@@ -199,56 +195,9 @@ namespace OfoLight.ViewModel
             var initTask = InitializationAsync();
         }
 
-        protected override async Task InitializationAsync()
-        {
-            Nick = UserInfo.Name;
-            TelPhone = OfoUtility.GetMaskTelPhoneNum(UserInfo.TelPhone);
-            if (string.IsNullOrEmpty(Nick))
-            {
-                Nick = TelPhone;
-            }
-            InfoButtons[0].ContentText = Nick;
+        #endregion 构造函数
 
-            CreditScoreInfo = $"信用分： {UserInfo.CreditTotal} >";
-
-            //获取头像图片
-            OfoUtility.GetAvatarImageByUrlAsync(UserInfo.AvatarUrl, avatar => Avatar = avatar);
-
-            InfoButtons[3].ContentText = UserInfo?.IsBond == 1 ? "认证用户" : "未认证用户";
-
-            var userProfileResult = await OfoApi.GetUserProfileAsync();
-            if (await CheckOfoApiResult(userProfileResult))
-            {
-                UserProfile = userProfileResult.Data;
-                InfoButtons[1].ContentText = UserProfile.SexType == 1 ? "男" : UserProfile.SexType == 2 ? "女" : "-";
-                if (UserProfile.BirthYear > 0)
-                {
-                    InfoButtons[2].ContentText = $"{UserProfile.BirthYear} 年 {UserProfile.BirthMonth} 月 {UserProfile.BirthDay} 日";
-                }
-                else
-                {
-                    InfoButtons[2].ContentText = "-";
-                }
-                SchoolInfo = string.IsNullOrEmpty(UserProfile.School) ? "非校园用户" : UserProfile.School;
-            }
-        }
-
-
-        protected override void NavigationActionAsync(object state)
-        {
-            if (state is string param)
-            {
-                if (param.Equals("CreditScoreInfo"))
-                {
-                    ContentPageArgs args = new ContentPageArgs()
-                    {
-                        Name = "信用分",
-                        ContentElement = new WebPageContentView("https://common.ofo.so/newdist/?CreditPoints"),
-                    };
-                    ContentNavigation(args);
-                }
-            }
-        }
+        #region 方法
 
         /// <summary>
         /// xbind的listview点击事件
@@ -300,5 +249,57 @@ namespace OfoLight.ViewModel
                 Debug.WriteLine(ex);
             }
         }
+
+        protected override async Task InitializationAsync()
+        {
+            Nick = UserInfo.Name;
+            TelPhone = OfoUtility.GetMaskTelPhoneNum(UserInfo.TelPhone);
+            if (string.IsNullOrEmpty(Nick))
+            {
+                Nick = TelPhone;
+            }
+            InfoButtons[0].ContentText = Nick;
+
+            CreditScoreInfo = $"信用分： {UserInfo.CreditTotal} >";
+
+            //获取头像图片
+            OfoUtility.GetAvatarImageByUrlAsync(UserInfo.AvatarUrl, avatar => Avatar = avatar);
+
+            InfoButtons[3].ContentText = UserInfo?.IsBond == 1 ? "认证用户" : "未认证用户";
+
+            var userProfileResult = await OfoApi.GetUserProfileAsync();
+            if (await CheckOfoApiResult(userProfileResult))
+            {
+                UserProfile = userProfileResult.Data;
+                InfoButtons[1].ContentText = UserProfile.SexType == 1 ? "男" : UserProfile.SexType == 2 ? "女" : "-";
+                if (UserProfile.BirthYear > 0)
+                {
+                    InfoButtons[2].ContentText = $"{UserProfile.BirthYear} 年 {UserProfile.BirthMonth} 月 {UserProfile.BirthDay} 日";
+                }
+                else
+                {
+                    InfoButtons[2].ContentText = "-";
+                }
+                SchoolInfo = string.IsNullOrEmpty(UserProfile.School) ? "非校园用户" : UserProfile.School;
+            }
+        }
+
+        protected override void NavigationActionAsync(object state)
+        {
+            if (state is string param)
+            {
+                if (param.Equals("CreditScoreInfo"))
+                {
+                    ContentPageArgs args = new ContentPageArgs()
+                    {
+                        Name = "信用分",
+                        ContentElement = new WebPageContentView("https://common.ofo.so/newdist/?CreditPoints"),
+                    };
+                    ContentNavigation(args);
+                }
+            }
+        }
+
+        #endregion 方法
     }
 }

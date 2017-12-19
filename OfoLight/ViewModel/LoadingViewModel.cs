@@ -24,6 +24,15 @@ namespace OfoLight.ViewModel
         private string _buttonTip = "跳过(3)";
 
         /// <summary>
+        /// 显示Splash的TokenSource
+        /// </summary>
+        private CancellationTokenSource _showSplashTokenSource = new CancellationTokenSource();
+
+        private Visibility _skipSplashButtonVisibility = Visibility.Visible;
+
+        private BitmapImage _splashImage;
+
+        /// <summary>
         /// 跳过启动画面按钮的字符串
         /// </summary>
         public string ButtonTip
@@ -35,23 +44,6 @@ namespace OfoLight.ViewModel
                 NotifyPropertyChanged("ButtonTip");
             }
         }
-
-        private BitmapImage _splashImage;
-
-        /// <summary>
-        /// 启动画面图片
-        /// </summary>
-        public BitmapImage SplashImage
-        {
-            get { return _splashImage; }
-            set
-            {
-                _splashImage = value;
-                NotifyPropertyChanged("SplashImage");
-            }
-        }
-
-        private Visibility _skipSplashButtonVisibility = Visibility.Visible;
 
         /// <summary>
         /// 跳过SplashButton可视状态
@@ -72,11 +64,21 @@ namespace OfoLight.ViewModel
         public ICommand SkipSplashCommand { get; set; }
 
         /// <summary>
-        /// 显示Splash的TokenSource
+        /// 启动画面图片
         /// </summary>
-        private CancellationTokenSource _showSplashTokenSource = new CancellationTokenSource();
+        public BitmapImage SplashImage
+        {
+            get { return _splashImage; }
+            set
+            {
+                _splashImage = value;
+                NotifyPropertyChanged("SplashImage");
+            }
+        }
 
-        #endregion
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 程序启动加载页VM
@@ -88,6 +90,10 @@ namespace OfoLight.ViewModel
                 _showSplashTokenSource.Cancel();
             });
         }
+
+        #endregion 构造函数
+
+        #region 方法
 
         /// <summary>
         /// 初始化
@@ -150,13 +156,16 @@ namespace OfoLight.ViewModel
                                 Application.Current.Exit();
                             }
                             break;
+
                         case LoginStatus.NoToken:   //没有Token
                         case LoginStatus.TokenExpire:   //Token过期
                             await TryReplaceNavigateAsync(typeof(NoLoginView));
                             break;
+
                         case LoginStatus.Logined:   //已登录
                             await TryReplaceNavigateAsync(typeof(MainPage));
                             break;
+
                         case LoginStatus.CheckFailed:
                         case LoginStatus.Default:
                         default:
@@ -172,44 +181,6 @@ namespace OfoLight.ViewModel
                     }
                 });
             });
-        }
-
-        /// <summary>
-        /// 确认位置访问权限
-        /// </summary>
-        /// <returns></returns>
-        private async Task ConfirmGeolocationAccessStatus()
-        {
-            try
-            {
-                var geolocationAccessStatus = await Geolocator.RequestAccessAsync();
-
-                switch (geolocationAccessStatus)
-                {
-                    case GeolocationAccessStatus.Allowed:
-                        break;
-                    case GeolocationAccessStatus.Unspecified:
-                    case GeolocationAccessStatus.Denied:
-                        await MessageDialogUtility.ShowMessageAsync("软件必须获取位置权限才能够正常运行，请在“设置”-“隐私”-“位置”中允许软件访问位置信息后，再次重新运行应用。", "注意", MessageDialogType.OK);
-                        Application.Current.Exit();
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                if ((ex.Message?.ToLower().Contains("cancel")).GetValueOrDefault(true))    //判定是否用户取消了步骤
-                {
-                    if ((await MessageDialogUtility.ShowMessageAsync("软件必须获取位置权限才能够正常运行，确认不允许软件访问位置信息吗？", "注意", MessageDialogType.OKCancel) == MessageDialogResult.OK))
-                    {
-                        Application.Current.Exit();
-                    }
-                    else
-                    {
-                        await ConfirmGeolocationAccessStatus();
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -236,6 +207,45 @@ namespace OfoLight.ViewModel
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// 确认位置访问权限
+        /// </summary>
+        /// <returns></returns>
+        private async Task ConfirmGeolocationAccessStatus()
+        {
+            try
+            {
+                var geolocationAccessStatus = await Geolocator.RequestAccessAsync();
+
+                switch (geolocationAccessStatus)
+                {
+                    case GeolocationAccessStatus.Allowed:
+                        break;
+
+                    case GeolocationAccessStatus.Unspecified:
+                    case GeolocationAccessStatus.Denied:
+                        await MessageDialogUtility.ShowMessageAsync("软件必须获取位置权限才能够正常运行，请在“设置”-“隐私”-“位置”中允许软件访问位置信息后，再次重新运行应用。", "注意", MessageDialogType.OK);
+                        Application.Current.Exit();
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                if ((ex.Message?.ToLower().Contains("cancel")).GetValueOrDefault(true))    //判定是否用户取消了步骤
+                {
+                    if ((await MessageDialogUtility.ShowMessageAsync("软件必须获取位置权限才能够正常运行，确认不允许软件访问位置信息吗？", "注意", MessageDialogType.OKCancel) == MessageDialogResult.OK))
+                    {
+                        Application.Current.Exit();
+                    }
+                    else
+                    {
+                        await ConfirmGeolocationAccessStatus();
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -279,5 +289,7 @@ namespace OfoLight.ViewModel
                 return null;
             }
         }
+
+        #endregion 方法
     }
 }

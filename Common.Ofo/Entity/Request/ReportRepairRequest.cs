@@ -1,19 +1,11 @@
-﻿using Newtonsoft.Json;
-
-namespace Common.Ofo.Entity.Request
+﻿namespace Common.Ofo.Entity.Request
 {
     /// <summary>
     /// 保修请求
     /// </summary>
     public class ReportRepairRequest : BasePositionRequest
     {
-        public string OrderNumber { get; set; }
-
-        /// <summary>
-        /// 原因，由报修原因字典接口获得
-        /// errorpwd
-        /// </summary>
-        public string Reason { get; set; }
+        #region 属性
 
         /// <summary>
         /// 地址名称
@@ -26,6 +18,18 @@ namespace Common.Ofo.Entity.Request
         /// </summary>
         public int IsGsm { get; set; } = 0;
 
+        public string OrderNumber { get; set; }
+
+        /// <summary>
+        /// 原因，由报修原因字典接口获得
+        /// errorpwd
+        /// </summary>
+        public string Reason { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
+
         /// <summary>
         /// 保修请求
         /// </summary>
@@ -34,9 +38,15 @@ namespace Common.Ofo.Entity.Request
             ApiUrl = ApiUrls.ReportRepair;
         }
 
+        #endregion 构造函数
+
+        #region 方法
+
         public override string GetFormString()
         {
             return base.GetFormString() + $"&ordernum={OrderNumber}&reason={Reason}&address={Address}&isGsm={IsGsm}";
         }
+
+        #endregion 方法
     }
 }

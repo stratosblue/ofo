@@ -3,24 +3,17 @@
 namespace Common.Ofo.Entity.Result
 {
     /// <summary>
-    /// 验证码请求结果
-    /// </summary>
-    public class LoginResult : BaseResult
-    {
-        [JsonProperty("values")]
-        public LoginInfo Data { get; set; }
-    }
-
-    /// <summary>
     /// 登录信息
     /// </summary>
     public class LoginInfo
     {
+        #region 属性
+
         /// <summary>
-        /// Token
+        /// 是否新用户
         /// </summary>
-        [JsonProperty("token")]
-        public string Token { get; set; }
+        [JsonProperty("isNewuser")]
+        public bool IsNewUser { get; set; }
 
         /// <summary>
         /// refreshToken
@@ -29,9 +22,24 @@ namespace Common.Ofo.Entity.Result
         public string RefreshToken { get; set; }
 
         /// <summary>
-        /// 是否新用户
+        /// Token
         /// </summary>
-        [JsonProperty("isNewuser")]
-        public bool IsNewUser { get; set; }
+        [JsonProperty("token")]
+        public string Token { get; set; }
+
+        #endregion 属性
+    }
+
+    /// <summary>
+    /// 验证码请求结果
+    /// </summary>
+    public class LoginResult : BaseResult
+    {
+        #region 属性
+
+        [JsonProperty("values")]
+        public LoginInfo Data { get; set; }
+
+        #endregion 属性
     }
 }

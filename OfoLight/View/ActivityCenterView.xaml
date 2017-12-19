@@ -9,7 +9,7 @@
 
     <Page.Resources>
         <Style TargetType="TextBlock">
-            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
         <DataTemplate x:Key="AdListTemplate">
             <HyperlinkButton Command="{Binding ClickCommand}" CommandParameter="{Binding JumpUrl}">

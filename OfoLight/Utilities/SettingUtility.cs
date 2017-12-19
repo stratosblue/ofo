@@ -7,15 +7,25 @@ namespace OfoLight.Utilities
     /// </summary>
     public static class SettingUtility
     {
-        /// <summary>
-        /// 当前程序的本地配置
-        /// </summary>
-        public static ApplicationDataContainer LocalSettings { get; private set; } = ApplicationData.Current.LocalSettings;
+        #region 字段
 
         /// <summary>
         /// 默认容器名称
         /// </summary>
         public const string DEFAULT_LOCAL_CONTAINERS_NAME = "Default";
+
+        #endregion 字段
+
+        #region 属性
+
+        /// <summary>
+        /// 当前程序的本地配置
+        /// </summary>
+        public static ApplicationDataContainer LocalSettings { get; private set; } = ApplicationData.Current.LocalSettings;
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 设置工具类
@@ -27,6 +37,10 @@ namespace OfoLight.Utilities
                 LocalSettings.CreateContainer(DEFAULT_LOCAL_CONTAINERS_NAME, ApplicationDataCreateDisposition.Always);
             }
         }
+
+        #endregion 构造函数
+
+        #region 方法
 
         /// <summary>
         /// 从默认容器获取一个值
@@ -95,5 +109,7 @@ namespace OfoLight.Utilities
         {
             LocalSettings.Containers[containerName].Values[key] = value;
         }
+
+        #endregion 方法
     }
 }

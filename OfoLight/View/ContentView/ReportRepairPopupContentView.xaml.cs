@@ -1,15 +1,16 @@
-﻿using OfoLight.ViewModel;
-using Windows.UI;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
+﻿using Windows.UI.Xaml.Controls;
 
 namespace OfoLight.View
 {
     public sealed partial class ReportRepairPopupContentView : UserControl
     {
+        #region 构造函数
+
         public ReportRepairPopupContentView()
         {
             this.InitializeComponent();
         }
+
+        #endregion 构造函数
     }
 }

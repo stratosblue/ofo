@@ -11,6 +11,8 @@ namespace OfoLight.Utilities
     /// </summary>
     public static class StatusBarUtility
     {
+        #region 属性
+
         /// <summary>
         /// 是否有状态栏
         /// </summary>
@@ -20,6 +22,10 @@ namespace OfoLight.Utilities
         /// 状态栏高度
         /// </summary>
         public static double StatusBarHeight { get; private set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 状态栏工具
@@ -34,6 +40,10 @@ namespace OfoLight.Utilities
             }
         }
 
+        #endregion 构造函数
+
+        #region 方法
+
         /// <summary>
         /// 获取状态栏
         /// </summary>
@@ -45,6 +55,19 @@ namespace OfoLight.Utilities
                 return StatusBar.GetForCurrentView();
             }
             return null;
+        }
+
+        /// <summary>
+        /// 隐藏状态栏
+        /// </summary>
+        /// <returns></returns>
+        public static async Task HideAsync()
+        {
+            if (IsAnyStatusBar)
+            {
+                var statusBar = StatusBar.GetForCurrentView();
+                await statusBar.HideAsync();
+            }
         }
 
         /// <summary>
@@ -74,19 +97,6 @@ namespace OfoLight.Utilities
         }
 
         /// <summary>
-        /// 隐藏状态栏
-        /// </summary>
-        /// <returns></returns>
-        public static async Task HideAsync()
-        {
-            if (IsAnyStatusBar)
-            {
-                var statusBar = StatusBar.GetForCurrentView();
-                await statusBar.HideAsync();
-            }
-        }
-
-        /// <summary>
         /// 显示状态栏
         /// </summary>
         /// <returns></returns>
@@ -98,5 +108,7 @@ namespace OfoLight.Utilities
                 await statusBar.ShowAsync();
             }
         }
+
+        #endregion 方法
     }
 }

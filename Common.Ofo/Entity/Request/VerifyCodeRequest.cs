@@ -7,6 +7,8 @@ namespace Common.Ofo.Entity.Request
     /// </summary>
     public class VerifyCodeRequest : BaseRequest
     {
+        #region 属性
+
         /// <summary>
         /// 最后一次的验证码
         /// </summary>
@@ -16,6 +18,12 @@ namespace Common.Ofo.Entity.Request
         /// 最后一次的验证ID
         /// </summary>
         public static string LastVerifyId { get; set; }
+
+        /// <summary>
+        /// 验证码
+        /// 表单参数captcha
+        /// </summary>
+        public string CaptchaCode { get; set; }
 
         /// <summary>
         /// 是否是重新获取
@@ -30,16 +38,14 @@ namespace Common.Ofo.Entity.Request
         public string TelPhone { get; set; }
 
         /// <summary>
-        /// 验证码
-        /// 表单参数captcha
-        /// </summary>
-        public string CaptchaCode { get; set; }
-
-        /// <summary>
         /// 验证ID
         /// 表单参数verifyId
         /// </summary>
         public string VerifyId { get; set; }
+
+        #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 验证码验证
@@ -48,6 +54,10 @@ namespace Common.Ofo.Entity.Request
         {
             ApiUrl = ApiUrls.GetVerifyCode;
         }
+
+        #endregion 构造函数
+
+        #region 方法
 
         public override string GetFormString()
         {
@@ -67,5 +77,7 @@ namespace Common.Ofo.Entity.Request
             stringBuilder.Append($"&tel={TelPhone}&captcha={CaptchaCode}&verifyId={VerifyId}");
             return stringBuilder.ToString();
         }
+
+        #endregion 方法
     }
 }

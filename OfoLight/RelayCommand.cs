@@ -8,15 +8,30 @@ namespace OfoLight
     /// </summary>
     public class RelayCommand : ICommand
     {
+        #region 事件
+
         /// <summary>
-        /// 命令执行委托
+        /// 可执行状态更改事件
         /// </summary>
-        readonly Action<object> _execute;
+        public event EventHandler CanExecuteChanged;
+
+        #endregion 事件
+
+        #region 字段
 
         /// <summary>
         /// 检查命令是否可执行委托
         /// </summary>
-        readonly Predicate<object> _canExecute;
+        private readonly Predicate<object> _canExecute;
+
+        /// <summary>
+        /// 命令执行委托
+        /// </summary>
+        private readonly Action<object> _execute;
+
+        #endregion 字段
+
+        #region 构造函数
 
         /// <summary>
         /// 创建一个命令
@@ -37,6 +52,10 @@ namespace OfoLight
             _canExecute = canExecute;
         }
 
+        #endregion 构造函数
+
+        #region 方法
+
         /// <summary>
         /// 检查是否可执行
         /// </summary>
@@ -48,11 +67,6 @@ namespace OfoLight
         }
 
         /// <summary>
-        /// 可执行状态更改事件
-        /// </summary>
-        public event EventHandler CanExecuteChanged;
-
-        /// <summary>
         /// 执行命令
         /// </summary>
         /// <param name="parameter"></param>
@@ -60,5 +74,7 @@ namespace OfoLight
         {
             _execute(parameter);
         }
+
+        #endregion 方法
     }
 }

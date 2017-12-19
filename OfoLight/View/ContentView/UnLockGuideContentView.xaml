@@ -32,21 +32,21 @@
                                     <VisualState x:Name="SelectedUnfocused">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="dotEllipse" Storyboard.TargetProperty="Fill">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MainDeepColorBrush}"/>
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MainDeepColorBrush}" />
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState x:Name="SelectedPointerOver">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="dotEllipse" Storyboard.TargetProperty="Fill">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MainDeepColorBrush}"/>
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MainDeepColorBrush}" />
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState x:Name="SelectedPressed">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="dotEllipse" Storyboard.TargetProperty="Fill">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MainDeepColorBrush}"/>
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MainDeepColorBrush}" />
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
@@ -58,7 +58,7 @@
                                      Control.IsTemplateFocusTarget="True"
                                      Fill="White"
                                      StrokeThickness="1"
-                                     Stroke="{StaticResource MainLightColorBrush}"/>
+                                     Stroke="{StaticResource MainLightColorBrush}" />
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -69,7 +69,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ListView">
                         <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
-                            <ItemsPresenter FooterTransitions="{TemplateBinding FooterTransitions}" FooterTemplate="{TemplateBinding FooterTemplate}" Footer="{TemplateBinding Footer}" HeaderTemplate="{TemplateBinding HeaderTemplate}" Header="{TemplateBinding Header}" HeaderTransitions="{TemplateBinding HeaderTransitions}" Padding="{TemplateBinding Padding}"/>
+                            <ItemsPresenter FooterTransitions="{TemplateBinding FooterTransitions}" FooterTemplate="{TemplateBinding FooterTemplate}" Footer="{TemplateBinding Footer}" HeaderTemplate="{TemplateBinding HeaderTemplate}" Header="{TemplateBinding Header}" HeaderTransitions="{TemplateBinding HeaderTransitions}" Padding="{TemplateBinding Padding}" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -112,7 +112,6 @@
                                          Fill="White" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
-
                     </ListBox>
                 </Grid>
             </ListView.Header>
