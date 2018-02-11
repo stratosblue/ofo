@@ -10,7 +10,17 @@ namespace Common.Ofo.Entity.Result
     {
         #region 属性
 
-        public int amounts { get; set; }
+        /// <summary>
+        /// 金额
+        /// </summary>
+        [JsonProperty("amounts")]
+        public float Amounts { get; set; }
+
+        /// <summary>
+        /// 优惠券ID
+        /// </summary>
+        [JsonProperty("couponId")]
+        public string CouponId { get; set; }
 
         /// <summary>
         /// 失效时间
@@ -27,8 +37,17 @@ namespace Common.Ofo.Entity.Result
         public DateTime? GetTime { get; set; }
 
         public int opp { get; set; }
-        public long packetid { get; set; }
+
+        /// <summary>
+        /// 红包ID
+        /// </summary>
+        [JsonProperty("packetid")]
+        public long PacketId { get; set; }
+
+        public string remark { get; set; }
+
         public int source { get; set; }
+
         public int used { get; set; }
 
         #endregion 属性

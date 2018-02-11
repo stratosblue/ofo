@@ -2,28 +2,6 @@
 
 namespace Common.Ofo.Entity.Result
 {
-    public class Packet
-    {
-        #region 属性
-
-        /// <summary>
-        ///
-        /// </summary>
-        public int amounts { get; set; }
-
-        /// <summary>
-        ///
-        /// </summary>
-        public int opp { get; set; }
-
-        /// <summary>
-        ///
-        /// </summary>
-        public int packetid { get; set; }
-
-        #endregion 属性
-    }
-
     /// <summary>
     /// 未完成订单
     /// </summary>

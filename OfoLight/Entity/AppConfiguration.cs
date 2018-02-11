@@ -32,7 +32,7 @@ namespace OfoLight.Entity
         /// <summary>
         /// 最后一次显示的活动ID
         /// </summary>
-        public long LastShowActivityId { get; set; }
+        public string LastShowActivityId { get; set; }
 
         /// <summary>
         /// 最后一次显示活动时间
@@ -43,6 +43,11 @@ namespace OfoLight.Entity
         /// ofoToken
         /// </summary>
         public string Token { get; set; }
+
+        /// <summary>
+        /// 是否使用透明图标
+        /// </summary>
+        public bool UseTransparentIcon { get; set; } = false;
 
         #endregion 属性
 
@@ -65,7 +70,7 @@ namespace OfoLight.Entity
         {
             CacheSplashExpire = null;
             LastCacheSplashFileName = string.Empty;
-            LastShowActivityId = 0;
+            LastShowActivityId = string.Empty;
             LastShowActivityTime = new DateTime();
         }
 
@@ -77,7 +82,7 @@ namespace OfoLight.Entity
             Token = string.Empty;
             LastOrderNum = 0;
             LastOrderPwd = string.Empty;
-            LastShowActivityId = 0;
+            LastShowActivityId = string.Empty;
             LastShowActivityTime = new DateTime();
         }
 

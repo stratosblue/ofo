@@ -3,6 +3,31 @@ using System;
 
 namespace Common.Ofo.Entity.Result
 {
+    /// <summary>
+    /// 骑行卡信息
+    /// </summary>
+    public class CardInfo
+    {
+        #region 属性
+
+        /// <summary>
+        /// 骑行卡ID
+        /// </summary>
+        [JsonProperty("cardId")]
+        public string CardId { get; set; }
+
+        /// <summary>
+        /// 显示内容？
+        /// </summary>
+        [JsonProperty("content")]
+        public string Content { get; set; }
+
+        [JsonProperty("type")]
+        public int Type { get; set; }
+
+        #endregion 属性
+    }
+
     public class LockedInfo
     {
         #region 属性
@@ -54,6 +79,12 @@ namespace Common.Ofo.Entity.Result
         ///
         /// </summary>
         public int baseTimeCost { get; set; }
+
+        /// <summary>
+        /// 骑行卡信息
+        /// </summary>
+        [JsonProperty("card")]
+        public CardInfo Card { get; set; }
 
         [JsonProperty("carno")]
         public string CarNumber { get; set; }
@@ -136,12 +167,13 @@ namespace Common.Ofo.Entity.Result
         /// <summary>
         ///
         /// </summary>
-        public Packet packet { get; set; }
+        public RedPacketInfo packet { get; set; }
 
         /// <summary>
-        ///
+        /// 红包ID？
         /// </summary>
-        public int packetid { get; set; }
+        [JsonProperty("packetid")]
+        public int PacketId { get; set; }
 
         /// <summary>
         ///
@@ -157,7 +189,10 @@ namespace Common.Ofo.Entity.Result
         /// <summary>
         ///
         /// </summary>
-        public int price { get; set; }
+        [JsonProperty("price")]
+        public float Price { get; set; }
+
+        public string redPacketNotice { get; set; }
 
         /// <summary>
         ///
@@ -170,6 +205,8 @@ namespace Common.Ofo.Entity.Result
         ///
         /// </summary>
         public int s { get; set; }
+
+        public string sanMianRemainCount { get; set; }
 
         /// <summary>
         /// 订单时间

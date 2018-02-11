@@ -8,6 +8,11 @@
         #region 属性
 
         /// <summary>
+        /// 骑行卡ID?
+        /// </summary>
+        public string CardId { get; set; }
+
+        /// <summary>
         /// 订单编号
         /// </summary>
         public long OrderNum { get; set; }
@@ -15,7 +20,7 @@
         /// <summary>
         /// 钱包Id?默认为0
         /// </summary>
-        public int Packetid { get; set; } = 0;
+        public long Packetid { get; set; } = 0;
 
         #endregion 属性
 
@@ -35,7 +40,7 @@
 
         public override string GetFormString()
         {
-            return base.GetFormString() + $"&ordernum={OrderNum}&packetid={Packetid}";
+            return base.GetFormString() + $"&ordernum={OrderNum}&packetid={Packetid}&cardId={CardId}";
         }
 
         #endregion 方法

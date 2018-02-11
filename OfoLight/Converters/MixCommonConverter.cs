@@ -89,6 +89,14 @@ namespace OfoLight.Converters
                             return blubarImage;
                         }
                         break;
+                    case "DeadTime":
+                        if (value is DateTime deadTime)
+                        {
+                            return $"有效期至 {deadTime.ToString("yyyy-MM-dd")}";
+                        }
+                        break;
+                    case "Money":
+                        return $"￥ {value}";
                 }
             }
             return null;

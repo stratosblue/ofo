@@ -118,12 +118,14 @@ namespace Common.Ofo
         /// </summary>
         /// <param name="orderNum">订单编号</param>
         /// <param name="packetid">钱包id</param>
+        /// <param name="packetid">骑行卡id</param>
         /// <returns></returns>
-        public async Task<ConfirmToPayResult> ConfirmToPayAsync(long orderNum, int packetid)
+        public async Task<ConfirmToPayResult> ConfirmToPayAsync(long orderNum, long packetid, string cardId)
         {
             ConfirmToPayRequest request = new ConfirmToPayRequest()
             {
                 OrderNum = orderNum,
+                CardId = cardId,
                 Packetid = packetid,
                 Token = CurUser.Token
             };

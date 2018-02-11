@@ -26,33 +26,8 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class MainPageViewModel : BaseViewModel
     {
-        #region 属性
+        #region 字段
 
-        /// <summary>
-        /// BlueBar显示命令
-        /// </summary>
-        public ICommand BlueBarVisibilityCommand { get; set; }
-
-        /// <summary>
-        /// 使用网页版命令
-        /// </summary>
-        public ICommand OpenWithEdgeCommand { get; set; }
-
-        /// <summary>
-        /// 重定位命令
-        /// </summary>
-        public ICommand ReLocationCommand { get; set; }
-
-        /// <summary>
-        /// 最后一次获取活动的时间
-        /// </summary>
-        private static DateTime LastGetActivityTime { get; set; }
-
-        #endregion 属性
-
-
-
-        #region 属性
         private Visibility _blueBarButtonVisibility = Visibility.Collapsed;
 
         private BlueBarInfo _blueBarInfo;
@@ -108,6 +83,10 @@ namespace OfoLight.ViewModel
         /// </summary>
         private double _zoomLevel;
 
+        #endregion 字段
+
+        #region 属性
+
         /// <summary>
         /// BlueBar按钮显示状态
         /// </summary>
@@ -143,6 +122,11 @@ namespace OfoLight.ViewModel
                 NotifyPropertyChanged("BlueBarVisibility");
             }
         }
+
+        /// <summary>
+        /// BlueBar显示命令
+        /// </summary>
+        public ICommand BlueBarVisibilityCommand { get; set; }
 
         /// <summary>
         /// 目的地位置
@@ -218,6 +202,11 @@ namespace OfoLight.ViewModel
         public MapControl Map { get; set; }
 
         /// <summary>
+        /// 使用网页版命令
+        /// </summary>
+        public ICommand OpenWithEdgeCommand { get; set; }
+
+        /// <summary>
         /// 行走起始地点
         /// </summary>
         public Geopoint OriginGeoPosition
@@ -229,6 +218,11 @@ namespace OfoLight.ViewModel
                 NotifyPropertyChanged("OriginGeoPosition");
             }
         }
+
+        /// <summary>
+        /// 重定位命令
+        /// </summary>
+        public ICommand ReLocationCommand { get; set; }
 
         /// <summary>
         /// 行走距离
@@ -278,11 +272,18 @@ namespace OfoLight.ViewModel
         }
 
         /// <summary>
+        /// 最后一次获取活动的时间
+        /// </summary>
+        private static DateTime LastGetActivityTime { get; set; }
+
+        /// <summary>
         /// 地图API
         /// </summary>
         private AmapWebAPIs AmapWebApi { get; set; }
 
         #endregion 属性
+
+        #region 构造函数
 
         /// <summary>
         /// 主页面的ViewModel
@@ -343,6 +344,10 @@ namespace OfoLight.ViewModel
 
             var loadTask = InitializationAsync();
         }
+
+        #endregion 构造函数
+
+        #region 方法
 
         /// <summary>
         /// 检查当前活动是否需要显示
@@ -618,7 +623,7 @@ namespace OfoLight.ViewModel
 
                 if (activity != null)
                 {
-                    if (Global.AppConfig.LastShowActivityId == activity.id && Global.AppConfig.LastShowActivityTime > DateTime.Now.AddHours(-3))    //今天已经显示过当前活动，则不再显示
+                    if (!string.IsNullOrEmpty(Global.AppConfig.LastShowActivityId) && Global.AppConfig.LastShowActivityId.Equals(activity.id) && Global.AppConfig.LastShowActivityTime > DateTime.Now.AddHours(-3))    //今天已经显示过当前活动，则不再显示
                     {
                         return;
                     }
@@ -825,5 +830,7 @@ namespace OfoLight.ViewModel
                 }
             }
         }
+
+        #endregion 方法
     }
 }

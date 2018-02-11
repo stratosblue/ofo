@@ -242,7 +242,7 @@ namespace OfoLight.ViewModel
         private async void RepairAsync(object state)
         {
             ReportRepairPopupContentView reportRepairPopupContentView = new ReportRepairPopupContentView();
-            var repairPopupContentViewModel = new ReportRepairPopupContentViewModel(async () => { await Task.Delay(1500); OnResumingAsync(); }, UnLockCarInfo.ordernum, UnLockCarInfo.isGsmLock == 1);
+            var repairPopupContentViewModel = new ReportRepairPopupContentViewModel(async args => { await Task.Delay(1500); OnResumingAsync(); }, UnLockCarInfo.ordernum, UnLockCarInfo.isGsmLock == 1);
             await ShowContentNotifyAsync(reportRepairPopupContentView, repairPopupContentViewModel);
         }
 

@@ -2,9 +2,12 @@
 using OfoLight.Utilities;
 using OfoLight.View;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.Data.Xml.Dom;
 using Windows.UI.Core;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -54,6 +57,19 @@ namespace OfoLight.ViewModel
         /// 退出登录命令
         /// </summary>
         public ICommand LoginOutCommand { get; set; }
+
+        /// <summary>
+        /// 是否使用了透明图标
+        /// </summary>
+        public bool UseTransparentIcon
+        {
+            get { return Global.AppConfig.UseTransparentIcon; }
+            set
+            {
+                Global.AppConfig.UseTransparentIcon = value;
+                NotifyPropertyChanged("UseTransparentIcon");
+            }
+        }
 
         #endregion 属性
 
@@ -130,6 +146,55 @@ namespace OfoLight.ViewModel
         #endregion 构造函数
 
         #region 方法
+
+        /// <summary>
+        /// 透明图标状态改变
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void TransparentIconSwitch(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (UseTransparentIcon)
+                {
+                    var xmlContent =
+    @"<tile>
+    <visual version='4'>
+        <binding template='TileSquare71x71Image'>
+            <image id='1' src='ms-appx:///Assets\appicon_transport\SmallTile.png'/>
+        </binding>
+        <binding template='TileSquare150x150Image' fallback='TileSquareImage'>
+            <image id='1' src='ms-appx:///Assets\appicon_transport\Square150x150Logo.png'/>
+        </binding>
+        <binding template='TileWide310x150Image'>
+            <image id='1' src='ms-appx:///Assets\appicon_transport\Wide310x150Logo.png'/>
+        </binding>
+        <binding template='TileSquare310x310Image'>
+            <image id='1' src='ms-appx:///Assets\appicon_transport\LargeTile.png'/>
+        </binding>
+    </visual>
+</tile>";
+                    var xml = new XmlDocument();
+                    xml.LoadXml(xmlContent);
+
+                    var tileUpdater = TileUpdateManager.CreateTileUpdaterForApplication();
+                    tileUpdater.Clear();
+                    tileUpdater.Update(new TileNotification(xml));
+                }
+                else
+                {
+                    TileUpdateManager.CreateTileUpdaterForApplication().Clear();
+                }
+
+                Global.SaveAppConfig();
+            }
+            catch (Exception ex)
+            {
+                ShowNotifyAsync("设置失败");
+                Debug.WriteLine(ex);
+            }
+        }
 
         protected override async Task InitializationAsync()
         {

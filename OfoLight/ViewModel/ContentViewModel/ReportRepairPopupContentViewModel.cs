@@ -42,7 +42,7 @@ namespace OfoLight.ViewModel
         /// <param name="completeCallBack">关闭时的回调</param>
         /// <param name="orderNum"></param>
         /// <param name="isGsm"></param>
-        public ReportRepairPopupContentViewModel(Action completeCallBack, string orderNum, bool isGsm) : base(completeCallBack)
+        public ReportRepairPopupContentViewModel(Action<object> completeCallBack, string orderNum, bool isGsm) : base(completeCallBack)
         {
             OrderNum = orderNum;
             IsGsm = isGsm ? 1 : 0;

@@ -38,7 +38,7 @@ namespace Common.Ofo.Entity.Result
         /// <summary>
         ///
         /// </summary>
-        public long id { get; set; }
+        public string id { get; set; }
 
         /// <summary>
         /// 图片名称
@@ -131,7 +131,7 @@ namespace Common.Ofo.Entity.Result
         /// <summary>
         ///
         /// </summary>
-        public long id { get; set; }
+        public string id { get; set; }
 
         /// <summary>
         /// 图片名称

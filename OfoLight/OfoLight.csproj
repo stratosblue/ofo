@@ -162,6 +162,7 @@
     <Compile Include="ViewModel\ContentViewModel\SettingContentViewModel.cs" />
     <Compile Include="ViewModel\ContentViewModel\ReportRepairPopupContentViewModel.cs" />
     <Compile Include="ViewModel\ContentViewModel\RedEnvelopePupopContentViewModel.cs" />
+    <Compile Include="ViewModel\ContentViewModel\PacketChosePupopContentViewModel.cs" />
     <Compile Include="ViewModel\UnlockedViewModel.cs" />
     <Compile Include="ViewModel\ContentViewModel\UnLockGuidePopupContentViewModel.cs" />
     <Compile Include="ViewModel\UnlockViewModel.cs" />
@@ -213,6 +214,9 @@
     </Compile>
     <Compile Include="View\ContentView\RedPacketPupopContentView.xaml.cs">
       <DependentUpon>RedPacketPupopContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ContentView\PacketChosePupopContentView.xaml.cs">
+      <DependentUpon>PacketChosePupopContentView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ScanQrcodeView.xaml.cs">
       <DependentUpon>ScanQrcodeView.xaml</DependentUpon>
@@ -300,6 +304,26 @@
     <Content Include="Assets\appicon\Wide310x150Logo.scale-150.png" />
     <Content Include="Assets\appicon\Wide310x150Logo.scale-200.png" />
     <Content Include="Assets\appicon\Wide310x150Logo.scale-400.png" />
+    <Content Include="Assets\appicon_transport\LargeTile.scale-100.png" />
+    <Content Include="Assets\appicon_transport\LargeTile.scale-125.png" />
+    <Content Include="Assets\appicon_transport\LargeTile.scale-150.png" />
+    <Content Include="Assets\appicon_transport\LargeTile.scale-200.png" />
+    <Content Include="Assets\appicon_transport\LargeTile.scale-400.png" />
+    <Content Include="Assets\appicon_transport\SmallTile.scale-100.png" />
+    <Content Include="Assets\appicon_transport\SmallTile.scale-125.png" />
+    <Content Include="Assets\appicon_transport\SmallTile.scale-150.png" />
+    <Content Include="Assets\appicon_transport\SmallTile.scale-200.png" />
+    <Content Include="Assets\appicon_transport\SmallTile.scale-400.png" />
+    <Content Include="Assets\appicon_transport\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\appicon_transport\Square150x150Logo.scale-125.png" />
+    <Content Include="Assets\appicon_transport\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\appicon_transport\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\appicon_transport\Square150x150Logo.scale-400.png" />
+    <Content Include="Assets\appicon_transport\Wide310x150Logo.scale-100.png" />
+    <Content Include="Assets\appicon_transport\Wide310x150Logo.scale-125.png" />
+    <Content Include="Assets\appicon_transport\Wide310x150Logo.scale-150.png" />
+    <Content Include="Assets\appicon_transport\Wide310x150Logo.scale-200.png" />
+    <Content Include="Assets\appicon_transport\Wide310x150Logo.scale-400.png" />
     <Content Include="Assets\Font\iconfont.ttf" />
   </ItemGroup>
   <ItemGroup>
@@ -704,6 +728,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ContentView\RedPacketPupopContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContentView\PacketChosePupopContentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

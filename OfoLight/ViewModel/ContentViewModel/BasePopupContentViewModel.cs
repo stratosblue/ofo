@@ -13,7 +13,7 @@ namespace OfoLight.ViewModel
         /// <summary>
         /// 关闭回调
         /// </summary>
-        public Action _closeCallBack = null;
+        public Action<object> _closeCallBack = null;
 
         #endregion 字段
 
@@ -32,7 +32,7 @@ namespace OfoLight.ViewModel
         /// 内容弹出页面VM
         /// </summary>
         /// <param name="closeCallBack">关闭时的回调委托</param>
-        public BasePopupContentViewModel(Action closeCallBack)
+        public BasePopupContentViewModel(Action<object> closeCallBack)
         {
             _closeCallBack = closeCallBack;
         }
@@ -41,13 +41,22 @@ namespace OfoLight.ViewModel
 
         #region 方法
 
-        protected override async void CloseAction()
+        protected override void CloseAction()
+        {
+            CloseAction(null);
+        }
+
+        /// <summary>
+        /// 关闭当前对话页面
+        /// </summary>
+        /// <param name="args">用于回调处理的内容</param>
+        protected virtual async void CloseAction(object args)
         {
             await ContentPopup?.Dispatcher?.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
             {
                 ContentPopup?.Hide();
             });
-            _closeCallBack?.Invoke();
+            _closeCallBack?.Invoke(args);
         }
 
         #endregion 方法

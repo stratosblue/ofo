@@ -62,8 +62,12 @@ namespace OfoLight.Controls
 
         public async Task ShowAsync(string notifyContent, TimeSpan showTime)
         {
-            IsShowing = true;
             NotifyContent = notifyContent ?? NotifyContent;
+            if (string.IsNullOrEmpty(NotifyContent))
+            {
+                return;
+            }
+            IsShowing = true;
             await _popup.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
             {
                 Width = Window.Current.Bounds.Width;

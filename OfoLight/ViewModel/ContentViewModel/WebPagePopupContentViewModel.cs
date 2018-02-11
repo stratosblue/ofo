@@ -26,7 +26,7 @@ namespace OfoLight.ViewModel
 
         #region 构造函数
 
-        public WebPagePopupContentViewModel(Action completeCallBack) : base(completeCallBack)
+        public WebPagePopupContentViewModel(Action<object> completeCallBack) : base(completeCallBack)
         {
         }
 

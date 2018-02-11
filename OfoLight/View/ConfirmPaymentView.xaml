@@ -7,17 +7,68 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" NavigationCacheMode="Disabled">
 
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="{StaticResource MainGrayColorBrush}"></Setter>
+            <Setter Property="FontSize" Value="15"></Setter>
+        </Style>
+    </Page.Resources>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
-            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
         </Grid.RowDefinitions>
-        <!--<StackPanel Orientation="Horizontal">
-            <TextBlock>总费用</TextBlock>
-            <TextBlock>0</TextBlock>
-            <TextBlock>元</TextBlock>
-        </StackPanel>-->
+
+        <Grid Grid.Row="1" Padding="0,0,0,15">
+            <Grid.Resources>
+                <Style TargetType="StackPanel">
+                    <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                    <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                </Style>
+            </Grid.Resources>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <TextBlock VerticalAlignment="Top">本次行程消费</TextBlock>
+
+            <StackPanel Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock>￥</TextBlock>
+                <TextBlock FontSize="80" Text="{Binding RealPrice}"></TextBlock>
+            </StackPanel>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>总费用</TextBlock>
+                    <TextBlock Margin="8,0" Text="{Binding Price}" />
+                    <TextBlock>元</TextBlock>
+                </StackPanel>
+
+                <Button Grid.Column="1" Command="{Binding ChoseDiscountTypeCommand}" Style="{StaticResource NoEventStyleButton}" Padding="0" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding CouponUseInfo}" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                        <Image Source="ms-appx:///Assets/icons/blue_bar_jouney_tip.png" VerticalAlignment="Center" HorizontalAlignment="Center" Width="18" Height="18" Margin="10,0,0,0"></Image>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Grid>
         <StackPanel Grid.Row="2">
             <Button Style="{StaticResource FillButton}" Height="44" Margin="50,10" Command="{Binding NaviCommand}" CommandParameter="WebPay" Background="{StaticResource MainColorBrush}">前往Web页面确认支付</Button>
             <Button Style="{StaticResource FillButton}" Height="44" Margin="50,40" Command="{Binding PayCommand}" Background="{StaticResource MainColorBrush}">不要在意这些细节，确认支付</Button>
