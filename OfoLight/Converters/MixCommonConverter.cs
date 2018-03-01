@@ -71,17 +71,15 @@ namespace OfoLight.Converters
                         break;
 
                     case "BlueBarType":
-                        if (value is int inputBlueBarType)
+                        if (value is string blueBarAction)
                         {
                             ImageSource blubarImage = null;
 
-                            switch (inputBlueBarType)
+                            switch (blueBarAction)
                             {
-                                case 1:
+                                case "ofoapp://certify":
                                     blubarImage = new BitmapImage(new Uri("ms-appx:///Assets/icons/blue_bar_alert.png"));
                                     break;
-
-                                case 0:
                                 default:
                                     blubarImage = new BitmapImage(new Uri("ms-appx:///Assets/icons/blue_bar_message.png"));
                                     break;
@@ -95,7 +93,16 @@ namespace OfoLight.Converters
                             return $"有效期至 {deadTime.ToString("yyyy-MM-dd")}";
                         }
                         break;
-                    case "Money":
+                    case "RedPacketType":
+                        if (value is bool isCoupon)
+                        {
+                            if (isCoupon)
+                            {
+                                return "ofo 共享单车·包天券";
+                            }
+                        }
+                        return "ofo 共享单车·红包";
+                    case "Amounts":
                         return $"￥ {value}";
                 }
             }

@@ -16,7 +16,7 @@ namespace Common.Ofo.Entity.Result
         public string Id { get; set; }
 
         /// <summary>
-        /// 未认证时maintype=1
+        /// 
         /// </summary>
         [JsonProperty("maintype")]
         public int MainType { get; set; }

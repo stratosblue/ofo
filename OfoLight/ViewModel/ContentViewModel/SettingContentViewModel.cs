@@ -191,7 +191,7 @@ namespace OfoLight.ViewModel
             }
             catch (Exception ex)
             {
-                ShowNotifyAsync("设置失败");
+                ShowNotifyAsync("设置失败").NoWarning();
                 Debug.WriteLine(ex);
             }
         }

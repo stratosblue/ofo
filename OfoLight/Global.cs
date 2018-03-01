@@ -20,14 +20,14 @@ namespace OfoLight
         public const string COOKIE_DOMAIN = "ofo.so";
 
         /// <summary>
+        /// 应用程序配置 键名
+        /// </summary>
+        public const string KEY_APP_CONFIG = "application_config";
+
+        /// <summary>
         /// 主页地址
         /// </summary>
         public const string MAIN_WEBPAGE_URL = "https://common.ofo.so/newdist/?Journey";
-
-        /// <summary>
-        /// 应用程序配置 键名
-        /// </summary>
-        private const string KEY_APP_CONFIG = "application_config";
 
         #endregion 字段
 

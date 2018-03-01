@@ -112,7 +112,7 @@ namespace OfoLight.ViewModel
                 {
                     TimerPanelVisibility = Visibility.Collapsed;
                     Password = value.Password.ToList();
-                    RepairTimeOut = UnLockCarInfo.repairTime - (int)value.Second;
+                    RepairTimeOut = UnLockCarInfo.RepairTime - (int)value.Second;
                 }
 
                 StartTimer();
@@ -160,7 +160,7 @@ namespace OfoLight.ViewModel
             {
                 if (unfinishedOrder.ErrorCode == 30005)
                 {
-                    if (unfinishedOrder.Data.egt == 0)  //还在骑行，获取信息
+                    if (unfinishedOrder.Data.Egt == 0)  //还在骑行，获取信息
                     {
                         //有未完成订单
                         var isSavedLastOrder = unfinishedOrder.Data.OrderNumber.Equals(Global.AppConfig.LastOrderNum);
@@ -177,7 +177,7 @@ namespace OfoLight.ViewModel
                         }
                         UnLockCarInfo = unfinishedOrder.Data;
                     }
-                    else if (unfinishedOrder.Data.egt == 1)  //等待确认付款
+                    else if (unfinishedOrder.Data.Egt == 1)  //等待确认付款
                     {
                         await TryReplaceNavigateAsync(typeof(ConfirmPaymentView), unfinishedOrder.Data);
                     }
@@ -242,7 +242,13 @@ namespace OfoLight.ViewModel
         private async void RepairAsync(object state)
         {
             ReportRepairPopupContentView reportRepairPopupContentView = new ReportRepairPopupContentView();
-            var repairPopupContentViewModel = new ReportRepairPopupContentViewModel(async args => { await Task.Delay(1500); OnResumingAsync(); }, UnLockCarInfo.ordernum, UnLockCarInfo.isGsmLock == 1);
+
+            var repairPopupContentViewModel = new ReportRepairPopupContentViewModel(async args =>
+            {
+                await Task.Delay(1500);
+                OnResumingAsync().NoWarning();
+            }, UnLockCarInfo.Ordernum, UnLockCarInfo.IsGsmLock == 1);
+
             await ShowContentNotifyAsync(reportRepairPopupContentView, repairPopupContentViewModel);
         }
 

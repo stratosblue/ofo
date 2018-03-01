@@ -166,7 +166,7 @@
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Image Source="{Binding BlueBarInfo.Type,Converter={StaticResource MixCommonConverter},ConverterParameter=BlueBarType}" VerticalAlignment="Center" Margin="15,15,0,15"></Image>
+                        <Image Source="{Binding BlueBarInfo.Action,Converter={StaticResource MixCommonConverter},ConverterParameter=BlueBarType}" VerticalAlignment="Center" Margin="15,15,0,15"></Image>
                         <TextBlock Grid.Column="1" Foreground="White" Margin="8,0,15,0" VerticalAlignment="Center" MaxLines="2" TextWrapping="WrapWholeWords" Text="{Binding BlueBarInfo.Text}"></TextBlock>
                     </Grid>
                 </HyperlinkButton>

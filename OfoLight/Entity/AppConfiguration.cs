@@ -49,6 +49,11 @@ namespace OfoLight.Entity
         /// </summary>
         public bool UseTransparentIcon { get; set; } = false;
 
+        /// <summary>
+        /// 最后一次显示的蓝贴ID
+        /// </summary>
+        public string LastBlueBarID { get; set; }
+
         #endregion 属性
 
         #region 构造函数

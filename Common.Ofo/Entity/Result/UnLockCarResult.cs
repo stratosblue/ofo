@@ -58,27 +58,32 @@ namespace Common.Ofo.Entity.Result
         /// <summary>
         /// 未结算？=1
         /// </summary>
-        public int alpha { get; set; }
+        [JsonProperty("alpha")]
+        public int Alpha { get; set; }
 
         /// <summary>
         ///
         /// </summary>
-        public int baseDistance { get; set; }
+        [JsonProperty("baseDistance")]
+        public double BaseDistance { get; set; }
 
         /// <summary>
         ///
         /// </summary>
-        public int baseDistanceCost { get; set; }
+        [JsonProperty("baseDistanceCost")]
+        public double BaseDistanceCost { get; set; }
 
         /// <summary>
         ///
         /// </summary>
-        public double baseTime { get; set; }
+        [JsonProperty("baseTime")]
+        public double BaseTime { get; set; }
 
         /// <summary>
         ///
         /// </summary>
-        public int baseTimeCost { get; set; }
+        [JsonProperty("baseTimeCost")]
+        public double BaseTimeCost { get; set; }
 
         /// <summary>
         /// 骑行卡信息
@@ -86,15 +91,22 @@ namespace Common.Ofo.Entity.Result
         [JsonProperty("card")]
         public CardInfo Card { get; set; }
 
+        /// <summary>
+        ///
+        /// </summary>
         [JsonProperty("carno")]
         public string CarNumber { get; set; }
 
+        /// <summary>
+        ///
+        /// </summary>
         public DateTime createTime { get; set; }
 
         /// <summary>
         /// 未结算？=1
         /// </summary>
-        public int egt { get; set; }
+        [JsonProperty("egt")]
+        public int Egt { get; set; }
 
         /// <summary>
         ///
@@ -104,13 +116,25 @@ namespace Common.Ofo.Entity.Result
         /// <summary>
         ///
         /// </summary>
-        public int isDiscount { get; set; }
+        [JsonProperty("isDiscount")]
+        public int IsDiscount { get; set; }
 
-        public int isGsmLock { get; set; }
+        /// <summary>
+        ///
+        /// </summary>
+        [JsonProperty("isGsmLock")]
+        public int IsGsmLock { get; set; }
 
+        /// <summary>
+        ///
+        /// </summary>
         public int isLast { get; set; }
 
-        public int isRedPacketArea { get; set; }
+        /// <summary>
+        ///
+        /// </summary>
+        [JsonProperty("isRedPacketArea")]
+        public int IsRedPacketArea { get; set; }
 
         /// <summary>
         ///
@@ -118,14 +142,20 @@ namespace Common.Ofo.Entity.Result
         [JsonProperty("lock")]
         public LockedInfo Lockinfo { get; set; }
 
-        public int lockRefreshTime { get; set; }
+        /// <summary>
+        ///
+        /// </summary>
+        [JsonProperty("lockRefreshTime")]
+        public int LockRefreshTime { get; set; }
 
         /// <summary>
         ///
         /// </summary>
-        public int lockType { get; set; }
+        [JsonProperty("lockType")]
+        public int LockType { get; set; }
 
-        public int model { get; set; }
+        [JsonProperty("model")]
+        public int Model { get; set; }
 
         public string notice { get; set; }
 
@@ -134,7 +164,11 @@ namespace Common.Ofo.Entity.Result
         /// </summary>
         public int opp { get; set; }
 
-        public string ordernum { get; set; }
+        /// <summary>
+        ///
+        /// </summary>
+        [JsonProperty("ordernum")]
+        public string Ordernum { get; set; }
 
         /// <summary>
         /// 订单号
@@ -142,32 +176,41 @@ namespace Common.Ofo.Entity.Result
         [JsonProperty("orderno")]
         public long OrderNumber { get; set; }
 
-        public int orderStatus { get; set; }
+        /// <summary>
+        ///
+        /// </summary>
+        [JsonProperty("orderStatus")]
+        public int OrderStatus { get; set; }
 
         /// <summary>
         ///
         /// </summary>
-        public int overDistance { get; set; }
+        [JsonProperty("overDistance")]
+        public int OverDistance { get; set; }
 
         /// <summary>
         ///
         /// </summary>
-        public int overDistanceCost { get; set; }
+        [JsonProperty("overDistanceCost")]
+        public int OverDistanceCost { get; set; }
 
         /// <summary>
         ///
         /// </summary>
-        public int overTime { get; set; }
+        [JsonProperty("overTime")]
+        public int OverTime { get; set; }
 
         /// <summary>
         ///
         /// </summary>
-        public int overTimeCost { get; set; }
+        [JsonProperty("overTimeCost")]
+        public int OverTimeCost { get; set; }
 
         /// <summary>
         ///
         /// </summary>
-        public RedPacketInfo packet { get; set; }
+        [JsonProperty("packet")]
+        public RedPacketInfo Packet { get; set; }
 
         /// <summary>
         /// 红包ID？
@@ -192,21 +235,32 @@ namespace Common.Ofo.Entity.Result
         [JsonProperty("price")]
         public float Price { get; set; }
 
-        public string redPacketNotice { get; set; }
+        [JsonProperty("redPacketNotice")]
+        public string RedPacketNotice { get; set; }
 
         /// <summary>
         ///
         /// </summary>
-        public float refreshTime { get; set; }
-
-        public int repairTime { get; set; }
+        [JsonProperty("refreshTime")]
+        public float RefreshTime { get; set; }
 
         /// <summary>
         ///
         /// </summary>
-        public int s { get; set; }
+        [JsonProperty("repairTime")]
+        public int RepairTime { get; set; }
 
-        public string sanMianRemainCount { get; set; }
+        /// <summary>
+        ///
+        /// </summary>
+        [JsonProperty("s")]
+        public double S { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        [JsonProperty("sanMianRemainCount")]
+        public string SanMianRemainCount { get; set; }
 
         /// <summary>
         /// 订单时间
@@ -217,12 +271,14 @@ namespace Common.Ofo.Entity.Result
         /// <summary>
         ///
         /// </summary>
-        public int t { get; set; }
+        [JsonProperty("t")]
+        public int T { get; set; }
 
         /// <summary>
         ///
         /// </summary>
-        public int timeout { get; set; }
+        [JsonProperty("timeout")]
+        public int Timeout { get; set; }
 
         /// <summary>
         ///

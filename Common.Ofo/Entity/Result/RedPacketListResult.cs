@@ -23,6 +23,12 @@ namespace Common.Ofo.Entity.Result
         public string CouponId { get; set; }
 
         /// <summary>
+        /// 是否是包天券
+        /// （CouponId不为空则是包天券？）
+        /// </summary>
+        public bool IsCoupon { get => !string.IsNullOrWhiteSpace(CouponId); }
+
+        /// <summary>
         /// 失效时间
         /// </summary>
         [JsonProperty("deadtime")]
@@ -36,6 +42,9 @@ namespace Common.Ofo.Entity.Result
         [JsonProperty("gettime")]
         public DateTime? GetTime { get; set; }
 
+        /// <summary>
+        /// opp?    红包为0    七天券-10  ？？
+        /// </summary>
         public int opp { get; set; }
 
         /// <summary>

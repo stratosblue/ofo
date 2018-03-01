@@ -19,9 +19,14 @@ namespace OfoLight.ViewModel
     /// </summary>
     public class LoadingViewModel : BaseViewModel
     {
-        #region 属性
+        #region 字段
 
         private string _buttonTip = "跳过(3)";
+
+        /// <summary>
+        /// 是否已初始化
+        /// </summary>
+        private volatile bool _isInit = false;
 
         /// <summary>
         /// 显示Splash的TokenSource
@@ -31,6 +36,10 @@ namespace OfoLight.ViewModel
         private Visibility _skipSplashButtonVisibility = Visibility.Visible;
 
         private BitmapImage _splashImage;
+
+        #endregion 字段
+
+        #region 属性
 
         /// <summary>
         /// 跳过启动画面按钮的字符串
@@ -44,6 +53,11 @@ namespace OfoLight.ViewModel
                 NotifyPropertyChanged("ButtonTip");
             }
         }
+
+        /// <summary>
+        /// 初始化命令
+        /// </summary>
+        public ICommand InitCommand { get; set; }
 
         /// <summary>
         /// 跳过SplashButton可视状态
@@ -85,6 +99,16 @@ namespace OfoLight.ViewModel
         /// </summary>
         public LoadingViewModel()
         {
+            InitCommand = new RelayCommand(async state =>
+            {
+                if (_isInit)
+                {
+                    return;
+                }
+                _isInit = true;
+                await Init();
+            });
+
             SkipSplashCommand = new RelayCommand((state) =>
             {
                 _showSplashTokenSource.Cancel();
@@ -99,7 +123,7 @@ namespace OfoLight.ViewModel
         /// 初始化
         /// </summary>
         /// <returns></returns>
-        protected override async Task InitializationAsync()
+        public async Task Init()
         {
             await ConfirmGeolocationAccessStatus();
 
@@ -117,12 +141,12 @@ namespace OfoLight.ViewModel
                     {
                         SplashImage = new BitmapImage();
                         SplashImage.SetSource(splashStream);
-                        await Task.Delay(600, _showSplashTokenSource.Token);
-                        for (int i = 2; i >= 0; i--)
-                        {
-                            ButtonTip = $"跳过({i})";
-                            await Task.Delay(1000, _showSplashTokenSource.Token);
-                        }
+                    }
+                    await Task.Delay(600, _showSplashTokenSource.Token);
+                    for (int i = 2; i >= 0; i--)
+                    {
+                        ButtonTip = $"跳过({i})";
+                        await Task.Delay(1000, _showSplashTokenSource.Token);
                     }
                 }
             }
@@ -140,16 +164,16 @@ namespace OfoLight.ViewModel
 
             await checkTokenTask.ContinueWith(async tokenTask =>
             {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
-                {
-                    LoginStatus loginStatus = await tokenTask;
+                LoginStatus loginStatus = await tokenTask;
 
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                {
                     switch (loginStatus)
                     {
                         case LoginStatus.NetWorkFailed:
                             if (await MessageDialogUtility.ShowMessageAsync("网络访问异常，请检查您的网络状态，并重新尝试。", "出现了一些问题...", MessageDialogType.RetryCancel) == MessageDialogResult.Retry)
                             {
-                                await InitializationAsync();
+                                await Init();
                             }
                             else
                             {
@@ -171,7 +195,7 @@ namespace OfoLight.ViewModel
                         default:
                             if (await MessageDialogUtility.ShowMessageAsync("出现了未知的问题，要重试吗？", "出现了一些问题...", MessageDialogType.RetryCancel) == MessageDialogResult.Retry)
                             {
-                                await InitializationAsync();
+                                await Init();
                             }
                             else
                             {
@@ -272,9 +296,7 @@ namespace OfoLight.ViewModel
                 IRandomAccessStream splashStream = null;
                 if (isSplashExpired || string.IsNullOrWhiteSpace(lastCacheSplashFileName) || !(await LocalCacheUtility.ExistsCacheFile(lastCacheSplashFileName))) //没有缓存Splash,或者缓存已过期,或者缓存图片获取失败
                 {
-                    await LocalCacheUtility.DeleteCacheFile(lastCacheSplashFileName);
-
-                    splashStream = await ResourceUtility.GetApplicationResourceStreamAsync("Assets/new_splash_content.png");
+                    LocalCacheUtility.DeleteCacheFile(lastCacheSplashFileName).NoWarning();
                 }
                 else
                 {

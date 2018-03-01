@@ -132,6 +132,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Compile Include="Utilities\ExtendsMethods.cs" />
     <Compile Include="Utilities\ImageUtility.cs" />
     <Compile Include="Utilities\LocalCacheUtility.cs" />
     <Compile Include="Utilities\ClientCookieManager.cs" />
@@ -786,7 +787,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.0.1</Version>
+      <Version>6.0.7</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed">
       <Version>2.0.0</Version>

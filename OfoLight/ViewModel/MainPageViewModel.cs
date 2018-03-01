@@ -411,7 +411,7 @@ namespace OfoLight.ViewModel
                         break;
 
                     case "BlueBar":
-                        if (BlueBarInfo.MainType == 1 && BlueBarInfo.Text.Contains("认证"))
+                        if (!BlueBarInfo.Action.StartsWith("http", StringComparison.OrdinalIgnoreCase) && BlueBarInfo.Text.Contains("认证"))
                         {
                             var identificationResult = await OfoApi.GetIdentificationInfoAsync(GeoPosition.Position);
                             if (await CheckOfoApiResult(identificationResult))
@@ -471,7 +471,7 @@ namespace OfoLight.ViewModel
             {
                 if (unfinishedOrder.ErrorCode == 30005)
                 {
-                    if (unfinishedOrder.Data.egt == 0)  //还在骑行，获取信息
+                    if (unfinishedOrder.Data.Egt == 0)  //还在骑行，获取信息
                     {
                         //有未完成订单
                         var isSavedLastOrder = unfinishedOrder.Data.OrderNumber.Equals(Global.AppConfig.LastOrderNum);
@@ -493,7 +493,7 @@ namespace OfoLight.ViewModel
                             await TryNavigateAsync(typeof(WebPageView), Global.MAIN_WEBPAGE_URL);
                         }
                     }
-                    else if (unfinishedOrder.Data.egt == 1)  //等待确认付款
+                    else if (unfinishedOrder.Data.Egt == 1)  //等待确认付款
                     {
                         await TryNavigateAsync(typeof(ConfirmPaymentView), unfinishedOrder.Data);
                     }
@@ -568,10 +568,12 @@ namespace OfoLight.ViewModel
                 if (!string.IsNullOrEmpty(blueBarResult.Data.Text))
                 {
                     BlueBarButtonVisibility = Visibility.Visible;
-                    if (BlueBarInfo.MainType == 1)
+                    if (BlueBarInfo.Id?.Equals(Global.AppConfig.LastBlueBarID) == false)
                     {
+                        Global.AppConfig.LastBlueBarID = BlueBarInfo.Id;
                         BlueBarButtonVisibility = Visibility.Collapsed;
                         BlueBarVisibility = Visibility.Visible;
+                        Global.SaveAppConfig();
                     }
                 }
             }

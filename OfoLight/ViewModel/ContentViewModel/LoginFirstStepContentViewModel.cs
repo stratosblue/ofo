@@ -110,7 +110,7 @@ namespace OfoLight.ViewModel
 
         #region 方法
 
-        public async Task InputCaptchaCodeTextChangedAsync(object sender, TextChangedEventArgs e)
+        public async void InputCaptchaCodeTextChangedAsync(object sender, TextChangedEventArgs e)
         {
             if (sender is TextBox tb)
             {

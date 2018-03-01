@@ -392,7 +392,7 @@ namespace OfoLight.ViewModel
                 }
                 else
                 {
-                    ShowNotifyAsync("再次点击退出");
+                    ShowNotifyAsync("再次点击退出").NoWarning();
                 }
             }
             else
@@ -466,7 +466,7 @@ namespace OfoLight.ViewModel
                 {
                     if (currentPage.DataContext is BaseViewModel currentViewModel)
                     {
-                        currentViewModel.OnResumingAsync();
+                        currentViewModel.OnResumingAsync().NoWarning();
                     }
                 }
             }
@@ -490,7 +490,7 @@ namespace OfoLight.ViewModel
                 {
                     if (currentPage.DataContext is BaseViewModel currentViewModel)
                     {
-                        currentViewModel.OnSuspendingAsync();
+                        currentViewModel.OnSuspendingAsync().NoWarning();
                     }
                 }
             }

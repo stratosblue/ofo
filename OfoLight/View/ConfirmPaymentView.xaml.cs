@@ -1,5 +1,6 @@
 ﻿using Common.Ofo.Entity.Result;
 using OfoLight.ViewModel;
+using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -41,7 +42,7 @@ namespace OfoLight.View
             }
             else if (e.NavigationMode == NavigationMode.Back)
             {
-                ViewModel.OnResumingAsync();
+                ViewModel.OnResumingAsync().NoWarning();
             }
         }
 

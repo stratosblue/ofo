@@ -5,9 +5,16 @@
     xmlns:local="using:OfoLight.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d" NavigationCacheMode="Disabled">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Interactivity:Interaction.Behaviors>
+            <Core:EventTriggerBehavior EventName="Loaded">
+                <Core:InvokeCommandAction Command="{Binding InitCommand}" />
+            </Core:EventTriggerBehavior>
+        </Interactivity:Interaction.Behaviors>
         <Image Stretch="Uniform" Source="ms-appx:///Assets/new_splash_content.png"></Image>
         <Image Stretch="Uniform" Source="{Binding SplashImage}"></Image>
         <Button Style="{StaticResource NoEventStyleButton}" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="25,15" Padding="10,4" Background="{StaticResource MainGrayColorBrush}" Opacity="0.7" Content="{Binding ButtonTip}" Command="{Binding SkipSplashCommand}" Visibility="{Binding SkipSplashButtonVisibility}"></Button>

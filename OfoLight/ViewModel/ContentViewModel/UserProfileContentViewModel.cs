@@ -263,7 +263,7 @@ namespace OfoLight.ViewModel
             CreditScoreInfo = $"信用分： {UserInfo.CreditTotal} >";
 
             //获取头像图片
-            OfoUtility.GetAvatarImageByUrlAsync(UserInfo.AvatarUrl, avatar => Avatar = avatar);
+            OfoUtility.GetAvatarImageByUrlAsync(UserInfo.AvatarUrl, avatar => Avatar = avatar).NoWarning();
 
             InfoButtons[3].ContentText = UserInfo?.IsBond == 1 ? "认证用户" : "未认证用户";
 

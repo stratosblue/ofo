@@ -19,13 +19,17 @@
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Margin="0,5,0,0" VerticalAlignment="Bottom">
-                    <TextBlock FontSize="17" Text="ofo 共享单车·红包"></TextBlock>
+                    <TextBlock FontSize="17" Text="{Binding IsCoupon,Converter={StaticResource MixCommonConverter},ConverterParameter=RedPacketType}"></TextBlock>
                     <TextBlock FontSize="14" Margin="0,8,0,12" Foreground="{StaticResource MainGrayColorBrush}" Text="{Binding DeadTime,Converter={StaticResource MixCommonConverter},ConverterParameter=DeadTime}"></TextBlock>
                     <Image Source="ms-appx:///Assets/icons/packet_bike.png" Height="45" HorizontalAlignment="Left" Margin="10,0"></Image>
                 </StackPanel>
                 <Grid Grid.Column="1">
                     <Image Source="ms-appx:///Assets/icons/packet_right.png" Stretch="Fill" />
-                    <TextBlock FontSize="24.5" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Amounts,Converter={StaticResource MixCommonConverter},ConverterParameter=Money}"></TextBlock>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock FontSize="24.5" VerticalAlignment="Center" HorizontalAlignment="Center"  Text="￥ " Visibility="{Binding Visibility,ElementName=CouponText,Converter={StaticResource AntiVisibilityConverter}}"></TextBlock>
+                        <TextBlock FontSize="24.5" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Amounts}"></TextBlock>
+                        <TextBlock x:Name="CouponText" FontSize="24.5" VerticalAlignment="Center" HorizontalAlignment="Center" Text=" 天" Visibility="{Binding IsCoupon,Converter={StaticResource BoolToVisibilityConverter}}"></TextBlock>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </DataTemplate>
@@ -41,7 +45,7 @@
         <ListView Grid.Row="1" x:Name="redPacketListView" ItemContainerStyle="{StaticResource FullScreenListViewItem}" ItemTemplate="{StaticResource RedPacketDataTemplate}" ItemsSource="{Binding RedPacketList}" SelectionMode="Single">
             <Interactivity:Interaction.Behaviors>
                 <Core:EventTriggerBehavior EventName="SelectionChanged">
-                    <Core:InvokeCommandAction Command="{Binding SelectPacketCommand}" CommandParameter="{x:Bind redPacketListView}"/>
+                    <Core:InvokeCommandAction Command="{Binding SelectPacketCommand}" CommandParameter="{x:Bind redPacketListView}" />
                 </Core:EventTriggerBehavior>
             </Interactivity:Interaction.Behaviors>
         </ListView>

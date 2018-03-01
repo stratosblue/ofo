@@ -78,7 +78,7 @@ namespace OfoLight.ViewModel
             get { return _realPrice; }
             set
             {
-                _realPrice = value;
+                _realPrice = value < 0 ? 0 : value;
                 NotifyPropertyChanged("RealPrice");
             }
         }
@@ -98,7 +98,7 @@ namespace OfoLight.ViewModel
                 }
                 else
                 {
-                    UsePacket(_unLockCarInfo.packet);
+                    UsePacket(_unLockCarInfo.Packet);
                 }
                 NotifyPropertyChanged("UnLockCarInfo");
             }
@@ -256,10 +256,19 @@ namespace OfoLight.ViewModel
         {
             if (packet != null && packet.PacketId > 0)
             {
-                var amount = packet.Amounts;
-                RealPrice = Price - amount;
                 _usePacketId = packet.PacketId;
-                CouponUseInfo = $"优惠券：{amount} 元";
+
+                if (!string.IsNullOrEmpty(packet.CouponId) || packet.opp < 0)  //包天券有CouponId或者opp<0？？
+                {
+                    RealPrice = 0;
+                    CouponUseInfo = $"包天券：免费";
+                }
+                else    //红包？
+                {
+                    var amount = packet.Amounts;
+                    RealPrice = Price - amount;
+                    CouponUseInfo = $"优惠券：{amount} 元";
+                }
             }
             else
             {
